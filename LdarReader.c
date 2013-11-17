@@ -127,31 +127,3 @@ void LasFileInit(const char *filename) {
 
     return;
 }
-
-/*
-void ReadPoint(LidarPoint_t *buffer) {
-    unsigned char pointbf;
-
-    fread(&buffer->X, INT32_SIZE, 1, las_file_in);
-    fread(&buffer->Y, INT32_SIZE, 1, las_file_in);
-    fread(&buffer->Z, INT32_SIZE, 1, las_file_in);
-    fread(&buffer->Intensity, UINT16_SIZE, 1, las_file_in);
-    fread(&pointbf, UCHAR_SIZE, 1, las_file_in);
-    fread(&buffer->Classification, UCHAR_SIZE, 1, las_file_in);
-    fread(&buffer->ScanAngleRankLeft, UCHAR_SIZE, 1, las_file_in);
-    fread(&buffer->FileMarker, UCHAR_SIZE, 1, las_file_in);
-    fread(&buffer->UserBitField, UINT16_SIZE, 1, las_file_in);
-    fread(&buffer->GpsTime, DOUBLE_SIZE, 1, las_file_in);
-
-    buffer->EdgeOfFlightLine = pointbf & 0x01;
-    pointbf >>= 1;
-    buffer->ScanDirFlag = pointbf & 0x01;
-    pointbf >>= 1;
-    buffer->NumReturns = pointbf & 0x07;
-    pointbf >>= 3;
-    buffer->RetNum = pointbf & 0x07;
-
-    buffer->StopFlag = 0;
-
-    return;
-}*/
