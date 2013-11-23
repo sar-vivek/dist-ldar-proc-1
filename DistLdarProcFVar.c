@@ -125,8 +125,8 @@ int main(int argc, char *argv[]) {
     Xdiff = (Xoffset - MinX) / Xint;
     Ydiff = (Yoffset - MinY) / Yint;
 
-    if (NodeID == 0) DistributeM();
-    else DistributeS();
+    if (NodeID == 0) DistributeSend();
+    else DistributeReceive();
 
     WorkerIDs[0] = 0;
     for (i = 1; i <= NUM_WORKERS; ++i) {
@@ -135,8 +135,8 @@ int main(int argc, char *argv[]) {
     }
     ProcessData(&WorkerIDs[0]);
 
-    if (NodeID == 0) MergeM();
-    else MergeS();
+    if (NodeID == 0) MergeSend();
+    else MergeReceive();
 
     for (i = 1; i <= NUM_WORKERS; ++i) {
 	pthread_join(Workers[i], NULL);
