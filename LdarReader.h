@@ -10,10 +10,10 @@
 #define __LDAR_READER_H__
 
 struct LidarPointNode {
-    struct LidarPointNode *next;
     double X_c;
     double Y_c;
     double Z_c;
+    struct LidarPointNode *next;
 } __attribute__ ((packed));
 
 typedef struct LidarPointNode LidarPointNode_t;
