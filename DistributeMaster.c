@@ -86,8 +86,6 @@ void DistributeSend() {
 
 	if (i == 0) {
 
-
-
 	} else {
 	    Send(msock[i], X_b, XYZ_SIZE);
 	}
