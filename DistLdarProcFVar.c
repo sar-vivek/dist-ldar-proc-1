@@ -8,16 +8,17 @@
 
 #include "DLPstd.h"
 #include "LdarReader.h"
-#include "DistributeS.c"
-#include "DistributeM.c"
-#include "MergeS.h"
-#include "MergeM.h"
+#include "DistributeSlave.c"
+#include "DistributeMaster.c"
+#include "MergeSlave.h"
+#include "MergeMaster.h"
 #include "DistLdarProcFVar.h"
 
 LidarPointNode_t *BinTbl[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 double BinU1[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
+uint32_t CellCnt[NUM_CELLS];
 LidarPointNode_t CellMin[NUM_CELLS];
 LidarPointNode_t CellMax[NUM_CELLS];
 
@@ -37,10 +38,10 @@ double Xint;
 double Yint;
 double Xdiff;
 double Ydiff;
-double Xint_local;
-double Yint_local;
-double Xdiff_local;
-double Ydiff_local;
+double Xint_cell;
+double Yint_cell;
+double Xint_bin;
+double Yint_bin;
 double X_c;
 double Y_c;
 double Z_c;
@@ -133,6 +134,12 @@ int main(int argc, char *argv[]) {
     Yratio = Yscale / Yint;
     Xdiff = (Xoffset - MinX) / Xint;
     Ydiff = (Yoffset - MinY) / Yint;
+
+    Xint_local = ;
+    Yint_local = ;
+    X
+
+
 
     if (NodeID == 0) DistributeSend();
     else DistributeReceive();

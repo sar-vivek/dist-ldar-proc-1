@@ -38,9 +38,12 @@ void Send(int sock, const void *buffer, size_t len) {
 
 void DistributeSend() {
 
+    LidarPointNode_t *itr;
+    LidarPointNode_t *prev;
     int i;
     int ix;
     int iy;
+    int c;
 
     for (i = 1; i <= NUM_NODES; ++i) {
 	memset(&svr_addr[i], 0, sizeof (struct sockaddr_in));
@@ -85,13 +88,13 @@ void DistributeSend() {
 	ix = i % NUM_CELLS_X;
 	iy = i / NUM_CELLS_X;
 
-	CellMin[i].X_c = X_c + Xint_local * ix;
-	CellMin[i].Y_c = Y_c + Yint_local * iy;
+	CellMin[i].X_c = X_c + Xint_cell * ix;
+	CellMin[i].Y_c = Y_c + Yint_cell * iy;
 	CellMin[i].Z_c = 0;
 	CellMin[i].next = NULL;
 
-	CellMax[i].X_c = X_c + Xint_local * (ix + 1);
-	CellMax[i].Y_c = Y_c + Yint_local * (iy + 1);
+	CellMax[i].X_c = X_c + Xint_cell * (ix + 1);
+	CellMax[i].Y_c = Y_c + Yint_cell * (iy + 1);
 	CellMax[i].Z_c = 0;
 	CellMax[i].next = NULL;
     }
@@ -117,11 +120,33 @@ void DistributeSend() {
 	    current->Z_c = Z_c;
 	    current->next = NULL;
 
-	    ix = X_c 
+	    ix = (X_c - MinX) / Xint_cell;
+	    iy = (Y_c - MinY) / Yint_cell;
+	    if (ix == NUM_CELLS_X) --ix;
+	    if (iy == NUM_CELLS_Y) --iy;
+	    c = NUM_CELLS_X * iy + ix;
 
+	    ix = (X_c - CellMin[c]) / Xint_bin;
+	    iy = (Y_c - CellMin[c]) / Yint_bin;
+	    if (ix == NUM_BINS_X) --ix;
+	    if (iy == NUM_BINS_Y) --iy;
 
+	    itr = BinTbl[c][ix][iy];
+	    if (BinTbl[c][ix][iy] == NULL) {
+		BinTbl[c][ix][iy] = current++;
+	    } else {
+		while (itr != NULL) {
+		    prev = itr;
+		    itr = itr->next;
+		}
+		prev->next = current++;
+	    }
 
-	    ++current;
+	    BinCnt[c][ix][iy]++;
+	    CellCnt[c]++;
+	    BinU1[c][ix][iy] += Z_c;
+	    *current2 = Z_c * Z_c;
+	    BinU2[c][ix][iy] += *current2++;
 	} else {
 	    Send(msock[i], X_b, XYZ_SIZE);
 	}
