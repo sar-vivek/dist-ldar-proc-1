@@ -40,9 +40,9 @@ void DistributeSend() {
 
     LidarPointNode_t *itr;
     LidarPointNode_t *prev;
+    long int ix;
+    long int iy;
     int i;
-    int ix;
-    int iy;
     int c;
 
     for (i = 1; i <= NUM_NODES; ++i) {
@@ -71,6 +71,17 @@ void DistributeSend() {
 	Send(msock[i], &MaxZ, DOUBLE_SIZE);
 	Send(msock[i], &MinZ, DOUBLE_SIZE);
     }
+
+    Xint = (MaxX - MinX) / NUM_NODES_X;
+    Yint = (MaxY - MinY) / NUM_NODES_Y;
+    Xratio = Xscale / Xint;
+    Yratio = Yscale / Yint;
+    Xdiff = (Xoffset - MinX) / Xint;
+    Ydiff = (Yoffset - MinY) / Yint;
+    Xint_cell = Xint / NUM_CELLS_X;
+    Yint_cell = Yint / NUM_CELLS_Y;
+    Xint_bin = Xint_cell / (NUM_BINS_X - 1);
+    Yint_bin = Yint_cell / (NUM_BINS_Y - 1);
 
     X_c = MinX;
     Y_c = MinY;
@@ -103,8 +114,8 @@ void DistributeSend() {
 	fread(X_b, INT32_SIZE, 3, las_file_in);
 	fseek(las_file_in, POINT_DATA_SKIP, SEEK_CUR);
 
-	ix = *((int32_t *) X_b) * Xratio + Xdiff;
-	iy = *((int32_t *) Y_b) * Yratio + Ydiff;
+	ix = lround(floor(*((int32_t *) X_b) * Xratio + Xdiff));
+	iy = lround(floor(*((int32_t *) Y_b) * Yratio + Ydiff));
 
 	if (ix == NUM_NODES_X) --ix;
 	if (iy == NUM_NODES_Y) --iy;
@@ -120,16 +131,14 @@ void DistributeSend() {
 	    current->Z_c = Z_c;
 	    current->next = NULL;
 
-	    ix = (X_c - MinX) / Xint_cell;
-	    iy = (Y_c - MinY) / Yint_cell;
+	    ix = lround(floor((X_c - MinX) / Xint_cell));
+	    iy = lround(floor((Y_c - MinY) / Yint_cell));
 	    if (ix == NUM_CELLS_X) --ix;
 	    if (iy == NUM_CELLS_Y) --iy;
 	    c = NUM_CELLS_X * iy + ix;
 
-	    ix = (X_c - CellMin[c]) / Xint_bin;
-	    iy = (Y_c - CellMin[c]) / Yint_bin;
-	    if (ix == NUM_BINS_X) --ix;
-	    if (iy == NUM_BINS_Y) --iy;
+	    ix = lround(floor((X_c - CellMin[c]) / Xint_bin));
+	    iy = lround(floor((Y_c - CellMin[c]) / Yint_bin));
 
 	    itr = BinTbl[c][ix][iy];
 	    if (BinTbl[c][ix][iy] == NULL) {

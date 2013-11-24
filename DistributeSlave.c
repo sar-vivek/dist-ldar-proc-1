@@ -16,13 +16,17 @@ void Receive(int sd, void *buffer, size_t len) {
     if (ret != len) perror("recv()");
 }
 
-void DistributeS() {
+void DistributeReceive() {
 
     struct sockaddr_in cli_addr;
+    LidarPointNode_t *itr;
+    LidarPointNode_t *prev;
     long int ix;
     long int iy;
     int lsock;
     int cli_addr_len;
+    int i;
+    int c;
 
     lsock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (lsock == -1) perror("socket()");
@@ -69,26 +73,82 @@ void DistributeS() {
     fflush(stdout);
 #endif
 
+    Xint = (MaxX - MinX) / NUM_NODES_X;
+    Yint = (MaxY - MinY) / NUM_NODES_Y;
+    Xratio = Xscale / Xint;
+    Yratio = Yscale / Yint;
+    Xdiff = (Xoffset - MinX) / Xint;
+    Ydiff = (Yoffset - MinY) / Yint;
+    Xint_cell = Xint / NUM_CELLS_X;
+    Yint_cell = Yint / NUM_CELLS_Y;
+    Xint_bin = Xint_cell / (NUM_BINS_X - 1);
+    Yint_bin = Yint_cell / (NUM_BINS_Y - 1);
+
+    ix = NodeID % NUM_NODES_X;
+    iy = NodeID / NUM_NODES_X;
+    X_c = MinX + Xint * ix;
+    Y_c = MinY + Yint * iy;
+
+    NodeMin.X_c = X_c;
+    NodeMin.Y_c = Y_c;
+    NodeMin.Z_c = 0;
+    NodeMin.next = NULL;
+    NodeMax.X_c = X_c + Xint;
+    NodeMax.Y_c = Y_c + Yint;
+    NodeMax.Z_c = 0;
+    NodeMax.next = NULL;
+
+    for (i = 0; i < NUM_CELLS; ++i) {
+	ix = i % NUM_CELLS_X;
+	iy = i / NUM_CELLS_X;
+
+	CellMin[i].X_c = X_c + Xint_cell * ix;
+	CellMin[i].Y_c = Y_c + Yint_cell * iy;
+	CellMin[i].Z_c = 0;
+	CellMin[i].next = NULL;
+
+	CellMax[i].X_c = X_c + Xint_cell * (ix + 1);
+	CellMax[i].Y_c = Y_c + Yint_cell * (iy + 1);
+	CellMax[i].Z_c = 0;
+	CellMax[i].next = NULL;
+    }
+
     while (1) {
 	Receive(ssock, X_b, XYZ_SIZE);
 	if (*X_b == 0 && *Y_b == 0 && *Z_b == 0) break;
 
-	X_c = (*X_b) * Xscale + Xoffset;
-	Y_c = (*Y_b) * Yscale + Yoffset;
-	Z_c = (*Z_b) * Zscale + Zoffset;
-	current->Next = NULL;
+	X_c = *((int32_t *) X_b) * Xscale + Xoffset;
+	Y_c = *((int32_t *) Y_b) * Yscale + Yoffset;
+	Z_c = *((int32_t *) Z_b) * Zscale + Zoffset;
 	current->X_c = X_c;
 	current->Y_c = Y_c;
 	current->Z_c = Z_c;
+	current->next = NULL;
 
+	ix = lround(floor((X_c - NodeMin.X_c) / Xint_cell));
+	iy = lround(floor((Y_c - NodeMin.Y_c) / Yint_cell));
+	if (ix == NUM_CELLS_X) --ix;
+	if (iy == NUM_CELLS_Y) --iy;
+	c = NUM_CELLS_X * iy + ix;
 
-	ix = lround(floor((X_c - MinX) / Xint));
-	iy = lround(floor((Y_c - MinY) / Yint));
+	ix = lround(floor((X_c - CellMin[c]) / Xint_bin));
+	iy = lround(floor((Y_c - CellMin[c]) / Yint_bin));
 
+	itr = BinTbl[c][ix][iy];
+	if (BinTbl[c][ix][iy] == NULL) {
+	    BinTbl[c][ix][iy] = current++;
+	} else {
+	    while (itr != NULL) {
+		prev = itr;
+		itr = itr->next;
+	    }
+	    prev->next = current++;
+	}
 
-
-	if (BinTbl[ix][iy] == NULL
+	BinCnt[c][ix][iy]++;
+	CellCnt[c]++;
+	BinU1[c][ix][iy] += Z_c;
+	*current2 = Z_c * Z_c;
+	BinU2[c][ix][iy] += *current2++;
     }
-
-    if (close(lsock) == -1) perror("close()");
 }

@@ -128,19 +128,6 @@ int main(int argc, char *argv[]) {
 	}
     }
 
-    Xint = (MaxX - MinX) / NUM_NODES_X;
-    Yint = (MaxY - MinY) / NUM_NODES_Y;
-    Xratio = Xscale / Xint;
-    Yratio = Yscale / Yint;
-    Xdiff = (Xoffset - MinX) / Xint;
-    Ydiff = (Yoffset - MinY) / Yint;
-
-    Xint_local = ;
-    Yint_local = ;
-    X
-
-
-
     if (NodeID == 0) DistributeSend();
     else DistributeReceive();
 
