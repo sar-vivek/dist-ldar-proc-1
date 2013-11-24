@@ -40,7 +40,30 @@ INT triLoc(int cellnum, LidarPointNode_t *point){
 }
 
 INT triangulate(int cellnum){
-    double DMAX; /*diagonal distance of a cell*/
+    double DMAX; /*pseudo-diagonal distance of a cell*/
 
-    DMAX=CellMax[cellnum]
+    DMAX=CellMax[cellnum]->X_c - CellMin[cellnum]->X_c;
+    DMAX=DMAX > CellMax[cellnum]->Y_c - CellMin[cellnum]->Y_c ? DMAX : CellMax[cellnum]->Y_c - CellMin[cellnum]->Y_c;
+
+    return Delaunay(cellnum);
+}
+
+INT Delaunay(int cellnum){
+    INT numt,nt;
+    int i,j,k;
+    numt=2*CellCnt[NUM_CELLS] + 1;
+    for(nt=0;nt<numt;nt++){
+        TriVertex[cellnum][nt]=malloc(3*sizeof(LidarPointNode_t*));
+        if(TriVertex[cellnum][nt]==NULL){
+            perror("TriVertex[cellnum][nt]");
+        }
+    }
+    for(nt=0;nt<numt;nt++){
+        TriEdge[cellnum][nt]=malloc(3*sizeof(INT));
+        if(TriEdge[cellnum][nt] == NULL){
+            perror("TriEdge[cellnum][nt])");
+        }
+    }
+
+
 
