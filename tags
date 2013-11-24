@@ -1,0 +1,162 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+BUF_LEN	DLPstd.h	30;"	d
+BinCnt	DistLdarProcFVar.c	/^uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
+BinTbl	DistLdarProcFVar.c	/^LidarPointNode_t *BinTbl[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
+BinU1	DistLdarProcFVar.c	/^double BinU1[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
+BinU2	DistLdarProcFVar.c	/^double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
+CHAR_SIZE	DLPstd.h	51;"	d
+Classification	LdarReader.h	/^    unsigned char Classification;$/;"	m	struct:LidarPoint
+DEBUG	DLPstd.h	28;"	d
+DOUBLE_SIZE	DLPstd.h	57;"	d
+DataOffset	LdarReader.c	/^uint32_t DataOffset;$/;"	v
+DataOffset	LdarReader.h	/^    uint32_t DataOffset;$/;"	m	struct:PublicHeaderBlock
+DateJulian	LdarReader.c	/^uint16_t DateJulian;$/;"	v
+DateJulian	LdarReader.h	/^    uint16_t DateJulian;$/;"	m	struct:PublicHeaderBlock
+DistributeM	DistributeM.c	/^void DistributeM() {$/;"	f
+DistributeS	DistributeS.c	/^void DistributeS() {$/;"	f
+EdgeOfFlightLine	LdarReader.h	/^    unsigned char EdgeOfFlightLine : 1;$/;"	m	struct:LidarPoint
+FileMarker	LdarReader.h	/^    unsigned char FileMarker;$/;"	m	struct:LidarPoint
+FileSig	LdarReader.c	/^char FileSig[4];$/;"	v
+FileSig	LdarReader.h	/^    char FileSig[4];$/;"	m	struct:PublicHeaderBlock
+FiltTbl	DistLdarProcFVar.c	/^int8_t *FiltTbl;$/;"	v
+GenSoft	LdarReader.c	/^char GenSoft[32];$/;"	v
+GenSoft	LdarReader.h	/^    char GenSoft[32];$/;"	m	struct:PublicHeaderBlock
+GpsTime	LdarReader.h	/^    double GpsTime;$/;"	m	struct:LidarPoint
+Guid1	LdarReader.c	/^uint32_t Guid1;$/;"	v
+Guid1	LdarReader.h	/^    uint32_t Guid1;$/;"	m	struct:PublicHeaderBlock
+Guid2	LdarReader.c	/^uint16_t Guid2;$/;"	v
+Guid2	LdarReader.h	/^    uint16_t Guid2;$/;"	m	struct:PublicHeaderBlock
+Guid3	LdarReader.c	/^uint16_t Guid3;$/;"	v
+Guid3	LdarReader.h	/^    uint16_t Guid3;$/;"	m	struct:PublicHeaderBlock
+Guid4	LdarReader.c	/^unsigned char Guid4[8];$/;"	v
+Guid4	LdarReader.h	/^    unsigned char Guid4[8];$/;"	m	struct:PublicHeaderBlock
+HeaderSize	LdarReader.c	/^uint16_t HeaderSize;$/;"	v
+HeaderSize	LdarReader.h	/^    uint16_t HeaderSize;$/;"	m	struct:PublicHeaderBlock
+INT32_SIZE	DLPstd.h	55;"	d
+INT8_SIZE	DLPstd.h	53;"	d
+Intensity	LdarReader.h	/^    uint16_t Intensity;$/;"	m	struct:LidarPoint
+LasFileInit	LdarReader.c	/^void LasFileInit(const char *filename) {$/;"	f
+LidarPoint	LdarReader.h	/^struct LidarPoint {$/;"	s
+LidarPointNode	LdarReader.h	/^struct LidarPointNode {$/;"	s
+LidarPointNode_t	LdarReader.h	/^typedef struct LidarPointNode LidarPointNode_t;$/;"	t	typeref:struct:LidarPointNode
+LidarPoint_t	LdarReader.h	/^typedef struct LidarPoint LidarPoint_t;$/;"	t	typeref:struct:LidarPoint
+MajorVers	LdarReader.c	/^unsigned char MajorVers;$/;"	v
+MajorVers	LdarReader.h	/^    unsigned char MajorVers;$/;"	m	struct:PublicHeaderBlock
+Malloc	DistLdarProcFVar.c	/^void *Malloc(size_t len) {$/;"	f
+MaxX	LdarReader.c	/^double MaxX;$/;"	v
+MaxX	LdarReader.h	/^    double MaxX;$/;"	m	struct:PublicHeaderBlock
+MaxY	LdarReader.c	/^double MaxY;$/;"	v
+MaxY	LdarReader.h	/^    double MaxY;$/;"	m	struct:PublicHeaderBlock
+MaxZ	LdarReader.c	/^double MaxZ;$/;"	v
+MaxZ	LdarReader.h	/^    double MaxZ;$/;"	m	struct:PublicHeaderBlock
+MinX	LdarReader.c	/^double MinX;$/;"	v
+MinX	LdarReader.h	/^    double MinX;$/;"	m	struct:PublicHeaderBlock
+MinY	LdarReader.c	/^double MinY;$/;"	v
+MinY	LdarReader.h	/^    double MinY;$/;"	m	struct:PublicHeaderBlock
+MinZ	LdarReader.c	/^double MinZ;$/;"	v
+MinZ	LdarReader.h	/^    double MinZ;$/;"	m	struct:PublicHeaderBlock
+MinorVers	LdarReader.c	/^unsigned char MinorVers;$/;"	v
+MinorVers	LdarReader.h	/^    unsigned char MinorVers;$/;"	m	struct:PublicHeaderBlock
+NUM_BINS_X	DLPstd.h	32;"	d
+NUM_BINS_Y	DLPstd.h	33;"	d
+NUM_NODES	DLPstd.h	35;"	d
+NUM_NODES_X	DLPstd.h	36;"	d
+NUM_NODES_Y	DLPstd.h	37;"	d
+NUM_PROCS	DLPstd.h	39;"	d
+NUM_PROCS_X	DLPstd.h	40;"	d
+NUM_PROCS_Y	DLPstd.h	41;"	d
+NodeID	DistLdarProcFVar.c	/^int NodeID;$/;"	v
+NodeIPs	DistLdarProcFVar.c	/^char NodeIPs[3][16] = {"128.255.101.181", "128.255.101.133", "128.255.101.11"};$/;"	v
+NumPointRec	LdarReader.c	/^uint32_t NumPointRec;$/;"	v
+NumPointRec	LdarReader.h	/^    uint32_t NumPointRec;$/;"	m	struct:PublicHeaderBlock
+NumPointsByRet	LdarReader.c	/^uint32_t NumPointsByRet[5];$/;"	v
+NumPointsByRet	LdarReader.h	/^    uint32_t NumPointsByRet[5];$/;"	m	struct:PublicHeaderBlock
+NumReturns	LdarReader.h	/^    unsigned char NumReturns : 3;$/;"	m	struct:LidarPoint
+NumVarLenRec	LdarReader.c	/^uint32_t NumVarLenRec;$/;"	v
+NumVarLenRec	LdarReader.h	/^    uint32_t NumVarLenRec;$/;"	m	struct:PublicHeaderBlock
+PERROR	DLPstd.h	60;"	d
+POINT_BUFFER_SIZE	DLPstd.h	43;"	d
+POINT_DATA_SKIP	DLPstd.h	45;"	d
+PORT_BASE	DLPstd.h	47;"	d
+PntTbl	DistLdarProcFVar.c	/^LidarPointNode_t *PntTbl;$/;"	v
+PointDataFormatID	LdarReader.c	/^unsigned char PointDataFormatID;$/;"	v
+PointDataFormatID	LdarReader.h	/^    unsigned char PointDataFormatID;$/;"	m	struct:PublicHeaderBlock
+PointDataRecLen	LdarReader.c	/^uint16_t PointDataRecLen;$/;"	v
+PointDataRecLen	LdarReader.h	/^    uint16_t PointDataRecLen;$/;"	m	struct:PublicHeaderBlock
+PublicHeaderBlock	LdarReader.h	/^typedef struct PublicHeaderBlock {$/;"	s
+PublicHeaderBlock_t	LdarReader.h	/^} PublicHeaderBlock_t;$/;"	t	typeref:struct:PublicHeaderBlock
+Receive	DistributeS.c	/^void Receive(int sd, void *buffer, size_t len) {$/;"	f
+Resrvd	LdarReader.c	/^uint32_t Resrvd;$/;"	v
+Resrvd	LdarReader.h	/^    uint32_t Resrvd;$/;"	m	struct:PublicHeaderBlock
+RetNum	LdarReader.h	/^    unsigned char RetNum : 3;$/;"	m	struct:LidarPoint
+ScanAngleRankLeft	LdarReader.h	/^    unsigned char ScanAngleRankLeft;$/;"	m	struct:LidarPoint
+ScanDirFlag	LdarReader.h	/^    unsigned char ScanDirFlag : 1;$/;"	m	struct:LidarPoint
+Send	DistributeM.c	/^void Send(int sd, const void *buffer, size_t len) {$/;"	f
+StopFlag	LdarReader.h	/^    int32_t StopFlag;$/;"	m	struct:LidarPoint
+SysID	LdarReader.c	/^char SysID[32];$/;"	v
+SysID	LdarReader.h	/^    char SysID[32];$/;"	m	struct:PublicHeaderBlock
+UCHAR_SIZE	DLPstd.h	52;"	d
+UINT16_SIZE	DLPstd.h	54;"	d
+UINT32_SIZE	DLPstd.h	56;"	d
+UserBitField	LdarReader.h	/^    uint16_t UserBitField;$/;"	m	struct:LidarPoint
+VAR_THRESHOLD	DLPstd.h	49;"	d
+X	DistLdarProcFVar.c	/^int32_t X;$/;"	v
+X	LdarReader.h	/^    int32_t X;$/;"	m	struct:LidarPoint
+XYZ_SIZE	DLPstd.h	58;"	d
+X_b	DistLdarProcFVar.c	/^void *X_b;$/;"	v
+X_c	DistLdarProcFVar.c	/^double X_c;$/;"	v
+X_c	LdarReader.h	/^    double X_c;$/;"	m	struct:LidarPointNode
+Xdiff	DistLdarProcFVar.c	/^double Xdiff;$/;"	v
+Xint	DistLdarProcFVar.c	/^double Xint;$/;"	v
+Xoffset	LdarReader.c	/^double Xoffset;$/;"	v
+Xoffset	LdarReader.h	/^    double Xoffset;$/;"	m	struct:PublicHeaderBlock
+Xscale	LdarReader.c	/^double Xscale;$/;"	v
+Xscale	LdarReader.h	/^    double Xscale;$/;"	m	struct:PublicHeaderBlock
+Y	DistLdarProcFVar.c	/^int32_t Y;$/;"	v
+Y	LdarReader.h	/^    int32_t Y;$/;"	m	struct:LidarPoint
+Y_b	DistLdarProcFVar.c	/^void *Y_b;$/;"	v
+Y_c	DistLdarProcFVar.c	/^double Y_c;$/;"	v
+Y_c	LdarReader.h	/^    double Y_c;$/;"	m	struct:LidarPointNode
+Ydiff	DistLdarProcFVar.c	/^double Ydiff;$/;"	v
+Year	LdarReader.c	/^uint16_t Year;$/;"	v
+Year	LdarReader.h	/^    uint16_t Year;$/;"	m	struct:PublicHeaderBlock
+Yint	DistLdarProcFVar.c	/^double Yint;$/;"	v
+Yoffset	LdarReader.c	/^double Yoffset;$/;"	v
+Yoffset	LdarReader.h	/^    double Yoffset;$/;"	m	struct:PublicHeaderBlock
+Yscale	LdarReader.c	/^double Yscale;$/;"	v
+Yscale	LdarReader.h	/^    double Yscale;$/;"	m	struct:PublicHeaderBlock
+Z	DistLdarProcFVar.c	/^int32_t Z;$/;"	v
+Z	LdarReader.h	/^    int32_t Z;$/;"	m	struct:LidarPoint
+Z2	DistLdarProcFVar.c	/^double *Z2;$/;"	v
+Z_b	DistLdarProcFVar.c	/^void *Z_b;$/;"	v
+Z_c	DistLdarProcFVar.c	/^double Z_c;$/;"	v
+Z_c	LdarReader.h	/^    double Z_c;$/;"	m	struct:LidarPointNode
+Zoffset	LdarReader.c	/^double Zoffset;$/;"	v
+Zoffset	LdarReader.h	/^    double Zoffset;$/;"	m	struct:PublicHeaderBlock
+Zscale	LdarReader.c	/^double Zscale;$/;"	v
+Zscale	LdarReader.h	/^    double Zscale;$/;"	m	struct:PublicHeaderBlock
+__DISTRIBUTE_M_H__	DistributeM.h	10;"	d
+__DIST_LDAR_PROC_FVAR_H__	DistLdarProcFVar.h	10;"	d
+__DLP_STD_H__	DLPstd.h	10;"	d
+__LDAR_READER_H__	LdarReader.h	10;"	d
+count	DistLdarProcFVar.c	/^uint32_t count;$/;"	v
+current	DistLdarProcFVar.c	/^LidarPointNode_t *current;$/;"	v
+current2	DistLdarProcFVar.c	/^double *current2;$/;"	v
+las_file_in	LdarReader.c	/^FILE *las_file_in;$/;"	v
+las_header	LdarReader.c	/^PublicHeaderBlock_t las_header;$/;"	v
+main	DistLdarProcFVar.c	/^int main(int argc, char *argv[]) {$/;"	f
+msock	DistLdarProcFVar.c	/^int msock[NUM_NODES];$/;"	v
+n	DistLdarProcFVar.c	/^uint32_t n;$/;"	v
+next	LdarReader.h	/^    struct LidarPointNode *next;$/;"	m	struct:LidarPointNode	typeref:struct:LidarPointNode::LidarPointNode
+ssock	DistLdarProcFVar.c	/^int ssock;$/;"	v
+svr_addr	DistLdarProcFVar.c	/^struct sockaddr_in svr_addr[NUM_NODES];$/;"	v	typeref:struct:sockaddr_in
+t_diff	DistLdarProcFVar.c	/^double t_diff;$/;"	v
+t_end	DistLdarProcFVar.c	/^struct timeval t_end;$/;"	v	typeref:struct:timeval
+t_start	DistLdarProcFVar.c	/^struct timeval t_start;$/;"	v	typeref:struct:timeval
+u1	DistLdarProcFVar.c	/^double u1;$/;"	v
+u2	DistLdarProcFVar.c	/^double u2;$/;"	v

@@ -18,10 +18,10 @@ INT NumTri[NUM_CELLS];
 INT triLoc(int cellnum, LidarPointNode_t *point){
     double xp,yp;
     INT t;
-    int i;
+    int i,found;
     LidarPointNode_t *v1, *v2;
     t=NumTri[cellnum];
-    int found=0;
+    found=0;
     while(!found){
         for(i=0; i<3; i++){
             v1=TriVertex[cellnum][t][i];
@@ -39,4 +39,8 @@ INT triLoc(int cellnum, LidarPointNode_t *point){
     return t;
 }
 
+INT triangulate(int cellnum){
+    double DMAX; /*diagonal distance of a cell*/
+
+    DMAX=CellMax[cellnum]
 

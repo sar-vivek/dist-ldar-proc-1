@@ -14,6 +14,8 @@ extern LidarPointNode_t *CurTbl[NUM_BINS_X][NUM_BINS_Y];
 extern double BinU1[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 extern double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 extern uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
+extern LidarPointNode_t CellMin[NUM_CELLS];
+extern LidarPointNode_t CellMax[NUM_CELLS];
 
 extern char NodeIPs[NUM_NODES][16];
 
