@@ -18,11 +18,16 @@ LidarPointNode_t *BinTbl[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 double BinU1[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
+LidarPointNode_t CellMin[NUM_CELLS];
+LidarPointNode_t CellMax[NUM_CELLS];
 
 char NodeIPs[3][16] = {"128.255.101.181", "128.255.101.133", "128.255.101.11"};
 
 struct sockaddr_in svr_addr[NUM_NODES];
 int msock[NUM_NODES];
+
+LidarPointNode_t NodeMin;
+LidarPointNode_t NodeMax;
 
 struct timeval t_start;
 struct timeval t_end;
@@ -32,6 +37,10 @@ double Xint;
 double Yint;
 double Xdiff;
 double Ydiff;
+double Xint_local;
+double Yint_local;
+double Xdiff_local;
+double Ydiff_local;
 double X_c;
 double Y_c;
 double Z_c;
@@ -118,8 +127,8 @@ int main(int argc, char *argv[]) {
 	}
     }
 
-    Xint = (MaxX - MinX) / (NUM_BINS_X - 1);
-    Yint = (MaxY - MinY) / (NUM_BINS_Y - 1);
+    Xint = (MaxX - MinX) / NUM_NODES_X;
+    Yint = (MaxY - MinY) / NUM_NODES_Y;
     Xratio = Xscale / Xint;
     Yratio = Yscale / Yint;
     Xdiff = (Xoffset - MinX) / Xint;
