@@ -94,14 +94,15 @@ INT Delaunay(int cell){
     for(iy=0;iy<NUM_BINS_Y;iy++){
         if(iy%2){
             for(ix=NUM_BINS_X-1;ix>=0;ix--)
-                processBins(ix,iy);
+                processBin(cell, ix,iy);
         }
         else{
             for(ix=0;ix<NUM_BINS_X;ix++)
-                processBins(ix,iy);
+                processBin(cell, ix,iy);
         }
     }
 
+    /*------------------remove pseudos-----------------------*/
     /*remove all triangles containing pseudo-triangle points*/
     /*first find triangle that is to be removed*/
     nt=0;
@@ -163,6 +164,7 @@ INT Delaunay(int cell){
             }
         }
     }
+    /*-----------------------end remove pseudo----------------------------*/
 }
 
 /* ix and nt are triangle numbers 
@@ -180,6 +182,11 @@ int edg(int cell, INT ix, INT nt){
 #endif
 }
 
+/*
+ * process a bin 
+ * insert points one by one 
+ */
+RETURNTYPE processBin(int cell, INT x, INT y){
 
 
 
