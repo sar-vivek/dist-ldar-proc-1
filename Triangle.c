@@ -186,8 +186,27 @@ int edg(int cell, INT ix, INT nt){
  * process a bin 
  * insert points one by one 
  */
-RETURNTYPE processBin(int cell, INT x, INT y){
+RETURNTYPE processBin(int cell, INT ix, INT iy){
+    LidarPointNode_t *p;
+    double px, py;
+    INT t;
+    p=BinTbl[cell][ix][iy];
+    if(p==NULL)
+        return;
+    while(p!=NULL){
+        px=p->X_c;
+        py=p->Y_c;
+        t=triLoc(cell, p);
+        
 
+    
+    
+    
+        p=p->next;
+    }
+
+
+}
 
 
 
