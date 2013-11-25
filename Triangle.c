@@ -50,7 +50,7 @@ INT triangulate(int cell){
 
 INT Delaunay(int cell){
     INT numt,nt;
-    INT i,j,k;
+    INT ix,iy;
     double DMAX; /*pseudo-diagonal distance of a cell*/
     LidarPointNode_t BigTriangle[3];
     double xcen, ycen;
@@ -85,16 +85,104 @@ INT Delaunay(int cell){
     TriVertex[cell][0][0] = &(BigTriangle[0]);
     TriVertex[cell][0][1] = &(BigTriangle[1]);
     TriVertex[cell][0][2] = &(BigTriangle[2]);
-    TriEdge[cell][0][0] = -1; 
-    TriEdge[cell][0][1] = -1;
-    TriEdge[cell][0][2] = -1; 
+    TriEdge[cell][0][0] = BOUNDRY; 
+    TriEdge[cell][0][1] = BOUNDRY;
+    TriEdge[cell][0][2] = BOUNDRY; 
 
     /*insert points one by one*/
     /*for optimization we insert from bins in a specific order - details in the paper*/
-    for(nt=
+    for(iy=0;iy<NUM_BINS_Y;iy++){
+        if(iy%2){
+            for(ix=NUM_BINS_X-1;ix>=0;ix--)
+                processBins(ix,iy);
+        }
+        else{
+            for(ix=0;ix<NUM_BINS_X;ix++)
+                processBins(ix,iy);
+        }
+    }
+
+    /*remove all triangles containing pseudo-triangle points*/
+    /*first find triangle that is to be removed*/
+    nt=0;
+    remove=0;
+    while(!remove && nt<numt){
+        i=0;
+        while(!remove && i < 3){
+            for(j=0;j<3;j++){
+                if(TriVertex[cell][nt][i] == &BigTriangle[j]){
+                    remove=1;
+                    break;
+                }   
+            }
+            i++;
+        }
+        nt++;
+    }
+    /*nt is the first triangle that to be removed*/
+    if(remove){
+        for(i=0;i<3;i++){
+            ix=TriEdge[cell][nt][i];
+            if(ix!=BOUNDRY){
+                TriEdge[cell][ix][edg(cell, ix,nt)]=BOUNDRY;  
+            }
+        }
+    }
+    /*starting from nt now remove rest triangles*/
+    tstart=nt+1;
+    tstop=numt;
+    numt=nt-1;
+    for(nt=tstart; nt<tstop; nt++){
+        i=0;
+        while(!remove && i < 3){
+            for(j=0;j<3;j++){
+                if(TriVertex[cell][nt][i] == &BigTriangle[j]){
+                    remove=1;
+                    break;
+                }   
+            }
+            i++;
+        }
+        if(remove){
+            for(i=0;i<3;i++){
+                ix=TriEdge[cell][nt][i];
+                if(ix!=BOUNDRY){
+                    TriEdge[cell][ix][edg(cell, ix,nt)]=BOUNDRY;  
+                }
+            }
+        }
+        else{
+            numt = numt+1;
+            for(i=0;i<3;i++){
+                ix=TriEdge[cell][nt][i];
+                TriEdge[cell][numt][i] = ix;
+                TriVertex[cell][numt][i] = TriVertex[cell][nt][i];
+                if(ix!=BOUNDRY){
+                    TriEdge[cell][ix][edg(cell, ix,nt)]=numt;
+                }
+            }
+        }
+    }
+}
+
+/* ix and nt are triangle numbers 
+ * and they are adjacent
+ * return the edge number between 0 to 2 which is shared between these two triangles
+ */
+int edg(int cell, INT ix, INT nt){
+    int i;
+    for(i=0;i<3;i++){
+        if(TriEdge[cell][ix][i]==nt)
+            return i;
+    }
+#if DEBUG
+    printf("%s:%d:triangles are not adjacent\n",__FILE__, __LINE__);
+#endif
+}
 
 
 
 
-    
+
+
 
