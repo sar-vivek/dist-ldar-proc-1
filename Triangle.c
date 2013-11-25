@@ -10,7 +10,7 @@
 
 
 LidarPointNode_t* **TriVertex[NUM_CELLS]; 
-LidarPointNode_t* **TriEdge[NUM_CELLS];
+INT  **TriEdge[NUM_CELLS];
 INT NumTri[NUM_CELLS]; 
 
 
@@ -88,7 +88,7 @@ INT Delaunay(int cell){
     TriEdge[cell][0][0] = BOUNDRY; 
     TriEdge[cell][0][1] = BOUNDRY;
     TriEdge[cell][0][2] = BOUNDRY; 
-
+    NumTri[cell]=0; /*triangles are numbered from 0*/ 
     /*insert points one by one*/
     /*for optimization we insert from bins in a specific order - details in the paper*/
     for(iy=0;iy<NUM_BINS_Y;iy++){
@@ -187,17 +187,62 @@ int edg(int cell, INT ix, INT nt){
  * insert points one by one 
  */
 RETURNTYPE processBin(int cell, INT ix, INT iy){
-    LidarPointNode_t *p;
+    LidarPointNode_t *p, *v1, *v2, *v3;
     double px, py;
-    INT t;
+    INT t,a,b,c;
     p=BinTbl[cell][ix][iy];
     if(p==NULL)
         return;
     while(p!=NULL){
         px=p->X_c;
         py=p->Y_c;
+        /*locate t in p is*/
         t=triLoc(cell, p);
+        /*add 2 new and update 1 triangles*/
+        a=TriEdge[cell][t][0];
+        b=TriEdge[cell][t][1];
+        c=TriEdge[cell][t][2];
+        v1=TriVertex[cell][t][0];
+        v2=TriVertex[cell][t][1];
+        v3=TriVertex[cell][t][2];
+        TriEdge[cell][t][0]=NumTri[cell]+2;
+        TriEdge[cell][t][1]=a;
+        TriEdge[cell][t][2]=NumTri[cell]+1;
+        NumTri[cell]++;
+        TriVertex[cell][NumTri[cell]][0]=p;
+        TriVertex[cell][NumTri[cell]][1]=v2;
+        TriVertex[cell][NumTri[cell]][2]=v3;
+        TriEdge[cell][NumTri[cell]][0]=t;
+        TriEdge[cell][NumTri[cell]][1]=b;
+        TriEdge[cell][NumTri[cell]][2]=NumTri[cell]+1;
+        NumTri[cell]++;
+        TriVertex[cell][NumTri[cell]][0]=p;
+        TriVertex[cell][NumTri[cell]][1]=v3;
+        TriVertex[cell][NumTri[cell]][2]=v1;
+        TriEdge[cell][NumTri[cell]][0]=NumTri[cell]-1;
+        TriEdge[cell][NumTri[cell]][1]=c;
+        TriEdge[cell][NumTri[cell]][2]=t;
+        /*update adjacency lists*/
+        if(a!=BOUNDRY)
+            push(cell, t);
+        if(b!=BOUNDRY){
+            TriEdge[cell][b][edg(cell,b,t)]=NumTri[cell]-1;
+            push(cell, NumTri[cell]-1);
+        }
+        if(c!=BOUNDRY){
+            TriEdge[cell][c][edg(cell,c,t)]=NumTri[cell];
+            push(cell, NumTri[cell]);
+        }
+
+
         
+
+
+
+
+        
+
+
 
     
     
