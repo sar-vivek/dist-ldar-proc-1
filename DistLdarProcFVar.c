@@ -127,6 +127,7 @@ int main(int argc, char *argv[]) {
 		BinCnt[i][ix][iy] = 0;
 	    }
 	}
+	CellCnt[i] = 0;
     }
 
     if (NodeID == 0) DistributeSend();
