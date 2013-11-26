@@ -41,8 +41,6 @@ extern double Yint_bin;
 extern double X_c;
 extern double Y_c;
 extern double Z_c;
-extern double u1;
-extern double u2;
 
 extern LidarPointNode_t *PntTbl;
 extern LidarPointNode_t *current;
@@ -59,7 +57,6 @@ extern int32_t X;
 extern int32_t Y;
 extern int32_t Z;
 extern uint32_t count;
-extern uint32_t n;
 
 void *Malloc(size_t len);
 

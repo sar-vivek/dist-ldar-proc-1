@@ -46,8 +46,6 @@ double Yint_bin;
 double X_c;
 double Y_c;
 double Z_c;
-double u1;
-double u2;
 
 LidarPointNode_t *PntTbl;
 LidarPointNode_t *current;
@@ -64,7 +62,6 @@ int32_t X;
 int32_t Y;
 int32_t Z;
 uint32_t count;
-uint32_t n;
 
 void *Malloc(size_t len) {
     void *ret;
