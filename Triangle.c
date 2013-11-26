@@ -233,7 +233,7 @@ RETURNTYPE processBin(int cell, INT ix, INT iy){
             TriEdge[cell][c][edg(cell,c,t)]=NumTri[cell];
             push(cell, NumTri[cell]);
         }
-
+        while(topstk[cell] > 0)
 
         
 
