@@ -1,14 +1,13 @@
 /*JWHGPLHERE*/
 /*
- * DistributeS.c
+ * DistributeSlave.c
  *
  * Author: James W Hegeman
  *
  */
 
 #include "DLPstd.h"
-#include "LdarReader.h"
-#include "DistributeS.h"
+#include "DistributeSlave.h"
 
 void Receive(int sd, void *buffer, size_t len) {
     ssize_t ret;
@@ -19,8 +18,6 @@ void Receive(int sd, void *buffer, size_t len) {
 void DistributeReceive() {
 
     struct sockaddr_in cli_addr;
-    LidarPointNode_t *itr;
-    LidarPointNode_t *prev;
     long int ix;
     long int iy;
     int lsock;
@@ -123,7 +120,6 @@ void DistributeReceive() {
 	current->X_c = X_c;
 	current->Y_c = Y_c;
 	current->Z_c = Z_c;
-	current->next = NULL;
 
 	ix = lround(floor((X_c - NodeMin.X_c) / Xint_cell));
 	iy = lround(floor((Y_c - NodeMin.Y_c) / Yint_cell));
@@ -134,16 +130,8 @@ void DistributeReceive() {
 	ix = lround(floor((X_c - CellMin[c]) / Xint_bin));
 	iy = lround(floor((Y_c - CellMin[c]) / Yint_bin));
 
-	itr = BinTbl[c][ix][iy];
-	if (BinTbl[c][ix][iy] == NULL) {
-	    BinTbl[c][ix][iy] = current++;
-	} else {
-	    while (itr != NULL) {
-		prev = itr;
-		itr = itr->next;
-	    }
-	    prev->next = current++;
-	}
+	current->next = BinTbl[c][ix][iy];
+	BinTbl[c][ix][iy] = current++;
 
 	BinCnt[c][ix][iy]++;
 	CellCnt[c]++;

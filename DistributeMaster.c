@@ -6,9 +6,9 @@
  *
  */
 
-#include <"DLPstd.h">
-#include <"DistLdarProcFVar.h">
-#include <"DistributeMaster.h">
+#include "DLPstd.h"
+#include "DistLdarProcFVar.h"
+#include "DistributeMaster.h"
 
 int Socket(int domain, int type, int protocol) {
     int ret;
@@ -38,8 +38,6 @@ void Send(int sock, const void *buffer, size_t len) {
 
 void DistributeSend() {
 
-    LidarPointNode_t *itr;
-    LidarPointNode_t *prev;
     long int ix;
     long int iy;
     int i;
@@ -140,16 +138,8 @@ void DistributeSend() {
 	    ix = lround(floor((X_c - CellMin[c]) / Xint_bin));
 	    iy = lround(floor((Y_c - CellMin[c]) / Yint_bin));
 
-	    itr = BinTbl[c][ix][iy];
-	    if (BinTbl[c][ix][iy] == NULL) {
-		BinTbl[c][ix][iy] = current++;
-	    } else {
-		while (itr != NULL) {
-		    prev = itr;
-		    itr = itr->next;
-		}
-		prev->next = current++;
-	    }
+	    current->next = BinTbl[c][ix][iy];
+	    BinTbl[c][ix][iy] = current++;
 
 	    BinCnt[c][ix][iy]++;
 	    CellCnt[c]++;

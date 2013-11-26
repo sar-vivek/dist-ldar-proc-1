@@ -7,7 +7,6 @@
  */
 
 #include "DLPstd.h"
-#include "DistLdarProcFVar.h"
 #include "MergeSlave.h"
 
 void MergeSend() {
