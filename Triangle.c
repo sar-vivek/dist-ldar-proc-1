@@ -39,14 +39,6 @@ INT triLoc(int cell, LidarPointNode_t *point){
     return t;
 }
 
-INT triangulate(int cell){
-    double DMAX; /*pseudo-diagonal distance of a cell*/
-
-    DMAX=CellMax[cell]->X_c - CellMin[cell]->X_c;
-    DMAX=DMAX > CellMax[cell]->Y_c - CellMin[cell]->Y_c ? DMAX : CellMax[cell]->Y_c - CellMin[cell]->Y_c;
-
-    return Delaunay(cell);
-}
 
 INT Delaunay(int cell){
     INT numt,nt;
@@ -85,9 +77,9 @@ INT Delaunay(int cell){
     TriVertex[cell][0][0] = &(BigTriangle[0]);
     TriVertex[cell][0][1] = &(BigTriangle[1]);
     TriVertex[cell][0][2] = &(BigTriangle[2]);
-    TriEdge[cell][0][0] = BOUNDRY; 
-    TriEdge[cell][0][1] = BOUNDRY;
-    TriEdge[cell][0][2] = BOUNDRY; 
+    TriEdge[cell][0][0] = BOUNDARY; 
+    TriEdge[cell][0][1] = BOUNDARY;
+    TriEdge[cell][0][2] = BOUNDARY; 
     NumTri[cell]=0; /*triangles are numbered from 0*/ 
     /*insert points one by one*/
     /*for optimization we insert from bins in a specific order - details in the paper*/
@@ -124,8 +116,8 @@ INT Delaunay(int cell){
     if(remove){
         for(i=0;i<3;i++){
             ix=TriEdge[cell][nt][i];
-            if(ix!=BOUNDRY){
-                TriEdge[cell][ix][edg(cell, ix,nt)]=BOUNDRY;  
+            if(ix!=BOUNDARY){
+                TriEdge[cell][ix][edg(cell, ix,nt)]=BOUNDARY;  
             }
         }
     }
@@ -147,8 +139,8 @@ INT Delaunay(int cell){
         if(remove){
             for(i=0;i<3;i++){
                 ix=TriEdge[cell][nt][i];
-                if(ix!=BOUNDRY){
-                    TriEdge[cell][ix][edg(cell, ix,nt)]=BOUNDRY;  
+                if(ix!=BOUNDARY){
+                    TriEdge[cell][ix][edg(cell, ix,nt)]=BOUNDARY;  
                 }
             }
         }
@@ -158,7 +150,7 @@ INT Delaunay(int cell){
                 ix=TriEdge[cell][nt][i];
                 TriEdge[cell][numt][i] = ix;
                 TriVertex[cell][numt][i] = TriVertex[cell][nt][i];
-                if(ix!=BOUNDRY){
+                if(ix!=BOUNDARY){
                     TriEdge[cell][ix][edg(cell, ix,nt)]=numt;
                 }
             }
@@ -186,7 +178,7 @@ int edg(int cell, INT ix, INT nt){
  * process a bin 
  * insert points one by one 
  */
-RETURNTYPE processBin(int cell, INT ix, INT iy){
+void processBin(int cell, INT ix, INT iy){
     LidarPointNode_t *p, *v1, *v2, *v3;
     double px, py;
     INT t,a,b,c,l,r;
@@ -224,13 +216,13 @@ RETURNTYPE processBin(int cell, INT ix, INT iy){
         TriEdge[cell][NumTri[cell]][1]=c;
         TriEdge[cell][NumTri[cell]][2]=t;
         /*update adjacency lists*/
-        if(a!=BOUNDRY)
+        if(a!=BOUNDARY)
             push(cell, t);
-        if(b!=BOUNDRY){
+        if(b!=BOUNDARY){
             TriEdge[cell][b][edg(cell,b,t)]=NumTri[cell]-1;
             push(cell, NumTri[cell]-1);
         }
-        if(c!=BOUNDRY){
+        if(c!=BOUNDARY){
             TriEdge[cell][c][edg(cell,c,t)]=NumTri[cell];
             push(cell, NumTri[cell]);
         }
@@ -259,14 +251,14 @@ RETURNTYPE processBin(int cell, INT ix, INT iy){
                 TriEdge[cell][r][1]=b;
                 TriEdge[cell][r][2]=c;
 
-                if(a!=BOUNDRY){
+                if(a!=BOUNDARY){
                     TriEdge[cell][a][edg(cell,a,r)]=l;
                     push(cell,l);
                 }
-                if(b!=BOUNDRY){
+                if(b!=BOUNDARY){
                     push(cell,r);
                 }
-                if(c!=BOUNDRY){
+                if(c!=BOUNDARY){
                     TriEdge[cell][c][edg(cell,c,l)]=r;
                 }
             }
