@@ -58,6 +58,7 @@
 #define XYZ_SIZE 12
 
 #define BOUNDARY 0xffffffff 
+#define INT uint32_t
 #define PERROR(X) do {           \
 fprintf(stderr, X);              \
 fprintf(stderr, ". Exiting.\n"); \

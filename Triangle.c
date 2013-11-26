@@ -12,6 +12,8 @@
 LidarPointNode_t* **TriVertex[NUM_CELLS]; 
 INT  **TriEdge[NUM_CELLS];
 INT NumTri[NUM_CELLS]; 
+INT *estack[NUM_CELLS];
+INT topstk[NUM_CELLS];
 
 
 
