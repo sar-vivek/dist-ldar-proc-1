@@ -74,6 +74,7 @@ int main(int argc, char *argv[]) {
 
     long int ix;
     long int iy;
+    INT numt,nt;
     int i;
 
     if (argc < 3 || argc > 4) {
@@ -105,8 +106,31 @@ int main(int argc, char *argv[]) {
      * Vivek - You should put your malloc()'s here.
      *
      **********************************************/
-
-
+    for(i=0;i<NUM_CELLS;i++){
+        TriVertex[i]=malloc((2*CellCnt[i]+1)*sizeof(LidarPoint_t**));
+        if(TriVertex[i]==NULL){
+            perror("TriVertex[i]");
+            exit(-1);
+        }
+        for(nt=0;nt<2*CellCnt[i]+1;nt++){
+            TriVertex[i][nt]=malloc(3*sizeof(LidarPointNode_t*));
+            if(TriVertex[i][nt]==NULL){
+                perror("TriVertex[cell][nt]");
+            }
+        }
+        TriEdge[i]=malloc((2*CellCnt[i]+1)*sizeof(INT*));
+        if(TriEdge[i]==NULL){
+            perror("TriEdge[i]");
+            exit(-1);
+        }
+        for(nt=0;nt<2*CellCnt[i]+1;nt++){
+            TriEdge[i][nt]=malloc(3*sizeof(INT));
+            if(TriEdge[i][nt] == NULL){
+                perror("TriEdge[cell][nt])");
+            }
+        }
+    }
+ 
     PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
     current = PntTbl;
 

@@ -53,18 +53,6 @@ INT Delaunay(int cell){
     DMAX=DMAX > CellMax[cell]->Y_c - CellMin[cell]->Y_c ? DMAX : CellMax[cell]->Y_c - CellMin[cell]->Y_c;
 
     numt=2*CellCnt[cell] + 1;
-    for(nt=0;nt<numt;nt++){
-        TriVertex[cell][nt]=malloc(3*sizeof(LidarPointNode_t*));
-        if(TriVertex[cell][nt]==NULL){
-            perror("TriVertex[cell][nt]");
-        }
-    }
-    for(nt=0;nt<numt;nt++){
-        TriEdge[cell][nt]=malloc(3*sizeof(INT));
-        if(TriEdge[cell][nt] == NULL){
-            perror("TriEdge[cell][nt])");
-        }
-    }
 
 
     /*calculate pseudo-triangle*/
