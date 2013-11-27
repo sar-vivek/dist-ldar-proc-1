@@ -18,7 +18,7 @@ int Socket(int domain, int type, int protocol) {
     return ret;
 }
 
-void Connect(int sock, struct sockaddr *addr, socklen_t addr_len) {
+void Connect(int sock, struct sockaddr_in *addr, socklen_t addr_len) {
     int ret;
     ret = connect(sock, addr, addr_len);
     if (ret == -1) perror("connect()");
