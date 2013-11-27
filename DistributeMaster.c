@@ -20,7 +20,7 @@ int Socket(int domain, int type, int protocol) {
 
 void Connect(int sock, struct sockaddr_in *addr, socklen_t addr_len) {
     int ret;
-    ret = connect(sock, addr, addr_len);
+    ret = connect(sock, (struct sockaddr *) addr, addr_len);
     if (ret == -1) perror("connect()");
 }
 
