@@ -12,11 +12,13 @@
 
 COMPILER=gcc
 LIBS=-lm -lpthread
-MAINOBJECTS=main.o
-OPTM=-O0
+OPTM=-O2
 OPTS=-g
+OBJ=DistLdarProcVar.o DistrubteMaster.o DistributeSlave.o LdarReader.o MergeMaster.o MergeSlave.o ProcessData.o 
 
-
+DLP:
+	$(COMPILER) $(OPTS) -c *.c -I . 
+	$(COMPILER) $(OPTS) $(LIBS) -I . -o DistLdarProc *.o $(OPTM) 	
 
 clean:
 	rm -f *.o
