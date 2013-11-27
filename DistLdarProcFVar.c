@@ -72,14 +72,9 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
-<<<<<<< HEAD
-    long int ix;
-    long int iy;
     INT numt,nt;
-=======
     uint32_t ix;
     uint32_t iy;
->>>>>>> b21f647b9a0d82d0039e0b5a0dd0a6bfaeebb831
     int i;
 
     if (argc < 3 || argc > 4) {
@@ -112,6 +107,31 @@ int main(int argc, char *argv[]) {
      *
      **********************************************/
     
+    for(i=0;i<NUM_CELLS;i++){
+        TriVertex[i]=malloc((2*CellCnt[i]+1)*sizeof(LidarPoint_t**));
+        if(TriVertex[i]==NULL){
+            perror("TriVertex[i]");
+            exit(-1);
+        }
+        for(nt=0;nt<2*CellCnt[i]+1;nt++){
+            TriVertex[i][nt]=malloc(3*sizeof(LidarPointNode_t*));
+            if(TriVertex[i][nt]==NULL){
+                perror("TriVertex[cell][nt]");
+            }
+        }
+        TriEdge[i]=malloc((2*CellCnt[i]+1)*sizeof(INT*));
+        if(TriEdge[i]==NULL){
+            perror("TriEdge[i]");
+            exit(-1);
+        }
+        for(nt=0;nt<2*CellCnt[i]+1;nt++){
+            TriEdge[i][nt]=malloc(3*sizeof(INT));
+            if(TriEdge[i][nt] == NULL){
+                perror("TriEdge[cell][nt])");
+            }
+        }
+    }
+
     PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
     current = PntTbl;
 
@@ -125,19 +145,19 @@ int main(int argc, char *argv[]) {
     Z_b = X_b + 2 * INT32_SIZE;
 
     for (ix = 0; ix < NumPointRec; ++ix) {
-	*(FiltTbl + ix) = 0;
+        *(FiltTbl + ix) = 0;
     }
 
     for (i = 0; i < NUM_CELLS; ++i) {
-	for (ix = 0; ix < NUM_BINS_X; ++ix) {
-	    for (iy = 0; iy < NUM_BINS_Y; ++iy) {
-		BinTbl[i][ix][iy] = NULL;
-		BinU1[i][ix][iy] = 0;
-		BinU2[i][ix][iy] = 0;
-		BinCnt[i][ix][iy] = 0;
-	    }
-	}
-	CellCnt[i] = 0;
+        for (ix = 0; ix < NUM_BINS_X; ++ix) {
+            for (iy = 0; iy < NUM_BINS_Y; ++iy) {
+                BinTbl[i][ix][iy] = NULL;
+                BinU1[i][ix][iy] = 0;
+                BinU2[i][ix][iy] = 0;
+                BinCnt[i][ix][iy] = 0;
+            }
+        }
+        CellCnt[i] = 0;
     }
 
     if (NodeID == 0) DistributeSend();
@@ -145,8 +165,8 @@ int main(int argc, char *argv[]) {
 
     WorkerIDs[0] = 0;
     for (i = 1; i <= NUM_WORKERS; ++i) {
-	WorkerIDs[i] = i;
-	if (pthread_create(&Workers[i], NULL, &ProcessData, &WorkerIDs[i])) perror("pthread_create()");
+        WorkerIDs[i] = i;
+        if (pthread_create(&Workers[i], NULL, &ProcessData, &WorkerIDs[i])) perror("pthread_create()");
     }
     ProcessData(&WorkerIDs[0]);
 
@@ -154,7 +174,7 @@ int main(int argc, char *argv[]) {
     else MergeReceive();
 
     for (i = 1; i <= NUM_WORKERS; ++i) {
-	pthread_join(Workers[i], NULL);
+        pthread_join(Workers[i], NULL);
     }
 
     gettimeofday(&t_end, NULL);
