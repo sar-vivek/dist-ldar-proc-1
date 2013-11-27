@@ -6,6 +6,7 @@
  */
 
 #include "DLPstd.h"
+#include "LdarReader.h"
 #include "DistLdarProcFVar.h"
 #include "Triangle.h"
 
