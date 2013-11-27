@@ -56,12 +56,12 @@ void *X_b;
 void *Y_b;
 void *Z_b;
 
-int NodeID;
-int ssock;
 int32_t X;
 int32_t Y;
 int32_t Z;
 uint32_t count;
+int NodeID;
+int ssock;
 
 void *Malloc(size_t len) {
     void *ret;
@@ -72,8 +72,8 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
-    long int ix;
-    long int iy;
+    uint32_t ix;
+    uint32_t iy;
     int i;
 
     if (argc < 3 || argc > 4) {

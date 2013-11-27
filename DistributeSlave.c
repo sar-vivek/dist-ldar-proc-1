@@ -18,8 +18,8 @@ void Receive(int sd, void *buffer, size_t len) {
 void DistributeReceive() {
 
     struct sockaddr_in cli_addr;
-    long int ix;
-    long int iy;
+    uint32_t ix;
+    uint32_t iy;
     int lsock;
     int cli_addr_len;
     int i;

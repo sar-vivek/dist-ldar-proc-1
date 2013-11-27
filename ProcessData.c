@@ -13,11 +13,11 @@ void *ProcessData(void *workerID) {
 
     double u1;
     double u2;
-    long int ix;
-    long int iy;
-    int c;
     uint32_t count2;
+    uint32_t ix;
+    uint32_t iy;
     uint32_t n;
+    int c;
 
     c = *((int *) workerID);
 
