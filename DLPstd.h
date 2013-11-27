@@ -33,6 +33,8 @@
 #define NUM_BINS_Y 3001
 
 #define NUM_CELLS 16
+#define NUM_CELLS_X 4
+#define NUM_CELLS_Y 4
 
 #define NUM_NODES 3
 #define NUM_NODES_X 3
