@@ -29,8 +29,8 @@
 
 #define BUF_LEN 4096
 
-#define NUM_BINS_X 301
-#define NUM_BINS_Y 301
+#define NUM_BINS_X 3001
+#define NUM_BINS_Y 3001
 
 #define NUM_CELLS 16
 #define NUM_CELLS_X 4
