@@ -7,6 +7,7 @@
  */
 
 #include "DLPstd.h"
+#include "LdarReader.h"
 #include "DistLdarProcFVar.h"
 #include "DistributeMaster.h"
 

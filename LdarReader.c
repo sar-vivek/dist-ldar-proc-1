@@ -31,7 +31,6 @@ uint32_t Guid1;
 uint32_t DataOffset;
 uint32_t NumVarLenRec;
 uint32_t NumPointRec;
-PublicHeaderBlock_t las_header;
 char FileSig[4];
 uint16_t Guid2;
 uint16_t Guid3;

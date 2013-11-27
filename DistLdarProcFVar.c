@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
     count = NumPointRec;
 
     for(i=0;i<NUM_CELLS;i++){
-        TriVertex[i]=malloc((2*CellCnt[i]+1)*sizeof(LidarPoint_t**));
+        TriVertex[i]=malloc((2*CellCnt[i]+1)*sizeof(LidarPointNode_t**));
         if(TriVertex[i]==NULL){
             perror("TriVertex[i]");
             exit(-1);
