@@ -99,6 +99,14 @@ int main(int argc, char *argv[]) {
     LasFileInit(argv[2]);
     count = NumPointRec;
 
+
+    /**********************************************
+     *
+     * Vivek - You should put your malloc()'s here.
+     *
+     **********************************************/
+
+
     PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
     current = PntTbl;
 
