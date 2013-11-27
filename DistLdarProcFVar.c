@@ -28,6 +28,9 @@ LidarPointNode_t CellMax[NUM_CELLS];
 struct sockaddr_in svr_addr[NUM_NODES];
 int msock[NUM_NODES];
 
+pthread_t Workers[NUM_WORKERS + 1];
+int WorkerIDs[NUM_WORKERS + 1];
+
 char NodeIPs[3][16] = {"128.255.101.181", "128.255.101.133", "128.255.101.11"};
 
 LidarPointNode_t NodeMin;

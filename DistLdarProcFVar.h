@@ -21,6 +21,9 @@ extern LidarPointNode_t CellMax[NUM_CELLS];
 extern struct sockaddr_in svr_addr[NUM_NODES];
 extern int msock[NUM_NODES];
 
+extern pthread_t Workers[NUM_WORKERS + 1];
+extern int WorkerIDs[NUM_WORKERS + 1];
+
 extern char NodeIPs[3][16];
 
 extern LidarPointNode_t NodeMin;

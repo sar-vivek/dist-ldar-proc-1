@@ -44,6 +44,8 @@
 #define NUM_PROCS_X 3
 #define NUM_PROCS_Y 2
 
+#define NUM_WORKERS 15
+
 #define POINT_BUFFER_SIZE 4000000
 
 #define POINT_DATA_SKIP 16
@@ -63,6 +65,7 @@
 
 #define BOUNDARY 0xffffffff 
 #define INT uint32_t
+
 #define PERROR(X) do {           \
 fprintf(stderr, X);              \
 fprintf(stderr, ". Exiting.\n"); \
