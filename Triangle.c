@@ -1,21 +1,19 @@
 /*
- * Author:  Vivek Sardeshmukh   
+ * Triangle.c
+ *
+ * Author: Vivek B Sardeshmukh   
  * 
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
+#include "DLPstd.h"
+#include "DistLdarProcFVar.h"
+#include "Triangle.h"
 
 LidarPointNode_t* **TriVertex[NUM_CELLS]; 
 INT  **TriEdge[NUM_CELLS];
 INT NumTri[NUM_CELLS]; 
 INT *estack[NUM_CELLS];
 INT topstk[NUM_CELLS];
-
-
 
 INT triLoc(int cell, LidarPointNode_t *point){
     double xp,yp;

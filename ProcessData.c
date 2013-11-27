@@ -7,6 +7,7 @@
  */
 
 #include "DLPstd.h"
+#include "DistLdarProcFVar.h"
 #include "ProcessData.h"
 
 typedef struct VarWeight {

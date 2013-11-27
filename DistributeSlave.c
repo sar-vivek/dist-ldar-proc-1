@@ -7,6 +7,7 @@
  */
 
 #include "DLPstd.h"
+#include "DistLdarProcFVar.h"
 #include "DistributeSlave.h"
 
 void Receive(int sd, void *buffer, size_t len) {

@@ -8,10 +8,11 @@
 
 #include "DLPstd.h"
 #include "LdarReader.h"
-#include "DistributeSlave.c"
-#include "DistributeMaster.c"
+#include "Triangle.h"
 #include "MergeSlave.h"
 #include "MergeMaster.h"
+#include "DistributeSlave.h"
+#include "DistributeMaster.h"
 #include "DistLdarProcFVar.h"
 
 LidarPointNode_t *BinTbl[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
