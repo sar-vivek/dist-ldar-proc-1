@@ -123,6 +123,10 @@ int main(int argc, char *argv[]) {
                 perror("TriEdge[cell][nt])");
             }
         }
+        estack[i]=malloc(sizeof(INT)*CellCnt[i]);
+        if(estack[i]==NULL){
+            perror("estack");
+        }
     }
 
     PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
