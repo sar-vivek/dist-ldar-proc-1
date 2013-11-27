@@ -1,4 +1,4 @@
-/*JWHGPLHERE*/a
+/*JWHGPLHERE*/
 /*
  * DistributeMaster.c
  *
