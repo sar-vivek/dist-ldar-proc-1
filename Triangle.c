@@ -75,8 +75,8 @@ INT Delaunay(int cell){
     /*for optimization we insert from bins in a specific order - details in the paper*/
     for(iy=0;iy<NUM_BINS_Y;iy++){
         if(iy%2){
-            for(ix=NUM_BINS_X-1;ix>=0;ix--)
-                processBin(cell, ix,iy);
+            for(ix=0;ix<NUM_BINS_X;ix++)
+                processBin(cell, NUM_BINS_X-ix-1,iy);
         }
         else{
             for(ix=0;ix<NUM_BINS_X;ix++)
@@ -216,7 +216,7 @@ void processBin(int cell, INT ix, INT iy){
             TriEdge[cell][c][edg(cell,c,t)]=NumTri[cell];
             push(cell, NumTri[cell]);
         }
-        while(topstk[cell] > 0){
+        while(topstk[cell]!=(INT)-1) { /*simply saying >=0 */
             l=pop(cell);
             r=TriEdge[cell][l][1];
             /*circumcircle test*/
@@ -299,7 +299,7 @@ void push(int cell, INT e){
 }
 
 INT pop(int cell){
-    if(topstk[cell] >= 0){
+    if(topstk[cell] != (INT)-1 ){
         topstk[cell]--;
         return estack[cell][topstk[cell]+1];
     }
