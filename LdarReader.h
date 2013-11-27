@@ -40,7 +40,6 @@ extern uint32_t Guid1;
 extern uint32_t DataOffset;
 extern uint32_t NumVarLenRec;
 extern uint32_t NumPointRec;
-extern PublicHeaderBlock_t las_header;
 extern char FileSig[4];
 extern uint16_t Guid2;
 extern uint16_t Guid3;
