@@ -29,8 +29,8 @@
 
 #define BUF_LEN 4096
 
-#define NUM_BINS_X 3001
-#define NUM_BINS_Y 3001
+#define NUM_BINS_X 301
+#define NUM_BINS_Y 301
 
 #define NUM_CELLS 16
 #define NUM_CELLS_X 4
@@ -45,8 +45,6 @@
 #define NUM_PROCS_Y 2
 
 #define NUM_WORKERS 15
-
-#define POINT_BUFFER_SIZE 4000000
 
 #define POINT_DATA_SKIP 16
 
