@@ -40,23 +40,185 @@ INT triLoc(int cell, LidarPointNode_t *point){
     return t;
 }
 
+void push(int cell, INT e){
+    topstk[cell]++;
+    if(topstk[cell] > CellCnt[cell]){
+        printf("%s:%d:stack full\n",__FILE__, __LINE__);
+        return;
+    }
+    estack[cell][topstk[cell]]=e;
+    return;
+}
 
-INT Delaunay(int cell){
+INT pop(int cell){
+    if(topstk[cell] != (INT)-1 ){
+        topstk[cell]--;
+        return estack[cell][topstk[cell]+1];
+    }
+    else{
+        printf("%s:%d:stack empty\n",__FILE__, __LINE__);
+        exit(-1);
+    }
+}
+
+
+
+/* ix and nt are triangle numbers 
+ * and they are adjacent
+ * return the edge number between 0 to 2 which is shared between these two triangles
+ */
+int edg(int cell, INT ix, INT nt){
+    int i;
+    for(i=0;i<3;i++){
+        if(TriEdge[cell][ix][i]==nt)
+            return i;
+    }
+#if DEBUG
+    printf("%s:%d:triangles are not adjacent\n",__FILE__, __LINE__);
+#endif
+}
+/*
+ * circumcircle test - triangle v1 v2 v3. point p
+ * returns 0 if swap is not required
+ * else returns 1
+ */
+int swap(int cell, LidarPointNode_t *v1, LidarPointNode_t *v2, LidarPointNode_t *v3, LidarPointNode_t *p){
+    double x13, y13, x23, y23, x1p, y1p, x2p, y2p, cosa, cosb,sina,sinb;
+    x13=v1->X_c - v3->X_c;
+    y13=v1->Y_c - v3->Y_c;
+    x23=v2->X_c - v3->X_c;
+    y23=v2->Y_c - v3->Y_c;
+    x1p=v1->X_c - p->X_c;
+    y1p=v1->Y_c - p->Y_c;
+    x2p=v2->X_c - p->X_c;
+    y2p=v2->Y_c - p->Y_c;
+    cosa=x13*x23 + y13*y23;
+    cosb=x2p*x1p + y1p*y2p;
+    if((cosa > 0) && (cosb > 0)) 
+        return 0;
+    else if((cosa < 0) && (cosb < 0))
+        return 1;
+    else{
+        sina=x13*y13-x23*y13;
+        sinb=x2p*y1p-x1p*y2p;
+        if(sina*cosb+sinb*cosa < 0)
+            return 1;
+        else
+            return 0;
+    }
+}
+
+/*
+ * process a bin 
+ * insert points one by one 
+ */
+void processBin(int cell, INT ix, INT iy){
+    LidarPointNode_t *p, *v1, *v2, *v3;
+    double px, py;
+    INT t,a,b,c,l,r;
+    int erl,era,erb;
+    p=BinTbl[cell][ix][iy];
+    if(p==NULL)
+        return;
+    while(p!=NULL){
+        px=p->X_c;
+        py=p->Y_c;
+        /*locate t in p is*/
+        t=triLoc(cell, p);
+        /*add 2 new and update 1 triangles*/
+        a=TriEdge[cell][t][0];
+        b=TriEdge[cell][t][1];
+        c=TriEdge[cell][t][2];
+        v1=TriVertex[cell][t][0];
+        v2=TriVertex[cell][t][1];
+        v3=TriVertex[cell][t][2];
+        TriEdge[cell][t][0]=NumTri[cell]+2;
+        TriEdge[cell][t][1]=a;
+        TriEdge[cell][t][2]=NumTri[cell]+1;
+        NumTri[cell]++;
+        TriVertex[cell][NumTri[cell]][0]=p;
+        TriVertex[cell][NumTri[cell]][1]=v2;
+        TriVertex[cell][NumTri[cell]][2]=v3;
+        TriEdge[cell][NumTri[cell]][0]=t;
+        TriEdge[cell][NumTri[cell]][1]=b;
+        TriEdge[cell][NumTri[cell]][2]=NumTri[cell]+1;
+        NumTri[cell]++;
+        TriVertex[cell][NumTri[cell]][0]=p;
+        TriVertex[cell][NumTri[cell]][1]=v3;
+        TriVertex[cell][NumTri[cell]][2]=v1;
+        TriEdge[cell][NumTri[cell]][0]=NumTri[cell]-1;
+        TriEdge[cell][NumTri[cell]][1]=c;
+        TriEdge[cell][NumTri[cell]][2]=t;
+        /*update adjacency lists*/
+        if(a!=BOUNDARY)
+            push(cell, t);
+        if(b!=BOUNDARY){
+            TriEdge[cell][b][edg(cell,b,t)]=NumTri[cell]-1;
+            push(cell, NumTri[cell]-1);
+        }
+        if(c!=BOUNDARY){
+            TriEdge[cell][c][edg(cell,c,t)]=NumTri[cell];
+            push(cell, NumTri[cell]);
+        }
+        while(topstk[cell]!=(INT)-1) { /*simply saying >=0 */
+            l=pop(cell);
+            r=TriEdge[cell][l][1];
+            /*circumcircle test*/
+            erl=edg(cell,r,l);
+            era=(erl+1)%3;
+            erb=(era+1)%3;
+            v1=TriVertex[cell][r][erl];
+            v2=TriVertex[cell][r][era];
+            v3=TriVertex[cell][r][erb];
+            if(swap(cell, v1,v2,v3,p)){
+                /*p is in circle of triangle r*/
+                a=TriEdge[cell][r][era];
+                b=TriEdge[cell][r][erb];
+                c=TriEdge[cell][l][2];
+                TriVertex[cell][l][2]=v3;
+                TriEdge[cell][l][1]=a;
+                TriEdge[cell][l][2]=r;
+                TriVertex[cell][r][0]=p;
+                TriVertex[cell][r][1]=v3;
+                TriVertex[cell][r][2]=v1;
+                TriEdge[cell][r][0]=l;
+                TriEdge[cell][r][1]=b;
+                TriEdge[cell][r][2]=c;
+
+                if(a!=BOUNDARY){
+                    TriEdge[cell][a][edg(cell,a,r)]=l;
+                    push(cell,l);
+                }
+                if(b!=BOUNDARY){
+                    push(cell,r);
+                }
+                if(c!=BOUNDARY){
+                    TriEdge[cell][c][edg(cell,c,l)]=r;
+                }
+            }
+        }
+        p=p->next;
+    }
+}
+
+
+void Delaunay(int cell){
     INT numt,nt;
-    INT ix,iy;
+    INT ix,iy,tstart,tstop;
+    int i,j,remove;
     double DMAX; /*pseudo-diagonal distance of a cell*/
     LidarPointNode_t BigTriangle[3];
     double xcen, ycen;
 
-    DMAX=CellMax[cell]->X_c - CellMin[cell]->X_c;
-    DMAX=DMAX > CellMax[cell]->Y_c - CellMin[cell]->Y_c ? DMAX : CellMax[cell]->Y_c - CellMin[cell]->Y_c;
+    DMAX=CellMax[cell].X_c - CellMin[cell].X_c;
+    DMAX=DMAX > CellMax[cell].Y_c - CellMin[cell].Y_c ? DMAX : CellMax[cell].Y_c - CellMin[cell].Y_c;
 
     numt=2*CellCnt[cell] + 1;
 
 
     /*calculate pseudo-triangle*/
-    xcen=0.5*(CellMax[cell]->X_c - CellMin[cell]->X_c);
-    ycen=0.5*(CellMax[cell]->Y_c - CellMin[cell]->Y_c);
+    xcen=0.5*(CellMax[cell].X_c - CellMin[cell].X_c);
+    ycen=0.5*(CellMax[cell].Y_c - CellMin[cell].Y_c);
     BigTriangle[0].X_c = xcen-0.866*DMAX;
     BigTriangle[0].Y_c = ycen-0.5*DMAX;
     BigTriangle[1].X_c = xcen+0.866*DMAX;
@@ -147,165 +309,4 @@ INT Delaunay(int cell){
     }
     /*-----------------------end remove pseudo----------------------------*/
 }
-
-/* ix and nt are triangle numbers 
- * and they are adjacent
- * return the edge number between 0 to 2 which is shared between these two triangles
- */
-int edg(int cell, INT ix, INT nt){
-    int i;
-    for(i=0;i<3;i++){
-        if(TriEdge[cell][ix][i]==nt)
-            return i;
-    }
-#if DEBUG
-    printf("%s:%d:triangles are not adjacent\n",__FILE__, __LINE__);
-#endif
-}
-
-/*
- * process a bin 
- * insert points one by one 
- */
-void processBin(int cell, INT ix, INT iy){
-    LidarPointNode_t *p, *v1, *v2, *v3;
-    double px, py;
-    INT t,a,b,c,l,r;
-    int erl,era,erb;
-    p=BinTbl[cell][ix][iy];
-    if(p==NULL)
-        return;
-    while(p!=NULL){
-        px=p->X_c;
-        py=p->Y_c;
-        /*locate t in p is*/
-        t=triLoc(cell, p);
-        /*add 2 new and update 1 triangles*/
-        a=TriEdge[cell][t][0];
-        b=TriEdge[cell][t][1];
-        c=TriEdge[cell][t][2];
-        v1=TriVertex[cell][t][0];
-        v2=TriVertex[cell][t][1];
-        v3=TriVertex[cell][t][2];
-        TriEdge[cell][t][0]=NumTri[cell]+2;
-        TriEdge[cell][t][1]=a;
-        TriEdge[cell][t][2]=NumTri[cell]+1;
-        NumTri[cell]++;
-        TriVertex[cell][NumTri[cell]][0]=p;
-        TriVertex[cell][NumTri[cell]][1]=v2;
-        TriVertex[cell][NumTri[cell]][2]=v3;
-        TriEdge[cell][NumTri[cell]][0]=t;
-        TriEdge[cell][NumTri[cell]][1]=b;
-        TriEdge[cell][NumTri[cell]][2]=NumTri[cell]+1;
-        NumTri[cell]++;
-        TriVertex[cell][NumTri[cell]][0]=p;
-        TriVertex[cell][NumTri[cell]][1]=v3;
-        TriVertex[cell][NumTri[cell]][2]=v1;
-        TriEdge[cell][NumTri[cell]][0]=NumTri[cell]-1;
-        TriEdge[cell][NumTri[cell]][1]=c;
-        TriEdge[cell][NumTri[cell]][2]=t;
-        /*update adjacency lists*/
-        if(a!=BOUNDARY)
-            push(cell, t);
-        if(b!=BOUNDARY){
-            TriEdge[cell][b][edg(cell,b,t)]=NumTri[cell]-1;
-            push(cell, NumTri[cell]-1);
-        }
-        if(c!=BOUNDARY){
-            TriEdge[cell][c][edg(cell,c,t)]=NumTri[cell];
-            push(cell, NumTri[cell]);
-        }
-        while(topstk[cell]!=(INT)-1) { /*simply saying >=0 */
-            l=pop(cell);
-            r=TriEdge[cell][l][1];
-            /*circumcircle test*/
-            erl=edg(r,l);
-            era=(erl+1)%3;
-            erb=(era+1)%3;
-            v1=TriVertex[cell][r][erl];
-            v2=TriVertex[cell][r][era];
-            v3=TriVertex[cell][r][erb];
-            if(swap(cell, v1,v2,v3,p)){
-                /*p is in circle of triangle r*/
-                a=TriEdge[cell][r][era];
-                b=TriEdge[cell][r][erb];
-                c=TriEdge[cell][l][2];
-                TriVertex[cell][l][2]=v3;
-                TriEdge[cell][l][1]=a;
-                TriEdge[cell][l][2]=r;
-                TriVertex[cell][r][0]=p;
-                TriVertex[cell][r][1]=v3;
-                TriVertex[cell][r][2]=v1;
-                TriEdge[cell][r][0]=l;
-                TriEdge[cell][r][1]=b;
-                TriEdge[cell][r][2]=c;
-
-                if(a!=BOUNDARY){
-                    TriEdge[cell][a][edg(cell,a,r)]=l;
-                    push(cell,l);
-                }
-                if(b!=BOUNDARY){
-                    push(cell,r);
-                }
-                if(c!=BOUNDARY){
-                    TriEdge[cell][c][edg(cell,c,l)]=r;
-                }
-            }
-        }
-        p=p->next;
-    }
-}
-
-/*
- * circumcircle test - triangle v1 v2 v3. point p
- * returns 0 if swap is not required
- * else returns 1
- */
-int swap(int cell, LidarPointNode_t *v1, LidarPointNode_t *v2, LidarPointNode_t *v3, LidarPointNode_t *p){
-    double x13, y13, x23, y23, x1p, y1p, x2p, y2p, cosa, cosb,sina,sinb;
-    x13=v1->X_c - v3->X_c;
-    y13=v1->Y_c - v3->Y_c;
-    x23=v2->X_c - v3->X_c;
-    y23=v2->Y_c - v3->Y_c;
-    x1p=v1->X_c - p->X_c;
-    y1p=v1->Y_c - p->Y_c;
-    x2p=v2->X_c - p->X_c;
-    y2p=v2->Y_c - p->Y_c;
-    cosa=x13*x23 + y13*y23;
-    cosb=x2p*x1p + y1p*y2p;
-    if((cosa > 0) && (cosb > 0)) 
-        return 0;
-    else if((cosa < 0) && (cosb < 0))
-        return 1;
-    else{
-        sina=x13*y13-x23*y13;
-        sinb=x2p*y1p-x1p*y2p;
-        if(sina*cosb+sinb*cosa < 0)
-            return 1;
-        else
-            return 0
-    }
-}
-
-void push(int cell, INT e){
-    topstk[cell]++;
-    if(topstk[cell] > CellCnt[cell]){
-        printf("%s:%d:stack full\n",__FILE__, __LINE__);
-        return;
-    }
-    estack[cell][topstk[cell]]=e;
-    return;
-}
-
-INT pop(int cell){
-    if(topstk[cell] != (INT)-1 ){
-        topstk[cell]--;
-        return estack[cell][topstk[cell]+1];
-    }
-    else{
-        printf("%s:%d:stack empty\n",__FILE__, __LINE__);
-        exit(-1);
-    }
-}
-
 

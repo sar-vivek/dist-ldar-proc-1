@@ -11,7 +11,7 @@ extern INT NumTri[NUM_CELLS];
 extern INT *estack[NUM_CELLS];/*[CellCnt[cell]] - malloc it*/
 extern INT topstk[NUM_CELLS];
 
-extern void Delaunay(int cell); 
+void Delaunay(int cell); 
 
 
 
