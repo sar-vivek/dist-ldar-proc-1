@@ -100,13 +100,6 @@ int main(int argc, char *argv[]) {
     LasFileInit(argv[2]);
     count = NumPointRec;
 
-
-    /**********************************************
-     *
-     * Vivek - You should put your malloc()'s here.
-     *
-     **********************************************/
-    
     for(i=0;i<NUM_CELLS;i++){
         TriVertex[i]=malloc((2*CellCnt[i]+1)*sizeof(LidarPoint_t**));
         if(TriVertex[i]==NULL){
