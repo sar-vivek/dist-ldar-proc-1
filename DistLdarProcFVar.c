@@ -56,12 +56,12 @@ void *X_b;
 void *Y_b;
 void *Z_b;
 
-int NodeID;
-int ssock;
 int32_t X;
 int32_t Y;
 int32_t Z;
 uint32_t count;
+int NodeID;
+int ssock;
 
 void *Malloc(size_t len) {
     void *ret;
@@ -72,9 +72,14 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
+<<<<<<< HEAD
     long int ix;
     long int iy;
     INT numt,nt;
+=======
+    uint32_t ix;
+    uint32_t iy;
+>>>>>>> b21f647b9a0d82d0039e0b5a0dd0a6bfaeebb831
     int i;
 
     if (argc < 3 || argc > 4) {
@@ -106,31 +111,7 @@ int main(int argc, char *argv[]) {
      * Vivek - You should put your malloc()'s here.
      *
      **********************************************/
-    for(i=0;i<NUM_CELLS;i++){
-        TriVertex[i]=malloc((2*CellCnt[i]+1)*sizeof(LidarPoint_t**));
-        if(TriVertex[i]==NULL){
-            perror("TriVertex[i]");
-            exit(-1);
-        }
-        for(nt=0;nt<2*CellCnt[i]+1;nt++){
-            TriVertex[i][nt]=malloc(3*sizeof(LidarPointNode_t*));
-            if(TriVertex[i][nt]==NULL){
-                perror("TriVertex[cell][nt]");
-            }
-        }
-        TriEdge[i]=malloc((2*CellCnt[i]+1)*sizeof(INT*));
-        if(TriEdge[i]==NULL){
-            perror("TriEdge[i]");
-            exit(-1);
-        }
-        for(nt=0;nt<2*CellCnt[i]+1;nt++){
-            TriEdge[i][nt]=malloc(3*sizeof(INT));
-            if(TriEdge[i][nt] == NULL){
-                perror("TriEdge[cell][nt])");
-            }
-        }
-    }
- 
+    
     PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
     current = PntTbl;
 

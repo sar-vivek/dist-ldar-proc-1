@@ -13,10 +13,11 @@ void *ProcessData(void *workerID) {
 
     double u1;
     double u2;
-    long int ix;
-    long int iy;
-    int c;
     uint32_t count2;
+    uint32_t ix;
+    uint32_t iy;
+    uint32_t n;
+    int c;
 
     c = *((int *) workerID);
 
@@ -51,6 +52,11 @@ void *ProcessData(void *workerID) {
 	    n = 0;
 	    if (BinCnt[c][ix][iy] == 0) continue;
 	    if (ix > 0) {
+		if (ix > 
+
+
+
+
 		if (iy > 0) {
 		    u1 += BinU1[c][ix - 1][iy - 1];
 		    u2 += BinU2[c][ix - 1][iy - 1];
@@ -70,9 +76,9 @@ void *ProcessData(void *workerID) {
 		u2 += 2 * BinU2[c][ix][iy - 1];
 		n += 2 * BinCnt[c][ix][iy - 1];
 	    }
-	    u1 += 3 * BinU1[c][ix][iy];
-	    u2 += 3 * BinU2[c][ix][iy];
-	    n += 3 * BinCnt[c][ix][iy];
+	    u1 += 4 * BinU1[c][ix][iy];
+	    u2 += 4 * BinU2[c][ix][iy];
+	    n += 4 * BinCnt[c][ix][iy];
 	    if (iy < NUM_BINS_Y - 1) {
 		u1 += 2 * BinU1[c][ix][iy + 1];
 		u2 += 2 * BinU2[c][ix][iy + 1];

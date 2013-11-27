@@ -38,8 +38,8 @@ void Send(int sock, const void *buffer, size_t len) {
 
 void DistributeSend() {
 
-    long int ix;
-    long int iy;
+    uint32_t ix;
+    uint32_t iy;
     int i;
     int c;
 
