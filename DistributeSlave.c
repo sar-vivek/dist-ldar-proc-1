@@ -130,8 +130,8 @@ void DistributeReceive() {
 	if (iy == NUM_CELLS_Y) --iy;
 	c = NUM_CELLS_X * iy + ix;
 
-	ix = lround(floor((X_c - CellMin[c]) / Xint_bin));
-	iy = lround(floor((Y_c - CellMin[c]) / Yint_bin));
+	ix = lround(floor((X_c - CellMin[c].X_c) / Xint_bin));
+	iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
 
 	current->next = BinTbl[c][ix][iy];
 	BinTbl[c][ix][iy] = current++;
