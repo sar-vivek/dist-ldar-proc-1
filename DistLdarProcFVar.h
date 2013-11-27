@@ -35,6 +35,8 @@ extern struct timeval t_end;
 extern double t_diff;
 extern double Xdiff;
 extern double Ydiff;
+extern double Xratio;
+extern double Yratio;
 extern double Xint;
 extern double Yint;
 extern double Xint_cell;

@@ -114,7 +114,8 @@ void DistributeReceive() {
 
     while (1) {
 	Receive(ssock, X_b, XYZ_SIZE);
-	if (*X_b == 0 && *Y_b == 0 && *Z_b == 0) break;
+
+	if (*((int32_t *) X_b) == 0 && *((int32_t *) Y_b) == 0 && *((int32_t *) Z_b) == 0) break;
 
 	X_c = *((int32_t *) X_b) * Xscale + Xoffset;
 	Y_c = *((int32_t *) Y_b) * Yscale + Yoffset;

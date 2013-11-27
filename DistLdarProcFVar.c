@@ -42,6 +42,8 @@ struct timeval t_end;
 double t_diff;
 double Xdiff;
 double Ydiff;
+double Xratio;
+double Yratio;
 double Xint;
 double Yint;
 double Xint_cell;

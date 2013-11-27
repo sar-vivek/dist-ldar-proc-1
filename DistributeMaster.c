@@ -53,10 +53,10 @@ void DistributeSend() {
 	svr_addr[i].sin_port = htons(PORT_BASE);
 	svr_addr[i].sin_addr.s_addr = inet_addr(NodeIPs[i]);
 
-	Connect(msock[i], svr_addr[i], sizeof (struct sockaddr_in));
+	Connect(msock[i], &svr_addr[i], sizeof (struct sockaddr_in));
     }
 
-    for (i = 1; i < = NUM_NODES; ++i) {
+    for (i = 1; i <= NUM_NODES; ++i) {
 	Send(msock[i], &Xscale, DOUBLE_SIZE);
 	Send(msock[i], &Yscale, DOUBLE_SIZE);
 	Send(msock[i], &Zscale, DOUBLE_SIZE);
@@ -150,5 +150,13 @@ void DistributeSend() {
 	} else {
 	    Send(msock[i], X_b, XYZ_SIZE);
 	}
+    }
+
+    *((int32_t *) X_b) = 0;
+    *((int32_t *) Y_b) = 0;
+    *((int32_t *) Z_b) = 0;
+
+    for (i = 1; i <= NUM_NODES; ++i) {
+	Send(msock[i], X_b, XYZ_SIZE);
     }
 }
