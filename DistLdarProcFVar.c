@@ -22,8 +22,8 @@ double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 uint32_t CellCnt[NUM_CELLS];
 
-LidarPointNode_t* CellMin[NUM_CELLS];
-LidarPointNode_t* CellMax[NUM_CELLS];
+LidarPointNode_t CellMin[NUM_CELLS];
+LidarPointNode_t CellMax[NUM_CELLS];
 
 struct sockaddr_in svr_addr[NUM_NODES];
 int msock[NUM_NODES];
