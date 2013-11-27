@@ -17,8 +17,8 @@ OPTS=-g
 OBJ=DistLdarProcVar.o DistrubteMaster.o DistributeSlave.o LdarReader.o MergeMaster.o MergeSlave.o ProcessData.o 
 
 DLP:
-	$(COMPILER) $(OPTS) -c *.c -I . 
-	$(COMPILER) $(OPTS) $(LIBS) -I . -o DistLdarProc *.o $(OPTM) 	
+	$(COMPILER) $(OPTS) -c *.c -I . -pg 
+	$(COMPILER) $(OPTS) $(LIBS) -I . -o DistLdarProc *.o $(OPTM) -pg
 
 clean:
 	rm -f *.o
