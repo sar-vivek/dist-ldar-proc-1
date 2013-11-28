@@ -40,10 +40,6 @@
 #define NUM_NODES_X 3
 #define NUM_NODES_Y 1
 
-#define NUM_PROCS 6
-#define NUM_PROCS_X 3
-#define NUM_PROCS_Y 2
-
 #define NUM_WORKERS 15
 
 #define POINT_DATA_SKIP 16
