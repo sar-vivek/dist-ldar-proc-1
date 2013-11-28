@@ -44,7 +44,7 @@ void DistributeSend() {
     int i;
     int c;
 
-    for (i = 1; i <= NUM_NODES; ++i) {
+    for (i = 1; i < NUM_NODES; ++i) {
 	memset(&svr_addr[i], 0, sizeof (struct sockaddr_in));
 
 	msock[i] = Socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -56,7 +56,7 @@ void DistributeSend() {
 	Connect(msock[i], &svr_addr[i], sizeof (struct sockaddr_in));
     }
 
-    for (i = 1; i <= NUM_NODES; ++i) {
+    for (i = 1; i < NUM_NODES; ++i) {
 	Send(msock[i], &Xscale, DOUBLE_SIZE);
 	Send(msock[i], &Yscale, DOUBLE_SIZE);
 	Send(msock[i], &Zscale, DOUBLE_SIZE);
