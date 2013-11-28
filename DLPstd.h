@@ -32,15 +32,15 @@
 #define NUM_BINS_X 10001
 #define NUM_BINS_Y 10001
 
-#define NUM_CELLS 16
-#define NUM_CELLS_X 4
+#define NUM_CELLS 32
+#define NUM_CELLS_X 8
 #define NUM_CELLS_Y 4
 
-#define NUM_NODES 3
-#define NUM_NODES_X 3
+#define NUM_NODES 1
+#define NUM_NODES_X 1
 #define NUM_NODES_Y 1
 
-#define NUM_WORKERS 15
+#define NUM_WORKERS 31
 
 #define POINT_DATA_SKIP 16
 
