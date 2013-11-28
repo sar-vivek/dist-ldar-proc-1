@@ -21,6 +21,8 @@ INT triLoc(int cell, LidarPointNode_t *point){
     INT t;
     int i,found;
     LidarPointNode_t *v1, *v2;
+    xp=point->X_c;
+    yp=point->Y_c;
     t=NumTri[cell];
     found=0;
     while(!found){
@@ -76,6 +78,7 @@ int edg(int cell, INT ix, INT nt){
 #if DEBUG
     printf("%s:%d:triangles are not adjacent\n",__FILE__, __LINE__);
 #endif
+    return 0;
 }
 /*
  * circumcircle test - triangle v1 v2 v3. point p
