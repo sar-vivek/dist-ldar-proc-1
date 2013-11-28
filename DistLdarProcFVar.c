@@ -79,7 +79,7 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
-    INT numt,nt;
+    INT nt;
     uint32_t ix;
     uint32_t iy;
     int i;
