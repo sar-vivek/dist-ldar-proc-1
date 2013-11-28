@@ -117,15 +117,12 @@ int swap(int cell, LidarPointNode_t *v1, LidarPointNode_t *v2, LidarPointNode_t 
  */
 void processBin(int cell, INT ix, INT iy){
     LidarPointNode_t *p, *v1, *v2, *v3;
-    double px, py;
     INT t,a,b,c,l,r;
     int erl,era,erb;
     p=BinTbl[cell][ix][iy];
     if(p==NULL)
         return;
     while(p!=NULL){
-        px=p->X_c;
-        py=p->Y_c;
         /*locate t in p is*/
         t=triLoc(cell, p);
         /*add 2 new and update 1 triangles*/
