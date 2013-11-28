@@ -121,6 +121,12 @@ void DistributeSend() {
 
 	i = NUM_NODES_X * iy + ix;
 
+#if DEBUG == 1
+	if (count % 100000 = 17) {
+	    printf("i=%d ", i);
+	}
+#endif
+
 	if (i == 0) {
 	    X_c = *((int32_t *) X_b) * Xscale + Xoffset;
 	    Y_c = *((int32_t *) Y_b) * Yscale + Yoffset;
@@ -156,7 +162,7 @@ void DistributeSend() {
     *((int32_t *) Y_b) = 0;
     *((int32_t *) Z_b) = 0;
 
-    for (i = 1; i <= NUM_NODES; ++i) {
+    for (i = 1; i < NUM_NODES; ++i) {
 	Send(msock[i], X_b, XYZ_SIZE);
     }
 }
