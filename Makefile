@@ -18,7 +18,7 @@ OBJ=DistLdarProcFVar.o DistributeMaster.o DistributeSlave.o LdarReader.o MergeMa
 
 DLP:
 	$(COMPILER) $(OPTS) -c *.c -I . -pg 
-	$(COMPILER) $(OPTS) $(LIBS) -I . -o DistLdarProc *.o $(OPTM) -pg
+	$(COMPILER) $(OPTS) -I . -o DistLdarProc *.o $(OPTM) -pg  $(LIBS) 
 
 clean:
 	rm -f DistLdarProc
