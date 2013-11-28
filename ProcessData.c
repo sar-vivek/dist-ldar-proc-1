@@ -74,7 +74,7 @@ void *ProcessData(void *workerID) {
 		(ix == 2890 && iy == 1576) ||
 		(ix == 2615 && iy == 2910))
 	    {
-		printf("Bin [%ld,%ld] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
+		printf("Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
 	    }
 	    count2 += BinCnt[c][ix][iy];
 	}
