@@ -122,7 +122,7 @@ void DistributeSend() {
 	i = NUM_NODES_X * iy + ix;
 
 #if DEBUG == 1
-	if (count % 100000 = 17) {
+	if (count % 100000 == 17) {
 	    printf("i=%d ", i);
 	}
 #endif
