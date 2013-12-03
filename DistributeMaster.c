@@ -79,8 +79,8 @@ void DistributeSend() {
     Ydiff = (Yoffset - MinY) / Yint;
     Xint_cell = Xint / NUM_CELLS_X;
     Yint_cell = Yint / NUM_CELLS_Y;
-    Xint_bin = Xint_cell / (NUM_BINS_X - 1);
-    Yint_bin = Yint_cell / (NUM_BINS_Y - 1);
+    Xint_bin = Xint_cell / NUM_BINS_X;
+    Yint_bin = Yint_cell / NUM_BINS_Y;
 
     X_c = MinX;
     Y_c = MinY;
@@ -122,7 +122,7 @@ void DistributeSend() {
 	i = NUM_NODES_X * iy + ix;
 
 #if DEBUG == 1
-	if (count % 100000 == 17) {
+	if (count % 1000000 == 478593) {
 	    printf("i=%d ", i);
 	}
 #endif
@@ -144,6 +144,8 @@ void DistributeSend() {
 
 	    ix = lround(floor((X_c - CellMin[c].X_c) / Xint_bin));
 	    iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
+	    if (ix == NUM_BINS_X) --ix;
+	    if (iy == NUM_BINS_Y) --iy;
 
 	    current->next = BinTbl[c][ix][iy];
 	    BinTbl[c][ix][iy] = current++;

@@ -29,8 +29,9 @@
 
 #define BUF_LEN 4096
 
-#define NUM_BINS_X 10001
-#define NUM_BINS_Y 10001
+/* NUM_BINS_X and NUM_BINS_Y should be even */
+#define NUM_BINS_X 10000
+#define NUM_BINS_Y 10000
 
 #define NUM_CELLS 32
 #define NUM_CELLS_X 8
