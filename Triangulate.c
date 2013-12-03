@@ -1,5 +1,5 @@
 /*
- * Triangle.c
+ * Triangulate.c
  *
  * Author: Vivek B Sardeshmukh   
  * 
@@ -8,7 +8,7 @@
 #include "DLPstd.h"
 #include "LdarReader.h"
 #include "DistLdarProcFVar.h"
-#include "Triangle.h"
+#include "Triangulate.h"
 
 LidarPointNode_t* **TriVertex[NUM_CELLS]; 
 INT  **TriEdge[NUM_CELLS];

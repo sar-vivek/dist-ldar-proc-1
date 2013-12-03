@@ -2,8 +2,8 @@
  * $Id$
  */
 /* Author : Vivek Sardeshmukh*/
-#ifndef TRIANGLE_H
-#  define TRIANGLE_H
+#ifndef TRIANGULATE_H
+#  define TRIANGULATE_H
 
 extern LidarPointNode_t* **TriVertex[NUM_CELLS]; 
 extern INT **TriEdge[NUM_CELLS];
@@ -15,5 +15,5 @@ void Delaunay(int cell);
 
 
 
-#endif /* ifndef TRIANGLE_H */
+#endif /* ifndef TRIANGULATE_H */
 

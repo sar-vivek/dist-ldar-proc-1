@@ -9,7 +9,7 @@
 #include "DLPstd.h"
 #include "LdarReader.h"
 #include "DistLdarProcFVar.h"
-#include "Triangle.h"
+#include "Triangulate.h"
 #include "ProcessData.h"
 #include "MergeSlave.h"
 #include "MergeMaster.h"

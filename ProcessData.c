@@ -8,7 +8,7 @@
 
 #include "DLPstd.h"
 #include "LdarReader.h"
-#include "Triangle.h"
+#include "Triangulate.h"
 #include "DistLdarProcFVar.h"
 #include "ProcessData.h"
 
