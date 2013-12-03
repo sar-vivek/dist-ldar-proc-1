@@ -97,7 +97,7 @@ int swap(int cell, LidarPointNode_t *v1, LidarPointNode_t *v2, LidarPointNode_t 
     y2p=v2->Y_c - p->Y_c;
     cosa=x13*x23 + y13*y23;
     cosb=x2p*x1p + y1p*y2p;
-    if((cosa > 0) && (cosb > 0)) 
+    if((cosa >= 0) && (cosb >= 0)) 
         return 0;
     else if((cosa < 0) && (cosb < 0))
         return 1;
