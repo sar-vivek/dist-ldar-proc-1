@@ -125,7 +125,7 @@ void processBin(int cell, INT ix, INT iy){
     while(p!=NULL){
         /*locate t in p is*/
         t=triLoc(cell, p);
-        /*add 2 new and update 1 triangles*/
+        /*add 2 new and update 1 triangle*/
         a=TriEdge[cell][t][0];
         b=TriEdge[cell][t][1];
         c=TriEdge[cell][t][2];
@@ -217,17 +217,17 @@ void Delaunay(int cell){
 
 
     /*calculate pseudo-triangle*/
-    xcen=0.5*(CellMax[cell].X_c - CellMin[cell].X_c);
-    ycen=0.5*(CellMax[cell].Y_c - CellMin[cell].Y_c);
+    xcen=0.5*(CellMax[cell].X_c + CellMin[cell].X_c);
+    ycen=0.5*(CellMax[cell].Y_c + CellMin[cell].Y_c);
     BigTriangle[0].X_c = xcen-0.866*DMAX;
     BigTriangle[0].Y_c = ycen-0.5*DMAX;
     BigTriangle[1].X_c = xcen+0.866*DMAX;
     BigTriangle[1].Y_c = ycen-0.5*DMAX;
     BigTriangle[2].X_c = xcen;
     BigTriangle[2].Y_c = ycen + DMAX;
-    TriVertex[cell][0][0] = &(BigTriangle[0]);
-    TriVertex[cell][0][1] = &(BigTriangle[1]);
-    TriVertex[cell][0][2] = &(BigTriangle[2]);
+    TriVertex[cell][0][0] = &BigTriangle[0];
+    TriVertex[cell][0][1] = &BigTriangle[1];
+    TriVertex[cell][0][2] = &BigTriangle[2];
     TriEdge[cell][0][0] = BOUNDARY; 
     TriEdge[cell][0][1] = BOUNDARY;
     TriEdge[cell][0][2] = BOUNDARY; 
