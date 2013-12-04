@@ -79,13 +79,14 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
-    INT nt;
     uint32_t ix;
     uint32_t iy;
+    uint32_t nt;
     int i;
 
     if (argc < 3 || argc > 4) {
-	fprintf(stderr, "Usage: %s NODE_ID INFILE [ADDRFILE]\n", argv[0]);
+	fprintf(stderr, "Usage (one node)......: %s NODE_ID INFILE\n", argv[0]);
+	fprinff(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE]\n", argv[0]);
 	fflush(stderr);
 	exit(-1);
     }
@@ -100,6 +101,7 @@ int main(int argc, char *argv[]) {
     assert(NUM_BINS_Y >= 2);
     assert(NUM_BINS_X % 2 == 0);
     assert(NUM_BINS_Y % 2 == 0);
+    assert(NUM_NODES >= 1);
     assert(NUM_NODES_X * NUM_NODES_Y == NUM_NODES);
     assert(NUM_CELLS_X * NUM_CELLS_Y == NUM_CELLS);
     assert(NUM_WORKERS == NUM_CELLS - 1);
@@ -108,52 +110,24 @@ int main(int argc, char *argv[]) {
 
     NodeID = (int) strtol(argv[1], NULL, 10);
 
-    LasFileInit(argv[2]);
-    count = NumPointRec;
-
-    for(i=0;i<NUM_CELLS;i++){
-        TriVertex[i]=malloc((2*CellCnt[i]+1)*sizeof(LidarPointNode_t**));
-        if(TriVertex[i]==NULL){
-            perror("TriVertex[i]");
-            exit(-1);
-        }
-        for(nt=0;nt<2*CellCnt[i]+1;nt++){
-            TriVertex[i][nt]=malloc(3*sizeof(LidarPointNode_t*));
-            if(TriVertex[i][nt]==NULL){
-                perror("TriVertex[cell][nt]");
-            }
-        }
-        TriEdge[i]=malloc((2*CellCnt[i]+1)*sizeof(INT*));
-        if(TriEdge[i]==NULL){
-            perror("TriEdge[i]");
-            exit(-1);
-        }
-        for(nt=0;nt<2*CellCnt[i]+1;nt++){
-            TriEdge[i][nt]=malloc(3*sizeof(INT));
-            if(TriEdge[i][nt] == NULL){
-                perror("TriEdge[cell][nt])");
-            }
-        }
-        estack[i]=malloc(sizeof(INT)*CellCnt[i]);
-        if(estack[i]==NULL){
-            perror("estack");
-        }
-    }
-
-    PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
-    current = PntTbl;
-
-    Z2 = (double *) Malloc(NumPointRec * DOUBLE_SIZE);
-    current2 = Z2;
-
-    FiltTbl = (int8_t *) Malloc(NumPointRec * INT8_SIZE);
-
-    X_b = Malloc(XYZ_SIZE);
-    Y_b = X_b + INT32_SIZE;
-    Z_b = X_b + 2 * INT32_SIZE;
-
-    for (ix = 0; ix < NumPointRec; ++ix) {
-        *(FiltTbl + ix) = 0;
+    if (NodeID == 0) {
+	if (NUM_NODES == 1) {
+	    LasFileInit(argv[2]);
+	} else {
+	    LasFileInit(argv[3]);
+	}
+	count = NumPointRec;
+	PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
+	current = PntTbl;
+	Z2 = (double *) Malloc(NumPointRec * DOUBLE_SIZE);
+	current2 = Z2;
+	FiltTbl = (int8_t *) Malloc(NumPointRec * INT8_SIZE);
+	X_b = Malloc(XYZ_SIZE);
+	Y_b = X_b + INT32_SIZE;
+	Z_b = X_b + 2 * INT32_SIZE;
+	for (ix = 0; ix < NumPointRec; ++ix) {
+	    *(FiltTbl + ix) = 0;
+	}
     }
 
     for (i = 0; i < NUM_CELLS; ++i) {
@@ -170,6 +144,23 @@ int main(int argc, char *argv[]) {
 
     if (NodeID == 0) DistributeSend();
     else DistributeReceive();
+
+    for (i = 0; i < NUM_CELLS; ++i) {
+	TriVertex[i] = malloc((2 * CellCnt[i] + 1) * sizeof (LidarPointNode_t **));
+	if (TriVertex[i] == NULL) perror("TriVertex[i]");
+	for (nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
+	    TriVertex[i][nt] = malloc(3 * sizeof (LidarPointNode_t *));
+	    if (TriVertex[i][nt] == NULL) perror("TriVertex[cell][nt]");
+	}
+	TriEdge[i] = malloc((2 * CellCnt[i] + 1) * sizeof (INT *));
+	if (TriEdge[i] == NULL) perror("TriEdge[i]");
+	for(nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
+	    TriEdge[i][nt] = malloc(3 * sizeof (INT));
+	    if (TriEdge[i][nt] == NULL) perror("TriEdge[cell][nt])");
+	}
+	estack[i] = malloc(sizeof (INT) * CellCnt[i]);
+	if (estack[i] == NULL) perror("estack");
+    }
 
     WorkerIDs[0] = 0;
     for (i = 1; i <= NUM_WORKERS; ++i) {

@@ -144,8 +144,26 @@ void DistributeSend() {
 
 	    ix = lround(floor((X_c - CellMin[c].X_c) / Xint_bin));
 	    iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
-	    if (ix == NUM_BINS_X) --ix;
-	    if (iy == NUM_BINS_Y) --iy;
+#if DEBUG == 1
+	    if (ix < 0 || iy < 0 || ix > NUM_BINS_X || iy > NUM_BINS_Y) {
+		printf("Error: ix = %u, iy = %u out of bounds\n");
+		fflush(stdout);
+	    }
+#endif
+	    if (ix == NUM_BINS_X) {
+		--ix;
+#if DEBUG == 1
+		printf("Bin right edge hit.\n");
+		fflush(stdout);
+#endif
+	    }
+	    if (iy == NUM_BINS_Y) {
+		--iy;
+#if DEBUG == 1
+		printf("Bin top edge hit.\n");
+		fflush(stdout);
+#endif
+	    }
 
 	    current->next = BinTbl[c][ix][iy];
 	    BinTbl[c][ix][iy] = current++;
@@ -167,4 +185,14 @@ void DistributeSend() {
     for (i = 1; i < NUM_NODES; ++i) {
 	Send(msock[i], X_b, XYZ_SIZE);
     }
+
+    /* Now add cell boundary points */
+
+
+
+
+
+
+
+
 }

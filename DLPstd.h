@@ -58,7 +58,7 @@
 #define DOUBLE_SIZE 8
 #define XYZ_SIZE 12
 
-#define BOUNDARY 0xffffffff 
+#define BOUNDARY 0xFFFFFFFF
 #define INT uint32_t
 
 #define PERROR(X) do {           \
