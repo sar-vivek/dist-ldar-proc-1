@@ -27,7 +27,7 @@ void DistributeReceive() {
     int i;
     int c;
 
-    lsock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    lsock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (lsock == -1) perror("socket()");
 
     memset(svr_addr, 0, sizeof (struct sockaddr_in));
@@ -55,7 +55,6 @@ void DistributeReceive() {
 
 #if DEBUG == 1
     printf("-------------------------------------\n");
-    printf("NumPointRec = %u\n", NumPointRec);
     printf("Xscale = %lg\n", Xscale);
     printf("Yscale = %lg\n", Yscale);
     printf("Zscale = %lg\n", Zscale);
@@ -161,6 +160,7 @@ void DistributeReceive() {
 	BinU1[c][ix][iy] += Z_c;
 	*current2 = Z_c * Z_c;
 	BinU2[c][ix][iy] += *current2++;
+	++mycount;
     }
 
     /* Now add cell boundary points */

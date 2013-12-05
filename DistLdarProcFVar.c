@@ -67,6 +67,7 @@ int32_t X;
 int32_t Y;
 int32_t Z;
 uint32_t count;
+uint32_t mycount = 0;
 int NodeID;
 int ssock;
 
@@ -79,9 +80,10 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
+    uint32_t test;
     uint32_t ix;
     uint32_t iy;
-    uint32_t nt;
+    INT nt;
     int i;
 
     if (argc < 3 || argc > 4) {
@@ -91,6 +93,8 @@ int main(int argc, char *argv[]) {
 	exit(-1);
     }
 
+    test = 1;
+    assert((char *)
     assert(sizeof (char) == CHAR_SIZE);
     assert(sizeof (unsigned char) == UCHAR_SIZE);
     assert(sizeof (uint16_t) == UINT16_SIZE);
@@ -116,15 +120,19 @@ int main(int argc, char *argv[]) {
 	} else {
 	    LasFileInit(argv[3]);
 	}
-	count = NumPointRec;
+
 	PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
 	current = PntTbl;
+
 	Z2 = (double *) Malloc(NumPointRec * DOUBLE_SIZE);
 	current2 = Z2;
+
 	FiltTbl = (int8_t *) Malloc(NumPointRec * INT8_SIZE);
+
 	X_b = Malloc(XYZ_SIZE);
 	Y_b = X_b + INT32_SIZE;
 	Z_b = X_b + 2 * INT32_SIZE;
+
 	for (ix = 0; ix < NumPointRec; ++ix) {
 	    *(FiltTbl + ix) = 0;
 	}
@@ -169,12 +177,12 @@ int main(int argc, char *argv[]) {
     }
     ProcessData(&WorkerIDs[0]);
 
-    if (NodeID == 0) MergeSend();
-    else MergeReceive();
-
     for (i = 1; i <= NUM_WORKERS; ++i) {
         pthread_join(Workers[i], NULL);
     }
+
+    if (NodeID == 0) MergeReceive();
+    else MergeSend();
 
     gettimeofday(&t_end, NULL);
     t_diff = 1000000 * (t_end.tv_sec - t_start.tv_sec) + t_end.tv_usec - t_start.tv_usec;

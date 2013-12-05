@@ -109,6 +109,8 @@ void DistributeSend() {
 	CellMax[i].next = NULL;
     }
 
+    count = NumPointRec;
+
     while (count-- > 0) {
 	fread(X_b, INT32_SIZE, 3, las_file_in);
 	fseek(las_file_in, POINT_DATA_SKIP, SEEK_CUR);
@@ -173,6 +175,7 @@ void DistributeSend() {
 	    BinU1[c][ix][iy] += Z_c;
 	    *current2 = Z_c * Z_c;
 	    BinU2[c][ix][iy] += *current2++;
+	    ++mycount;
 	} else {
 	    Send(msock[i], X_b, XYZ_SIZE);
 	}
@@ -185,6 +188,7 @@ void DistributeSend() {
     for (i = 1; i < NUM_NODES; ++i) {
 	Send(msock[i], X_b, XYZ_SIZE);
     }
+
 
     /* Now add cell boundary points */
 
