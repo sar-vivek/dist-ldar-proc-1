@@ -80,11 +80,12 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
-    uint32_t test;
+    uint32_t little;
     uint32_t ix;
     uint32_t iy;
     INT nt;
     int i;
+
 
     if (argc < 3 || argc > 4) {
 	fprintf(stderr, "Usage (one node)......: %s NODE_ID INFILE\n", argv[0]);
@@ -93,8 +94,6 @@ int main(int argc, char *argv[]) {
 	exit(-1);
     }
 
-    test = 1;
-    assert((char *)
     assert(sizeof (char) == CHAR_SIZE);
     assert(sizeof (unsigned char) == UCHAR_SIZE);
     assert(sizeof (uint16_t) == UINT16_SIZE);
@@ -109,6 +108,11 @@ int main(int argc, char *argv[]) {
     assert(NUM_NODES_X * NUM_NODES_Y == NUM_NODES);
     assert(NUM_CELLS_X * NUM_CELLS_Y == NUM_CELLS);
     assert(NUM_WORKERS == NUM_CELLS - 1);
+    little = 16976155;
+    assert(*(((unsigned char *) &test) + 0) == (unsigned char) 0x1B);
+    assert(*(((unsigned char *) &test) + 1) == (unsigned char) 0x09);
+    assert(*(((unsigned char *) &test) + 2) == (unsigned char) 0x03);
+    assert(*(((unsigned char *) &test) + 3) == (unsigned char) 0x01);
 
     gettimeofday(&t_start, NULL);
 
