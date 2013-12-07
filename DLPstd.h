@@ -27,7 +27,7 @@
 
 #define DEBUG 1
 
-#define BUF_LEN 4096
+#define NODE_POINTS_MAX 16777216
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
 #define NUM_BINS_X 10000

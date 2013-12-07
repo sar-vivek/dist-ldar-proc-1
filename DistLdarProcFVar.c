@@ -124,22 +124,22 @@ int main(int argc, char *argv[]) {
 	} else {
 	    LasFileInit(argv[3]);
 	}
+    }
 
-	PntTbl = (LidarPointNode_t *) Malloc(NumPointRec * sizeof (LidarPointNode_t));
-	current = PntTbl;
+    PntTbl = (LidarPointNode_t *) Malloc(NODE_POINTS_MAX * sizeof (LidarPointNode_t));
+    current = PntTbl;
 
-	Z2 = (double *) Malloc(NumPointRec * DOUBLE_SIZE);
-	current2 = Z2;
+    Z2 = (double *) Malloc(NODE_POINTS_MAX * DOUBLE_SIZE);
+    current2 = Z2;
 
-	FiltTbl = (int8_t *) Malloc(NumPointRec * INT8_SIZE);
+    FiltTbl = (int8_t *) Malloc(NODE_POINTS_MAX * INT8_SIZE);
 
-	X_b = Malloc(XYZ_SIZE);
-	Y_b = X_b + INT32_SIZE;
-	Z_b = X_b + 2 * INT32_SIZE;
+    X_b = Malloc(XYZ_SIZE);
+    Y_b = X_b + INT32_SIZE;
+    Z_b = X_b + 2 * INT32_SIZE;
 
-	for (ix = 0; ix < NumPointRec; ++ix) {
-	    *(FiltTbl + ix) = 0;
-	}
+    for (ix = 0; ix < NODE_POINTS_MAX; ++ix) {
+	*(FiltTbl + ix) = 0;
     }
 
     for (i = 0; i < NUM_CELLS; ++i) {

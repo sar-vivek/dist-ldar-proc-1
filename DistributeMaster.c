@@ -43,7 +43,6 @@ void DistributeSend() {
     uint32_t ix;
     uint32_t iy;
     int i;
-    int c;
 
     for (i = 1; i < NUM_NODES; ++i) {
 	memset(&svr_addr[i], 0, sizeof (struct sockaddr_in));
@@ -86,29 +85,7 @@ void DistributeSend() {
     X_c = MinX;
     Y_c = MinY;
 
-    NodeMin.X_c = X_c;
-    NodeMin.Y_c = Y_c;
-    NodeMin.Z_c = 0;
-    NodeMin.next = NULL;
-    NodeMax.X_c = X_c + Xint;
-    NodeMax.Y_c = Y_c + Yint;
-    NodeMax.Z_c = 0;
-    NodeMax.next = NULL;
-
-    for (i = 0; i < NUM_CELLS; ++i) {
-	ix = i % NUM_CELLS_X;
-	iy = i / NUM_CELLS_X;
-
-	CellMin[i].X_c = X_c + Xint_cell * ix;
-	CellMin[i].Y_c = Y_c + Yint_cell * iy;
-	CellMin[i].Z_c = 0;
-	CellMin[i].next = NULL;
-
-	CellMax[i].X_c = X_c + Xint_cell * (ix + 1);
-	CellMax[i].Y_c = Y_c + Yint_cell * (iy + 1);
-	CellMax[i].Z_c = 0;
-	CellMax[i].next = NULL;
-    }
+    CreateMinMax();
 
     count = NumPointRec;
 
@@ -131,52 +108,7 @@ void DistributeSend() {
 #endif
 
 	if (i == 0) {
-	    X_c = *((int32_t *) X_b) * Xscale + Xoffset;
-	    Y_c = *((int32_t *) Y_b) * Yscale + Yoffset;
-	    Z_c = *((int32_t *) Z_b) * Zscale + Zoffset;
-	    current->X_c = X_c;
-	    current->Y_c = Y_c;
-	    current->Z_c = Z_c;
-	    current->next = NULL;
-
-	    ix = lround(floor((X_c - MinX) / Xint_cell));
-	    iy = lround(floor((Y_c - MinY) / Yint_cell));
-	    if (ix == NUM_CELLS_X) --ix;
-	    if (iy == NUM_CELLS_Y) --iy;
-	    c = NUM_CELLS_X * iy + ix;
-
-	    ix = lround(floor((X_c - CellMin[c].X_c) / Xint_bin));
-	    iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
-#if DEBUG == 1
-	    if (ix < 0 || iy < 0 || ix > NUM_BINS_X || iy > NUM_BINS_Y) {
-		printf("Error: ix = %u, iy = %u out of bounds\n");
-		fflush(stdout);
-	    }
-#endif
-	    if (ix == NUM_BINS_X) {
-		--ix;
-#if DEBUG == 1
-		printf("Bin right edge hit.\n");
-		fflush(stdout);
-#endif
-	    }
-	    if (iy == NUM_BINS_Y) {
-		--iy;
-#if DEBUG == 1
-		printf("Bin top edge hit.\n");
-		fflush(stdout);
-#endif
-	    }
-
-	    current->next = BinTbl[c][ix][iy];
-	    BinTbl[c][ix][iy] = current++;
-
-	    BinCnt[c][ix][iy]++;
-	    CellCnt[c]++;
-	    BinU1[c][ix][iy] += Z_c;
-	    *current2 = Z_c * Z_c;
-	    BinU2[c][ix][iy] += *current2++;
-	    ++mycount;
+	    AddPoint();
 	} else {
 	    Send(msock[i], X_b, XYZ_SIZE);
 	}
