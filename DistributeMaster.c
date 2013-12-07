@@ -9,6 +9,7 @@
 #include "DLPstd.h"
 #include "LdarReader.h"
 #include "DistLdarProcFVar.h"
+#include "DistributeSlave.h"
 #include "DistributeMaster.h"
 
 int Socket(int domain, int type, int protocol) {
@@ -189,14 +190,6 @@ void DistributeSend() {
 	Send(msock[i], X_b, XYZ_SIZE);
     }
 
-
-    /* Now add cell boundary points */
-
-
-
-
-
-
-
+    BoundaryPointsAdd();
 
 }

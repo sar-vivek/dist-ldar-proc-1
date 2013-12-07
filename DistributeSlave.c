@@ -17,6 +17,24 @@ void Receive(int sd, void *buffer, size_t len) {
     if (ret != len) perror("recv()");
 }
 
+void BoundaryPointsAdd() {
+    uint32_t ix;
+    uint32_t iy;
+    int cx;
+    int cy;
+
+    for (cx = 0; cx <= NUM_CELLS_X; ++cx) {
+	for (cy = 0; cy <= NUM_CELLS_Y; ++cy) {
+
+
+
+
+
+
+	}
+    }
+}
+
 void DistributeReceive() {
 
     struct sockaddr_in cli_addr;
@@ -163,13 +181,6 @@ void DistributeReceive() {
 	++mycount;
     }
 
-    /* Now add cell boundary points */
-
-
-
-
-
-
-
+    BoundaryPointsAdd();
 
 }
