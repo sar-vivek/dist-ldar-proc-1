@@ -115,8 +115,8 @@ void WritePoint(double x, double y) {
     fwrite((void *) &zero, sizeof (uint16_t), 1, las_file_out);
     fwrite((void *) &x, sizeof (double), 1, las_file_out);
     
-    if(x>MaxX) MaxX=x;
-    if(y>MaxY) MaxY=y;
+    if(px>MaxX) MaxX=px;
+    if(py>MaxY) MaxY=py;
     if(pz>MaxZ) MaxZ=pz;
     if(x<MinX) MinX=x;
     if(y<MinY) MinY=y;
@@ -183,10 +183,10 @@ int main(int argc, char* argv[]){
     WriteHeader(argv[2]);
     /*read first point and init all variables*/
     fscanf(fin, "%lg %lg\n", &x, &y);
-    MinX=x;
-    MaxX=x;
-    MinY=y;
-    MaxY=y;
+    MinX=(int32_t)x;
+    MaxX=(int32_t)x;
+    MinY=(int32_t)y;
+    MaxY=(int32_t)y;
     NumPointRec=0;
     srand(time(NULL));
     MinZ=500;
