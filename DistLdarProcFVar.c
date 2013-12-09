@@ -72,7 +72,7 @@ uint32_t count;
 uint32_t mycount = 0;
 int NodeID;
 int ssock;
-int epolldesc;
+int polldesc;
 
 void *Malloc(size_t len) {
     void *ret;
@@ -111,10 +111,10 @@ int main(int argc, char *argv[]) {
     assert(NUM_CELLS_X * NUM_CELLS_Y == NUM_CELLS);
     assert(NUM_WORKERS == NUM_CELLS - 1);
     little = 16976155;
-    assert(*(((unsigned char *) &test) + 0) == (unsigned char) 0x1B);
-    assert(*(((unsigned char *) &test) + 1) == (unsigned char) 0x09);
-    assert(*(((unsigned char *) &test) + 2) == (unsigned char) 0x03);
-    assert(*(((unsigned char *) &test) + 3) == (unsigned char) 0x01);
+    assert(*(((unsigned char *) &little) + 0) == (unsigned char) 0x1B);
+    assert(*(((unsigned char *) &little) + 1) == (unsigned char) 0x09);
+    assert(*(((unsigned char *) &little) + 2) == (unsigned char) 0x03);
+    assert(*(((unsigned char *) &little) + 3) == (unsigned char) 0x01);
 
     gettimeofday(&t_start, NULL);
 

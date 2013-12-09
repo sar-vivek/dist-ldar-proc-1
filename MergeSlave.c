@@ -48,7 +48,7 @@ void MergeSend() {
 
     while ((ret = recv(ssock, X_b, 1, 0)) != 0) {
 	if (ret == 1) {
-	    fprintf(stderr, "Received byte %X after socket was supposed to close.\n", (int) *((char *) X_b);
+	    fprintf(stderr, "Received byte %X after socket was supposed to close.\n", (int) *((char *) X_b));
 	    fflush(stderr);
 	} else {
 	    perror("recv()");

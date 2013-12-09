@@ -18,6 +18,8 @@ void Receive(int sd, void *buffer, size_t len) {
 }
 
 void CreateMinMax() {
+    uint32_t ix;
+    uint32_t iy;
     int c;
 
     NodeMin.X_c = X_c;

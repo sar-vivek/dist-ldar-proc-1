@@ -65,7 +65,7 @@ extern uint32_t count;
 extern uint32_t mycount;
 extern int NodeID;
 extern int ssock;
-extern int epolldesc;
+extern int polldesc;
 
 void *Malloc(size_t len);
 
