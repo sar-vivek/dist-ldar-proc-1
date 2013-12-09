@@ -56,7 +56,7 @@ void push(int cell, INT e){
 }
 
 INT pop(int cell){
-    if(topstk[cell] != (INT)-1 ){
+    if(topstk[cell] != BOUNDARY){
         topstk[cell]--;
         return estack[cell][topstk[cell]+1];
     }
@@ -233,7 +233,13 @@ void Delaunay(int cell){
     BigTriangle[1].Y_c = ycen-DMAX;
     BigTriangle[2].X_c = xcen;
     BigTriangle[2].Y_c = ycen + DMAX;
-    TriVertex[cell][0][0] = &BigTriangle[0];
+/*    BigTriangle[0].X_c = 778;
+    BigTriangle[0].Y_c = 1778;
+    BigTriangle[1].X_c = 4227;
+    BigTriangle[1].Y_c = 1778;
+    BigTriangle[2].X_c = 2500;
+    BigTriangle[2].Y_c = 3500;*/
+ TriVertex[cell][0][0] = &BigTriangle[0];
     TriVertex[cell][0][1] = &BigTriangle[1];
     TriVertex[cell][0][2] = &BigTriangle[2];
     TriEdge[cell][0][0] = BOUNDARY; 
@@ -253,6 +259,7 @@ void Delaunay(int cell){
         }
     }
 
+    printf("Success\n");
     /*------------------remove pseudos-----------------------*/
     /*remove all triangles containing pseudo-triangle points*/
     /*first find triangle that is to be removed*/
