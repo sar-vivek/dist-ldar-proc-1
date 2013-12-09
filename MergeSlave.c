@@ -2,34 +2,58 @@
 /*
  * MergeSlave.c
  *
- * Author: Vivek B Sardeshmukh 
+ * Authors: Vivek B Sardeshmukh, James W Hegeman
  *
  */
 
 #include "DLPstd.h"
 #include "LdarReader.h"
 #include "DistLdarProcFVar.h"
-#include "MergeSlave.h"
 #include "Triangulate.h"
-#include "DistributeMaster.h" 
+#include "DistributeMaster.h"
+#include "MergeSlave.h"
 
 void MergeSend() {
-    int i,c;
-    INT t;
-    double px,py,pz;
-    Send(ssock, &NodeID, sizeof(nodeid));   
-    for(c=0;c<NUM_CELLS;c++){
-        Send(ssock, &c, sizeof(c));
-        for(t=0;t<NumTri[c];t++){
-            Send(ssock, &t, sizeof(t));
-            for(i=0;i<3;i++){
-                px=TriVertex[c][t][i]->X_c;
-                py=TriVertex[c][t][i]->Y_c;
-                pz=TriVertex[c][t][i]->Z_c;
-                Send(ssock, &px, sizeof(px));
-                Send(ssock, &py, sizeof(py));
-                Send(ssock, &pz, sizeof(pz));
-            }
-        }
+
+    ssize_t ret;
+    uint32_t t;
+    int c;
+    int i;
+
+    for (c = 0; c < NUM_CELLS; ++c) {
+	for (t = 0; t < NumTri[c]; ++t) {
+	    *((uint32_t *) X_b) = t;
+	    *((int *) Y_b) = c;
+	    Send(ssock, X_b, XYZ_SIZE);
+	    *((int32_t *) X_b) = lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale);
+	    *((int32_t *) Y_b) = lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale);
+	    *((int32_t *) Z_b) = lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale);
+	    Send(ssock, X_b, XYZ_SIZE);
+	    *((int32_t *) X_b) = lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale);
+	    *((int32_t *) Y_b) = lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale);
+	    *((int32_t *) Z_b) = lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale);
+	    Send(ssock, X_b, XYZ_SIZE);
+	    *((int32_t *) X_b) = lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale);
+	    *((int32_t *) Y_b) = lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale);
+	    *((int32_t *) Z_b) = lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale);
+	    Send(ssock, X_b, XYZ_SIZE);
+	}
     }
+
+    *((int32_t *) X_b) = 0;
+    *((int32_t *) Y_b) = 0;
+    *((int32_t *) Z_b) = 0;
+    Send(ssock, X_b, XYZ_SIZE);
+    Send(ssock, X_b, XYZ_SIZE);
+
+    while ((ret = recv(ssock, X_b, 1, 0)) != 0) {
+	if (ret == 1) {
+	    fprintf(stderr, "Received byte %X after socket was supposed to close.\n", (int) *((char *) X_b);
+	    fflush(stderr);
+	} else {
+	    perror("recv()");
+	}
+    }
+
+    if (close(ssock) == -1) perror("close()");
 }

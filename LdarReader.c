@@ -25,6 +25,7 @@ double MaxZ;
 double MinZ;
 unsigned char Guid4[8];
 FILE *las_file_in;
+FILE *proc_file_out;
 uint32_t NumPointsByRet[5];
 uint32_t Resrvd;
 uint32_t Guid1;

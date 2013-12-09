@@ -114,6 +114,8 @@ void DistributeSend() {
 	}
     }
 
+    if (fclose(las_file_in)) perror("fclose()");
+
     *((int32_t *) X_b) = 0;
     *((int32_t *) Y_b) = 0;
     *((int32_t *) Z_b) = 0;

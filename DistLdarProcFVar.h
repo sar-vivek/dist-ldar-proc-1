@@ -19,6 +19,7 @@ extern LidarPointNode_t CellMin[NUM_CELLS];
 extern LidarPointNode_t CellMax[NUM_CELLS];
 
 extern struct sockaddr_in svr_addr[NUM_NODES];
+extern struct epoll_event msockevents[NUM_NODES];
 extern int msock[NUM_NODES];
 
 extern pthread_t Workers[NUM_WORKERS + 1];
@@ -49,6 +50,7 @@ extern double Z_c;
 
 extern LidarPointNode_t *PntTbl;
 extern LidarPointNode_t *current;
+extern struct epoll_event *newevents;
 extern double *Z2;
 extern double *current2;
 extern int8_t *FiltTbl;
@@ -56,12 +58,14 @@ extern void *X_b;
 extern void *Y_b;
 extern void *Z_b;
 
-extern int NodeID;
-extern int ssock;
 extern int32_t X;
 extern int32_t Y;
 extern int32_t Z;
 extern uint32_t count;
+extern uint32_t mycount;
+extern int NodeID;
+extern int ssock;
+extern int epolldesc;
 
 void *Malloc(size_t len);
 

@@ -34,6 +34,7 @@ extern double MaxZ;
 extern double MinZ;
 extern unsigned char Guid4[8];
 extern FILE *las_file_in;
+extern FILE *proc_file_out;
 extern uint32_t NumPointsByRet[5];
 extern uint32_t Resrvd;
 extern uint32_t Guid1;

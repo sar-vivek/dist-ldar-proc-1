@@ -10,6 +10,10 @@
 #define __DISTRIBUTE_SLAVE_H__
 
 void Receive(int sd, void *buffer, size_t len);
+void CreateMinMax();
+void AddPoint();
+void AddPoint2();
+void BoundaryPointsAdd();
 void DistributeReceive();
 
 #endif

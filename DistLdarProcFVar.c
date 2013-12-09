@@ -26,6 +26,7 @@ LidarPointNode_t CellMin[NUM_CELLS];
 LidarPointNode_t CellMax[NUM_CELLS];
 
 struct sockaddr_in svr_addr[NUM_NODES];
+struct epoll_event msockevents[NUM_NODES];
 int msock[NUM_NODES];
 
 pthread_t Workers[NUM_WORKERS + 1];
@@ -56,6 +57,7 @@ double Z_c;
 
 LidarPointNode_t *PntTbl;
 LidarPointNode_t *current;
+struct epoll_event *newevents;
 double *Z2;
 double *current2;
 int8_t *FiltTbl;
@@ -70,6 +72,7 @@ uint32_t count;
 uint32_t mycount = 0;
 int NodeID;
 int ssock;
+int epolldesc;
 
 void *Malloc(size_t len) {
     void *ret;
@@ -85,7 +88,6 @@ int main(int argc, char *argv[]) {
     uint32_t iy;
     INT nt;
     int i;
-
 
     if (argc < 3 || argc > 4) {
 	fprintf(stderr, "Usage (one node)......: %s NODE_ID INFILE\n", argv[0]);
