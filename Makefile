@@ -21,5 +21,4 @@ DLP:
 	$(COMPILER) $(OPTS) -I . -o DistLdarProc *.o $(OPTM) -pg $(LIBS)  
 
 clean:
-	rm -f DistLdarProc
 	rm -f *.o

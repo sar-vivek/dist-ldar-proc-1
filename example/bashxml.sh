@@ -20,7 +20,6 @@ while read_dom; do
 done < $1 >$2
 
 gcc -g create_las.c ../LdarReader.o -I ../. -o create
-./create $2 $3 
 # $Id: $
 
 
