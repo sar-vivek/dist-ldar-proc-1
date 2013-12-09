@@ -222,11 +222,11 @@ void Delaunay(int cell){
     xcen=0.5*(CellMax[cell].X_c + CellMin[cell].X_c);
     ycen=0.5*(CellMax[cell].Y_c + CellMin[cell].Y_c);
     BigTriangle[0].X_c = xcen-0.866*DMAX;
-    BigTriangle[0].Y_c = ycen-0.5*DMAX;
+    BigTriangle[0].Y_c = ycen-0.65*DMAX;
     BigTriangle[1].X_c = xcen+0.866*DMAX;
-    BigTriangle[1].Y_c = ycen-0.5*DMAX;
+    BigTriangle[1].Y_c = ycen-0.65*DMAX;
     BigTriangle[2].X_c = xcen;
-    BigTriangle[2].Y_c = ycen + DMAX;
+    BigTriangle[2].Y_c = ycen + 1.2*DMAX;
     TriVertex[cell][0][0] = &BigTriangle[0];
     TriVertex[cell][0][1] = &BigTriangle[1];
     TriVertex[cell][0][2] = &BigTriangle[2];
