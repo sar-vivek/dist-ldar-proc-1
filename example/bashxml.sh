@@ -19,5 +19,6 @@ while read_dom; do
     parse_dom
 done < $1 >$2
 # $Id: $
-
+echo "delete points manually"
+gcc -g create_las.c ../LdarReader.o -I ../. -o create
 
