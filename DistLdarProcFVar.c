@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 
     if (argc < 3 || argc > 4) {
 	fprintf(stderr, "Usage (one node)......: %s NODE_ID INFILE\n", argv[0]);
-	fprinff(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE]\n", argv[0]);
+	fprintf(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE]\n", argv[0]);
 	fflush(stderr);
 	exit(-1);
     }
