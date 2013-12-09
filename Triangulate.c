@@ -132,6 +132,9 @@ void processBin(int cell, INT ix, INT iy){
         v1=TriVertex[cell][t][0];
         v2=TriVertex[cell][t][1];
         v3=TriVertex[cell][t][2];
+        TriVertex[cell][t][0]=p;
+        TriVertex[cell][t][1]=v1;
+        TriVertex[cell][t][2]=v2;
         TriEdge[cell][t][0]=NumTri[cell]+2;
         TriEdge[cell][t][1]=a;
         TriEdge[cell][t][2]=NumTri[cell]+1;
