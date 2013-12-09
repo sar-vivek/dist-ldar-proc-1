@@ -25,7 +25,7 @@ extern int msock[NUM_NODES];
 extern pthread_t Workers[NUM_WORKERS + 1];
 extern int WorkerIDs[NUM_WORKERS + 1];
 
-extern char NodeIPs[3][16];
+extern char NodeIPs[NUM_NODES][16];
 
 extern LidarPointNode_t NodeMin;
 extern LidarPointNode_t NodeMax;
@@ -48,6 +48,7 @@ extern double X_c;
 extern double Y_c;
 extern double Z_c;
 
+extern FILE *addrfile;
 extern LidarPointNode_t *PntTbl;
 extern LidarPointNode_t *current;
 extern struct epoll_event *newevents;

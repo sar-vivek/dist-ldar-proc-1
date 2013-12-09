@@ -32,7 +32,7 @@ int msock[NUM_NODES];
 pthread_t Workers[NUM_WORKERS + 1];
 int WorkerIDs[NUM_WORKERS + 1];
 
-char NodeIPs[3][16] = {"128.255.101.181", "128.255.101.133", "128.255.101.11"};
+char NodeIPs[NUM_NODES][16];
 
 LidarPointNode_t NodeMin;
 LidarPointNode_t NodeMax;
@@ -55,6 +55,7 @@ double X_c;
 double Y_c;
 double Z_c;
 
+FILE *addrfile;
 LidarPointNode_t *PntTbl;
 LidarPointNode_t *current;
 struct epoll_event *newevents;
@@ -83,11 +84,17 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
+    char ip[16];
     uint32_t little;
     uint32_t ix;
     uint32_t iy;
     INT nt;
     int i;
+    int id;
+    int ip1;
+    int ip2;
+    int ip3;
+    int ip4;
 
     if (argc < 3 || argc > 4) {
 	fprintf(stderr, "Usage (one node)......: %s NODE_ID INFILE\n", argv[0]);
@@ -119,6 +126,22 @@ int main(int argc, char *argv[]) {
     gettimeofday(&t_start, NULL);
 
     NodeID = (int) strtol(argv[1], NULL, 10);
+
+    if (argc == 4) {
+	if ((addrfile = fopen(argv[2], "r")) == NULL) {
+	    fprintf(stderr, "Could not open file %s for reading. Exiting.\n", argv[2]);
+	    fflush(stderr);
+	    exit(-1);
+	}
+
+	for (i = 0; i < NUM_NODES; ++i) {
+	    fscanf(addrfile, "%d %d.%d.%d.%d", &id, &ip1, &ip2, &ip3, &ip4);
+	    snprintf(ip, 16, "%d.%d.%d.%d", ip1, ip2, ip3, ip4);
+	    strncpy(NodeIPs[id], ip, 16);
+	}
+
+	if (fclose(addrfile)) perror("fclose()");
+    }
 
     if (NodeID == 0) {
 	if (NUM_NODES == 1) {
