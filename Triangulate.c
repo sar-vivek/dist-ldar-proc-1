@@ -163,8 +163,8 @@ void processBin(int cell, INT ix, INT iy){
         while(topstk[cell]!=BOUNDARY) { /*simply saying >=0 */
             l=pop(cell);
             r=TriEdge[cell][l][1];
-            if(r==BOUNDARY)
-                continue;
+            /*if(r==BOUNDARY)
+                continue;*/
             /*circumcircle test*/
             erl=edg(cell,r,l);
             era=(erl+1)%3;
@@ -216,7 +216,7 @@ void Delaunay(int cell){
     DMAX=DMAX > CellMax[cell].Y_c - CellMin[cell].Y_c ? DMAX : CellMax[cell].Y_c - CellMin[cell].Y_c;
 
     numt=2*CellCnt[cell] + 1;
-
+    topstk[cell]=BOUNDARY;
 
     /*calculate pseudo-triangle*/
     xcen=0.5*(CellMax[cell].X_c + CellMin[cell].X_c);
