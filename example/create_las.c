@@ -6,9 +6,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/types.h>
+#include <stdint.h>
 
 char SysID[32]="0";;
-char GenSoft[32]="0";
+char GenSoft[32]="TerraScan";
 double Xscale=1.0;
 double Yscale=1.0;
 double Zscale=1.0;
@@ -21,7 +23,7 @@ double MaxY;
 double MinY;
 double MaxZ;
 double MinZ;
-unsigned char Guid4[8]="0";
+unsigned char Guid4[8];
 FILE *las_file_in;
 FILE *las_file_out;
 uint32_t NumPointsByRet[5]={0, 0, 0, 0, 0};
@@ -30,16 +32,16 @@ uint32_t Guid1=0;
 uint32_t DataOffset=0;
 uint32_t NumVarLenRec=0;
 uint32_t NumPointRec;
-char FileSig[4]="0";
+char FileSig[4]={'L', 'A', 'S', 'F'};
 uint16_t Guid2=0;
 uint16_t Guid3=0;
 uint16_t DateJulian=0;
 uint16_t Year=0;
-uint16_t HeaderSize;
-uint16_t PointDataRecLen;
-unsigned char MajorVers;
-unsigned char MinorVers;
-unsigned char PointDataFormatID;
+uint16_t HeaderSize=0xE3;
+uint16_t PointDataRecLen=28;
+unsigned char MajorVers=0x01;
+unsigned char MinorVers=0x00;
+unsigned char PointDataFormatID=0x01;
 
 
 void WriteHeader(const char *filename) {
@@ -180,7 +182,7 @@ int main(int argc, char* argv[]){
 
     WriteHeader(argv[2]);
     /*read first point and init all variables*/
-    fscanf(fin, "%f %f\n", &x, &y);
+    fscanf(fin, "%lg %lg\n", &x, &y);
     MinX=x;
     MaxX=x;
     MinY=y;
@@ -190,7 +192,7 @@ int main(int argc, char* argv[]){
     MinZ=500;
     MaxZ=400;
     WritePoint(x,y);
-    while(fscanf(fin, "%f %f\n", &x, &y)!=EOF){
+    while(fscanf(fin, "%lg %lg\n", &x, &y)!=EOF){
         WritePoint(x,y);
     }
     UpdateHeader();
