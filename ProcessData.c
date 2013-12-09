@@ -134,9 +134,8 @@ void *ProcessData(void *workerID) {
 
     for (ix = 2; ix < NUM_BINS_X - 2; ++ix) {
 	for (iy = 2; iy < NUM_BINS_Y - 2; ++iy) {
-	    if (*(FiltTbl + (BinTbl[c][ix][iy] - PntTbl)) == 1) {
-		BinTbl[c][ix][iy] = NULL;
-	    }
+	    if (BinTbl[c][ix][iy] == NULL) continue;
+	    if (*(FiltTbl + (BinTbl[c][ix][iy] - PntTbl)) == 1) BinTbl[c][ix][iy] = NULL;
 	}
     }
 
