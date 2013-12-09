@@ -107,12 +107,12 @@ void AddPoint() {
 #endif
 }
 
-void AddPoint2(int c, uint32_t ix, uint32_t iy) {
+void AddPoint2(int c, int32_t ix, int32_t iy) {
     LidarPointNode_t *node;
-    uint32_t ax;
-    uint32_t ay;
-    uint32_t bx;
-    uint32_t by;
+    int32_t ax;
+    int32_t ay;
+    int32_t bx;
+    int32_t by;
     int cnt;
     int d;
     int i;
@@ -123,6 +123,21 @@ void AddPoint2(int c, uint32_t ix, uint32_t iy) {
     Z_c = 0;
     cnt = 0;
     i = 1;
+
+#if DEBUG == 1
+    if (ix < 0 || bx >= NUM_BINS_X) {
+	fprintf(stderr, "bx out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
+	fflush(stderr);
+    }
+    if (iy < 0 || by >= NUM_BINS_Y) {
+	fprintf(stderr, "by out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
+	fflush(stderr);
+    }
+    if (c < 0 || c >= NUM_CELLS) {
+	fprintf(stderr, "d out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
+	fflush(stderr);
+    }
+#endif
 
     node = BinTbl[c][ix][iy];
     while (node != NULL) {
@@ -164,17 +179,17 @@ void AddPoint2(int c, uint32_t ix, uint32_t iy) {
 		if (skip == 0) {
 #if DEBUG == 1
 		    if (bx < 0 || bx >= NUM_BINS_X) {
-			fprintf(stderr, "bx out of range: c = %d, ax = %u, ay = %u, d = %d, bx = %u, by = %u\n",
+			fprintf(stderr, "bx out of range: c = %d, ax = %d, ay = %d, d = %d, bx = %d, by = %d\n",
 				c, ax, ay, d, bx, by);
 			fflush(stderr);
 		    }
 		    if (by < 0 || by >= NUM_BINS_Y) {
-			fprintf(stderr, "by out of range: c = %d, ax = %u, ay = %u, d = %d, bx = %u, by = %u\n",
+			fprintf(stderr, "by out of range: c = %d, ax = %d, ay = %d, d = %d, bx = %d, by = %d\n",
 				c, ax, ay, d, bx, by);
 			fflush(stderr);
 		    }
 		    if (d < 0 || d >= NUM_CELLS) {
-			fprintf(stderr, "d out of range: c = %d, ax = %u, ay = %u, d = %d, bx = %u, by = %u\n",
+			fprintf(stderr, "d out of range: c = %d, ax = %d, ay = %d, d = %d, bx = %d, by = %d\n",
 				c, ax, ay, d, bx, by);
 			fflush(stderr);
 		    }
@@ -229,7 +244,7 @@ void AddPoint2(int c, uint32_t ix, uint32_t iy) {
 }
 
 void BoundaryPointsAdd() {
-    uint32_t i;
+    int32_t i;
     int c;
 
     for (c = 0; c < NUM_CELLS; ++c) {
