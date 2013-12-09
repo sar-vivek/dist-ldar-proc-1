@@ -163,7 +163,7 @@ void processBin(int cell, INT ix, INT iy){
         while(topstk[cell]!=BOUNDARY) { /*simply saying >=0 */
             l=pop(cell);
             r=TriEdge[cell][l][1];
-            if(r==BOUNDRY)
+            if(r==BOUNDARY)
                 continue;
             /*circumcircle test*/
             erl=edg(cell,r,l);
