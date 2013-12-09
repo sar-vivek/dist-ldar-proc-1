@@ -2,7 +2,10 @@
  * Triangulate.c
  *
  * Author: Vivek B Sardeshmukh   
- * 
+ *
+ * Derived from 'A fast algorithm for constructing Delaunay triangulations in
+ * the plane' by S. W. Sloan, Adv. Eng. Software, 1987, Vol. 9, No. 1.
+ *
  */
 
 #include "DLPstd.h"
@@ -10,16 +13,16 @@
 #include "DistLdarProcFVar.h"
 #include "Triangulate.h"
 
-LidarPointNode_t* **TriVertex[NUM_CELLS]; 
-INT  **TriEdge[NUM_CELLS];
+LidarPointNode_t ***TriVertex[NUM_CELLS]; 
+INT **TriEdge[NUM_CELLS];
 INT NumTri[NUM_CELLS]; 
 INT *estack[NUM_CELLS];
 INT topstk[NUM_CELLS];
 
 INT triLoc(int cell, LidarPointNode_t *point){
-    double xp,yp;
+    double xp, yp;
     INT t;
-    int i,found;
+    int i, found;
     LidarPointNode_t *v1, *v2;
     xp=point->X_c;
     yp=point->Y_c;
@@ -29,7 +32,7 @@ INT triLoc(int cell, LidarPointNode_t *point){
         for(i=0; i<3; i++){
             v1=TriVertex[cell][t][i];
             v2=TriVertex[cell][t][(i+1)%3];
-            if((v1->Y_c-yp)*(v2->X_c - xp) > (v1->X_c -xp)*(v2->Y_c - yp)){
+            if((v1->Y_c - yp)*(v2->X_c - xp) > (v1->X_c - xp)*(v2->Y_c - yp)){
                 t=TriEdge[cell][t][i];
                 found=0;
                 break;
