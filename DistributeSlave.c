@@ -162,6 +162,23 @@ void AddPoint2(int c, uint32_t ix, uint32_t iy) {
 		    else by += NUM_BINS_Y;
 		}
 		if (skip == 0) {
+#if DEBUG == 1
+		    if (bx < 0 || bx >= NUM_BINS_X) {
+			fprintf(stderr, "bx out of range: c = %d, ax = %u, ay = %u, d = %d, bx = %u, by = %u\n",
+				c, ax, ay, d, bx, by);
+			fflush(stderr);
+		    }
+		    if (by < 0 || by >= NUM_BINS_Y) {
+			fprintf(stderr, "by out of range: c = %d, ax = %u, ay = %u, d = %d, bx = %u, by = %u\n",
+				c, ax, ay, d, bx, by);
+			fflush(stderr);
+		    }
+		    if (d < 0 || d >= NUM_CELLS) {
+			fprintf(stderr, "d out of range: c = %d, ax = %u, ay = %u, d = %d, bx = %u, by = %u\n",
+				c, ax, ay, d, bx, by);
+			fflush(stderr);
+		    }
+#endif
 		    node = BinTbl[d][bx][by];
 		    while (node != NULL) {
 			Z_c += node->Z_c;

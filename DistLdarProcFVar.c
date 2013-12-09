@@ -96,8 +96,8 @@ int main(int argc, char *argv[]) {
     int ip3;
     int ip4;
 
-    if (argc < 3 || argc > 4) {
-	fprintf(stderr, "Usage (one node)......: %s NODE_ID INFILE\n", argv[0]);
+    if (argc != 2 && argc != 4) {
+	fprintf(stderr, "Usage (one node)......: %s INFILE\n", argv[0]);
 	fprintf(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE]\n", argv[0]);
 	fflush(stderr);
 	exit(-1);
@@ -125,9 +125,9 @@ int main(int argc, char *argv[]) {
 
     gettimeofday(&t_start, NULL);
 
-    NodeID = (int) strtol(argv[1], NULL, 10);
-
     if (argc == 4) {
+	NodeID = (int) strtol(argv[1], NULL, 10);
+
 	if ((addrfile = fopen(argv[2], "r")) == NULL) {
 	    fprintf(stderr, "Could not open file %s for reading. Exiting.\n", argv[2]);
 	    fflush(stderr);
@@ -141,11 +141,13 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (fclose(addrfile)) perror("fclose()");
+    } else {
+	NodeID = 0;
     }
 
     if (NodeID == 0) {
-	if (NUM_NODES == 1) {
-	    LasFileInit(argv[2]);
+	if (argc == 2) {
+	    LasFileInit(argv[1]);
 	} else {
 	    LasFileInit(argv[3]);
 	}
