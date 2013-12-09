@@ -187,7 +187,7 @@ int main(int argc, char* argv[]){
     MaxX=x;
     MinY=y;
     MaxY=y;
-    NumPointRec=1;
+    NumPointRec=0;
     srand(time(NULL));
     MinZ=500;
     MaxZ=400;

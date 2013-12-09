@@ -18,6 +18,9 @@ parse_dom () {
 while read_dom; do
     parse_dom
 done < $1 >$2
+
+gcc -g create_las.c ../LdarReader.o -I ../. -o create
+./create $2 $3 
 # $Id: $
 
 
