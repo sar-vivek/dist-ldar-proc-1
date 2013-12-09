@@ -160,7 +160,7 @@ void processBin(int cell, INT ix, INT iy){
             TriEdge[cell][c][edg(cell,c,t)]=NumTri[cell];
             push(cell, NumTri[cell]);
         }
-        while(topstk[cell]!=(INT)-1) { /*simply saying >=0 */
+        while(topstk[cell]!=BOUNDARY) { /*simply saying >=0 */
             l=pop(cell);
             r=TriEdge[cell][l][1];
             /*circumcircle test*/
