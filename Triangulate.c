@@ -437,6 +437,9 @@ void Delaunay(int cell) {
             for (j = 0; j < 3; ++j) {
                 if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
                     remove = 1;
+#if DEBUG == 1
+                    fprintf(stderr, "%d removing\n", j);
+#endif
                     break;
                 }   
             }
@@ -462,10 +465,14 @@ void Delaunay(int cell) {
     numt = nt - 1;
     for (nt = tstart; nt < tstop; ++nt) {
         i = 0;
+        remove=0;
         while (!remove && i < 3) {
             for (j = 0; j < 3; ++j) {
                 if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
                     remove = 1;
+#if DEBUG == 1
+                    fprintf(stderr, "%d removing rest\n", j);
+#endif
                     break;
                 }   
             }
