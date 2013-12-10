@@ -84,7 +84,7 @@ void MergeReceive() {
     }
 
     for (c = 0; c < NUM_CELLS; ++c) {
-	for (t = 0; t < NumTri[c]; ++t) {
+	for (t = 0; t <= NumTri[c]; ++t) {
 	    fprintf(proc_file_out, "%2d %2d | %4d %4d %4d | ", c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale));
 	    fprintf(proc_file_out, "%4d %4d %4d | ", lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale),
