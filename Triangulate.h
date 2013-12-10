@@ -8,16 +8,16 @@
  *
  */
 
-#ifndef TRIANGULATE_H
-#define TRIANGULATE_H
+#ifndef __TRIANGULATE_H__
+#define __TRIANGULATE_H__
 
-extern LidarPointNode_t ***TriVertex[NUM_CELLS]; 
+extern LidarPointNode_t ***TriVertex[NUM_CELLS];
 extern INT **TriEdge[NUM_CELLS];
-extern INT NumTri[NUM_CELLS]; 
-extern INT *estack[NUM_CELLS];/*[CellCnt[cell]] - malloc it*/
+extern INT *estack[NUM_CELLS];
+extern INT NumTri[NUM_CELLS];
 extern INT topstk[NUM_CELLS];
 
+INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp);
 void Delaunay(int cell); 
 
 #endif
-

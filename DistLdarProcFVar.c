@@ -189,16 +189,16 @@ int main(int argc, char *argv[]) {
 	if (TriVertex[i] == NULL) perror("TriVertex[i]");
 	for (nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
 	    TriVertex[i][nt] = malloc(3 * sizeof (LidarPointNode_t *));
-	    if (TriVertex[i][nt] == NULL) perror("TriVertex[cell][nt]");
+	    if (TriVertex[i][nt] == NULL) perror("TriVertex[cell][nt] = malloc()");
 	}
 	TriEdge[i] = malloc((2 * CellCnt[i] + 1) * sizeof (INT *));
 	if (TriEdge[i] == NULL) perror("TriEdge[i]");
 	for(nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
 	    TriEdge[i][nt] = malloc(3 * sizeof (INT));
-	    if (TriEdge[i][nt] == NULL) perror("TriEdge[cell][nt])");
+	    if (TriEdge[i][nt] == NULL) perror("TriEdge[cell][nt] = malloc()");
 	}
-	estack[i] = malloc(sizeof (INT) * CellCnt[i]);
-	if (estack[i] == NULL) perror("estack");
+	estack[i] = malloc(CellCnt[i] * sizeof (INT));
+	if (estack[i] == NULL) perror("estack[i] = malloc()");
     }
 
     WorkerIDs[0] = 0;
