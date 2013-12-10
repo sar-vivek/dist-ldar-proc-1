@@ -141,12 +141,14 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 
     node = BinTbl[c][ix][iy];
     while (node != NULL) {
+	if (boundary_begin - node > 0) {
 #if DEBUG == 1
-	printf("Found a point. i = 0, X_c = %lg, Y_c = %lg, Z_c = %lg\n", node->X_c, node->Y_c, node->Z_c);
-	fflush(stdout);
+	    printf("Found a point. i = 0, X_c = %lg, Y_c = %lg, Z_c = %lg\n", node->X_c, node->Y_c, node->Z_c);
+	    fflush(stdout);
 #endif
-	Z_c += node->Z_c;
-	++cnt;
+	    Z_c += node->Z_c;
+	    ++cnt;
+	}
 	node = node->next;
     }
 
@@ -200,12 +202,14 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 #endif
 		    node = BinTbl[d][bx][by];
 		    while (node != NULL) {
+			if (boundary_begin - node > 0) {
 #if DEBUG == 1
-			printf("Found a point. i = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n", i, node->X_c, node->Y_c, node->Z_c);
-			fflush(stdout);
+			    printf("Found a point. i = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n", i, node->X_c, node->Y_c, node->Z_c);
+			    fflush(stdout);
 #endif
-			Z_c += node->Z_c;
-			++cnt;
+			    Z_c += node->Z_c;
+			    ++cnt;
+			}
 			node = node->next;
 		    }
 		}
@@ -379,6 +383,8 @@ void DistributeReceive() {
 
 	AddPoint();
     }
+
+    boundary_begin = current;
 
     BoundaryPointsAdd();
 
