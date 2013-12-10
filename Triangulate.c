@@ -249,7 +249,10 @@ void processBin(int cell, INT ix, INT iy) {
             }
 
         } else {
-
+#if DEBUG == 1
+            p = p->next;
+            continue;
+#endif
             /* new point was on an edge - add 2 new and update 2 triangles */
             i1 = (bflag + 1) % 3;
             i2 = (bflag + 2) % 3;
