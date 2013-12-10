@@ -21,7 +21,7 @@ void MergeSend() {
     int i;
 
     for (c = 0; c < NUM_CELLS; ++c) {
-	for (t = 0; t < NumTri[c]; ++t) {
+	for (t = 0; t <= NumTri[c]; ++t) {
 	    *((uint32_t *) X_b) = t;
 	    *((int *) Y_b) = c;
 	    Send(ssock, X_b, XYZ_SIZE);
