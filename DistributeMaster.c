@@ -96,8 +96,10 @@ void DistributeSend() {
 	ix = lround(floor(*((int32_t *) X_b) * Xratio + Xdiff));
 	iy = lround(floor(*((int32_t *) Y_b) * Yratio + Ydiff));
 
-	if (ix == NUM_NODES_X) --ix;
-	if (iy == NUM_NODES_Y) --iy;
+	if (ix >= NUM_NODES_X) ix = NUM_NODES_X - 1;
+	if (ix < 0) ix = 0;
+	if (iy >= NUM_NODES_Y) iy = NUM_NODES_Y - 1;
+	if (iy < 0) iy = 0;
 
 	i = NUM_NODES_X * iy + ix;
 
@@ -111,7 +113,7 @@ void DistributeSend() {
 	    AddPoint();
 	} else {
 #if DEBUG == 1
-	    if (NUM_NODES == 1) {
+	    if (NUM_NODES == 1 || i < 0 || i >= NUM_NODES) {
 		printf("We shouldn't be here. i = %d, X_r = %d, Y_r = %d\n",
 			i, *((int32_t *) X_b), *((int32_t *) Y_b));
 		fflush(stdout);
