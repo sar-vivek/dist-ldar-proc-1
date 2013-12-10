@@ -125,8 +125,6 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     i = 1;
 
 #if DEBUG == 1
-    printf("Adding a point in cell %d. ix = %d, iy = %d\n", c, ix, iy);
-    fflush(stdout);
     if (ix < 0 || bx >= NUM_BINS_X) {
 	fprintf(stderr, "bx out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
 	fflush(stderr);
@@ -230,6 +228,12 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     }
 
     Z_c /= cnt;
+
+#if DEBUG == 1
+    printf("Adding a point in cell %d. ix = %d, iy = %d, X_c = %lg, Y_c = %lg, Z_c = %lg",
+	   c, ix, iy, X_c, Y_c, Z_c);
+    fflush(stdout);
+#endif
 
     current->X_c = X_c;
     current->Y_c = Y_c;
