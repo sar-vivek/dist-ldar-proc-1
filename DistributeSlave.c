@@ -125,6 +125,8 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     i = 1;
 
 #if DEBUG == 1
+    printf("Adding a point in cell %d. ix = %d, iy = %d\n", c, ix, iy);
+    fflush(stdout);
     if (ix < 0 || bx >= NUM_BINS_X) {
 	fprintf(stderr, "bx out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
 	fflush(stderr);
@@ -141,6 +143,10 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 
     node = BinTbl[c][ix][iy];
     while (node != NULL) {
+#if DEBUG == 1
+	printf("Found a point. i = 0, X_c = %lg, Y_c = %lg, Z_c = %lg\n", node->X_c, node->Y_c, node->Z_c);
+	fflush(stdout);
+#endif
 	Z_c += node->Z_c;
 	++cnt;
 	node = node->next;
@@ -196,6 +202,10 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 #endif
 		    node = BinTbl[d][bx][by];
 		    while (node != NULL) {
+#if DEBUG == 1
+			printf("Found a point. i = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n", i, node->X_c, node->Y_c, node->Z_c);
+			fflush(stdout);
+#endif
 			Z_c += node->Z_c;
 			++cnt;
 			node = node->next;
