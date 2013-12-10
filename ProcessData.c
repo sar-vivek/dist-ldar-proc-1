@@ -62,6 +62,8 @@ void *ProcessData(void *workerID) {
     c = *((int *) workerID);
 
 #if DEBUG == 1
+    printf("Hello from thread 0x%08X\n", pthread_self());
+    fflush(stdout);
     count2 = 0;
     for (ix = 0; ix < NUM_BINS_X; ++ix) {
 	for (iy = 0; iy < NUM_BINS_Y; ++iy) {
