@@ -13,10 +13,11 @@ extern LidarPointNode_t *BinTbl[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 extern double BinU1[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 extern double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 extern uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
-extern uint32_t CellCnt[NUM_CELLS];
 
+extern double Zinit[NUM_CELLS][4];
 extern LidarPointNode_t CellMin[NUM_CELLS];
 extern LidarPointNode_t CellMax[NUM_CELLS];
+extern uint32_t CellCnt[NUM_CELLS];
 
 extern struct sockaddr_in svr_addr[NUM_NODES];
 extern struct epoll_event msockevents[NUM_NODES];

@@ -20,10 +20,11 @@ LidarPointNode_t *BinTbl[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 double BinU1[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
 uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];
-uint32_t CellCnt[NUM_CELLS];
 
+double Zinit[NUM_CELLS][4];
 LidarPointNode_t CellMin[NUM_CELLS];
 LidarPointNode_t CellMax[NUM_CELLS];
+uint32_t CellCnt[NUM_CELLS];
 
 struct sockaddr_in svr_addr[NUM_NODES];
 struct epoll_event msockevents[NUM_NODES];
