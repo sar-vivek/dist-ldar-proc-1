@@ -178,7 +178,7 @@ int main(int argc, char *argv[]) {
                 BinCnt[i][ix][iy] = 0;
             }
         }
-        CellCnt[i] = NUM_BINS_X + NUM_BINS_Y;
+        CellCnt[i] = 0;
     }
 
     if (NodeID == 0) DistributeSend();
