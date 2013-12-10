@@ -52,6 +52,7 @@ extern double Z_c;
 extern FILE *addrfile;
 extern LidarPointNode_t *PntTbl;
 extern LidarPointNode_t *current;
+extern LidarPointNode_t *boundary_begin;
 extern struct epoll_event *newevents;
 extern double *Z2;
 extern double *current2;

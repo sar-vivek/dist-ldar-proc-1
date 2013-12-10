@@ -133,6 +133,8 @@ void DistributeSend() {
 	Send(msock[i], X_b, XYZ_SIZE);
     }
 
+    boundary_begin = current;
+
     BoundaryPointsAdd();
 
 }

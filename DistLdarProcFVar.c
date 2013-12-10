@@ -59,6 +59,7 @@ double Z_c;
 FILE *addrfile;
 LidarPointNode_t *PntTbl;
 LidarPointNode_t *current;
+LidarPointNode_t *boundary_begin;
 struct epoll_event *newevents;
 double *Z2;
 double *current2;
