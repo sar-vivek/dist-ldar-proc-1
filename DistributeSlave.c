@@ -230,7 +230,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     Z_c /= cnt;
 
 #if DEBUG == 1
-    printf("Adding a point in cell %d. ix = %d, iy = %d, X_c = %lg, Y_c = %lg, Z_c = %lg",
+    printf("Adding a point in cell %d. ix = %d, iy = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n",
 	   c, ix, iy, X_c, Y_c, Z_c);
     fflush(stdout);
 #endif
