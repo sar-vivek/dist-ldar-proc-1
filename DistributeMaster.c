@@ -110,6 +110,13 @@ void DistributeSend() {
 	if (i == 0) {
 	    AddPoint();
 	} else {
+#if DEBUG == 1
+	    if (NUM_NODES == 1) {
+		printf("We shouldn't be here. i = %d, X_r = %d, Y_r = %d\n",
+			i, *((int32_t *) X_b), *((int32_t *) Y_b));
+		fflush(stdout);
+	    }
+#endif
 	    Send(msock[i], X_b, XYZ_SIZE);
 	}
     }
