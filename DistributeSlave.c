@@ -250,30 +250,42 @@ void BoundaryPointsAdd() {
     for (c = 0; c < NUM_CELLS; ++c) {
 	X_c = CellMin[c].X_c;
 	Y_c = CellMin[c].Y_c;
-	for (i = 0; i < NUM_BINS_X; i += 2) {
+	AddPoint2(c, 0, 0);
+	X_c += 2 * Xint_bin;
+	Zinit[c][0] = Z_c;
+	for (i = 1; i < NUM_BINS_X; i += 2) {
 	    AddPoint2(c, i, 0);
 	    X_c += 2 * Xint_bin;
 	}
 
 	X_c = CellMax[c].X_c;
-	for (i = 0; i < NUM_BINS_Y; i += 2) {
+	AddPoint2(c, NUM_BINS_X - 1, 0);
+	Y_c += 2 * Yint_bin;
+	Zinit[c][1] = Z_c;
+	for (i = 1; i < NUM_BINS_Y; i += 2) {
 	    AddPoint2(c, NUM_BINS_X - 1, i);
 	    Y_c += 2 * Yint_bin;
 	}
 
 	X_c = CellMax[c].X_c;
 	Y_c = CellMax[c].Y_c;
-	for (i = NUM_BINS_X - 1; i > 0; i -= 2) {
+	AddPoint2(c, NUM_BINS_X - 1, NUM_BINS_Y - 1);
+	X_c -= 2 * Xint_bin;
+	Zinit[c][3] = Z_c;
+	for (i = NUM_BINS_X - 2; i > 0; i -= 2) {
 	    AddPoint2(c, i, NUM_BINS_Y - 1);
 	    X_c -= 2 * Xint_bin;
 	}
 	
 	X_c = CellMin[c].X_c;
-	for (i = NUM_BINS_Y - 1; i > 0; i -= 2) {
+	AddPoint2(c, 0, NUM_BINS_Y - 1);
+	Y_c -= 2 * Yint_bin;
+	Zinit[c][2] = Z_c;
+	for (i = NUM_BINS_Y - 2; i > 0; i -= 2) {
 	    AddPoint2(c, 0, i);
 	    Y_c -= 2 * Yint_bin;
 	}
-    }
+    }    
 }
 
 void DistributeReceive() {
