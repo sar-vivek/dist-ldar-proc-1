@@ -417,7 +417,7 @@ void Delaunay(int cell) {
     BigTriangle[3].Y_c = CellMax[cell].Y_c; 
     BigTriangle[3].Z_c = Zinit[cell][3];
 #if DEBUG == 1
-    for(i=0;i<4,++i){
+    for(i=0;i<4;++i){
         fprintf(stderr,"%lu %lu %lu\n", BigTriangle[i].X_c, BigTriangle[i].Y_c, BigTriangle[i].Z_c);
     }
 #endif
