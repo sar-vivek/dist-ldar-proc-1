@@ -39,43 +39,43 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     found = 0;
 
     while (!found) {
-	for (i = 0; i < 3; ++i) {
-	    v1 = TriVertex[cell][t][i];
-	    v2 = TriVertex[cell][t][(i + 1) % 3];
-	    v1x = v1->X_c;
-	    v1y = v1->Y_c;
-	    v2x = v2->X_c;
-	    v2y = v2->Y_c;
-	    det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
+        for (i = 0; i < 3; ++i) {
+            v1 = TriVertex[cell][t][i];
+            v2 = TriVertex[cell][t][(i + 1) % 3];
+            v1x = v1->X_c;
+            v1y = v1->Y_c;
+            v2x = v2->X_c;
+            v2y = v2->Y_c;
+            det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
 
-	    if (det > 0) {
-		t = TriEdge[cell][t][i];
-		found = 0;
-		break;
-	    } else if (det == 0) {
-		if (px == v1x && py == v1y) {
-		    *bfp = i;
-		    *dfp = i;
+            if (det > 0) {
+                t = TriEdge[cell][t][i];
+                found = 0;
+                break;
+            } else if (det == 0) {
+                if (px == v1x && py == v1y) {
+                    *bfp = i;
+                    *dfp = i;
 #if DEBUG == 1
-		    printf("Duplicate points at (%lg, %lg)\n", px, py);
-		    fflush(stdout);
+                    fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
+                    fflush(stderr);
 #endif
-		}
-		if (px == v2x && py == v2y) {
-		    *bfp = (i + 1) % 3;
-		    *dfp = *bfp;
+                }
+                if (px == v2x && py == v2y) {
+                    *bfp = (i + 1) % 3;
+                    *dfp = *bfp;
 #if DEBUG == 1
-		    printf("Duplicate points at (%lg, %lg)\n", px, py);
-		    fflush(stdout);
+                    fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
+                    fflush(stderr);
 #endif
-		}
-		if (v1x < px && px < v2x || v1x > px && px > v2x) *bfp = i;
-		if (v1x == v2x) {
-		    if (v1y < py && py < v2y || v1y > py && py > v2y) *bfp = i;
-		}
-		return t;
-	    } else found = 1;
-	}
+                }
+                if (v1x < px && px < v2x || v1x > px && px > v2x) *bfp = i;
+                if (v1x == v2x) {
+                    if (v1y < py && py < v2y || v1y > py && py > v2y) *bfp = i;
+                }
+                return t;
+            } else found = 1;
+        }
     }
 
     return t;
@@ -85,9 +85,11 @@ void push(int cell, INT e) {
     ++topstk[cell];
 
     if (topstk[cell] > CellCnt[cell]) {
-	printf("%s:%d:stack full\n", __FILE__, __LINE__);
-	fflush(stdout);
-	return;
+#if DEBUG == 1
+        fprintf(stderr, "%s:%d:stack full\n", __FILE__, __LINE__);
+        fflush(stderr);
+#endif
+        return;
     }
 
     estack[cell][topstk[cell]] = e;
@@ -96,12 +98,13 @@ void push(int cell, INT e) {
 INT pop(int cell) {
 
     if (topstk[cell] != BOUNDARY) {
-	--topstk[cell];
-	return estack[cell][topstk[cell] + 1];
+        --topstk[cell];
+        return estack[cell][topstk[cell] + 1];
     }
-
-    printf("%s:%d:stack empty\n", __FILE__, __LINE__);
-    fflush(stdout);
+#if DEBUG == 1
+    fprintf(stderr, "%s:%d:stack empty\n", __FILE__, __LINE__);
+    fflush(stderr);
+#endif
     exit(-1);
 }
 
@@ -116,8 +119,8 @@ int edg(int cell, INT ix, INT nt) {
     }
 
 #if DEBUG
-    printf("%s:%d:triangles are not adjacent\n", __FILE__, __LINE__);
-    fflush(stdout);
+    fprintf(stderr, "%s:%d:triangles are not adjacent\n", __FILE__, __LINE__);
+    fflush(stderr);
 #endif
 
     return 0;
@@ -182,7 +185,7 @@ void processBin(int cell, INT ix, INT iy) {
     INT r;
     int bflag;
     int dflag;
-    int erl
+    int erl;
     int era;
     int erb;
     int i0;
@@ -193,172 +196,172 @@ void processBin(int cell, INT ix, INT iy) {
 
     while (p != NULL) {
         /*locate index of triangle containing p*/
-	bflag = -1;
-	dflag = -1;
+        bflag = -1;
+        dflag = -1;
         t = triLoc(cell, p, &bflag, &dflag);
 
-	if (dflag > -1) {
-	    p = p->next;
-	    continue;
-	}
+        if (dflag > -1) {
+            p = p->next;
+            continue;
+        }
 
-	if (bflag == -1) {
-	    /*add 2 new and update 1 triangle*/
-	    a = TriEdge[cell][t][0];
-	    b = TriEdge[cell][t][1];
-	    c = TriEdge[cell][t][2];
-	    v1 = TriVertex[cell][t][0];
-	    v2 = TriVertex[cell][t][1];
-	    v3 = TriVertex[cell][t][2];
-	    TriVertex[cell][t][0] = p;
-	    TriVertex[cell][t][1] = v1;
-	    TriVertex[cell][t][2] = v2;
-	    TriEdge[cell][t][0] = NumTri[cell] + 2;
-	    TriEdge[cell][t][1] = a;
-	    TriEdge[cell][t][2] = NumTri[cell] + 1;
+        if (bflag == -1) {
+            /*add 2 new and update 1 triangle*/
+            a = TriEdge[cell][t][0];
+            b = TriEdge[cell][t][1];
+            c = TriEdge[cell][t][2];
+            v1 = TriVertex[cell][t][0];
+            v2 = TriVertex[cell][t][1];
+            v3 = TriVertex[cell][t][2];
+            TriVertex[cell][t][0] = p;
+            TriVertex[cell][t][1] = v1;
+            TriVertex[cell][t][2] = v2;
+            TriEdge[cell][t][0] = NumTri[cell] + 2;
+            TriEdge[cell][t][1] = a;
+            TriEdge[cell][t][2] = NumTri[cell] + 1;
 
-	    t2 = ++NumTri[cell];
-	    TriVertex[cell][t2][0] = p;
-	    TriVertex[cell][t2][1] = v2;
-	    TriVertex[cell][t2][2] = v3;
-	    TriEdge[cell][t2][0] = t;
-	    TriEdge[cell][t2][1] = b;
-	    TriEdge[cell][t2][2] = NumTri[cell] + 1;
+            t2 = ++NumTri[cell];
+            TriVertex[cell][t2][0] = p;
+            TriVertex[cell][t2][1] = v2;
+            TriVertex[cell][t2][2] = v3;
+            TriEdge[cell][t2][0] = t;
+            TriEdge[cell][t2][1] = b;
+            TriEdge[cell][t2][2] = NumTri[cell] + 1;
 
-	    t2 = ++NumTri[cell];
-	    TriVertex[cell][t2][0] = p;
-	    TriVertex[cell][t2][1] = v3;
-	    TriVertex[cell][t2][2] = v1;
-	    TriEdge[cell][t2][0] = NumTri[cell] - 1;
-	    TriEdge[cell][t2][1] = c;
-	    TriEdge[cell][t2][2] = t;
+            t2 = ++NumTri[cell];
+            TriVertex[cell][t2][0] = p;
+            TriVertex[cell][t2][1] = v3;
+            TriVertex[cell][t2][2] = v1;
+            TriEdge[cell][t2][0] = NumTri[cell] - 1;
+            TriEdge[cell][t2][1] = c;
+            TriEdge[cell][t2][2] = t;
 
-	    /*update adjacency lists*/
-	    if (a != BOUNDARY) push(cell, t);
+            /*update adjacency lists*/
+            if (a != BOUNDARY) push(cell, t);
 
-	    if (b != BOUNDARY) {
-		TriEdge[cell][b][edg(cell, b, t)] = NumTri[cell] - 1;
-		push(cell, NumTri[cell] - 1);
-	    }
+            if (b != BOUNDARY) {
+                TriEdge[cell][b][edg(cell, b, t)] = NumTri[cell] - 1;
+                push(cell, NumTri[cell] - 1);
+            }
 
-	    if (c != BOUNDARY) {
-		TriEdge[cell][c][edg(cell, c, t)] = NumTri[cell];
-		push(cell, NumTri[cell]);
-	    }
+            if (c != BOUNDARY) {
+                TriEdge[cell][c][edg(cell, c, t)] = NumTri[cell];
+                push(cell, NumTri[cell]);
+            }
 
-	} else {
+        } else {
 
-	    /* new point was on an edge - add 2 new and update 2 triangles */
-	    i1 = (bflag + 1) % 3;
-	    i2 = (bflag + 2) % 3;
-	    t2 = ++NumTri[cell];
+            /* new point was on an edge - add 2 new and update 2 triangles */
+            i1 = (bflag + 1) % 3;
+            i2 = (bflag + 2) % 3;
+            t2 = ++NumTri[cell];
 
-	    a = TriEdge[cell][t][bflag];
-	    b = TriEdge[cell][t][i1];
-	    c = TriEdge[cell][t][i2];
-	    v1 = TriVertex[cell][t][bflag];
-	    v2 = TriVertex[cell][t][i1];
-	    v3 = TriVertex[cell][t][i2];
-	    TriVertex[cell][t][i1] = p;
-	    TriEdge[cell][t][i1] = t2;
+            a = TriEdge[cell][t][bflag];
+            b = TriEdge[cell][t][i1];
+            c = TriEdge[cell][t][i2];
+            v1 = TriVertex[cell][t][bflag];
+            v2 = TriVertex[cell][t][i1];
+            v3 = TriVertex[cell][t][i2];
+            TriVertex[cell][t][i1] = p;
+            TriEdge[cell][t][i1] = t2;
 
-	    TriVertex[cell][t2][bflag] = p;
-	    TriVertex[cell][t2][i1] = v2;
-	    TriVertex[cell][t2][i2] = v3;
-	    TriEdge[cell][t2][i1] = b;
-	    TriEdge[cell][t2][i2] = t;
+            TriVertex[cell][t2][bflag] = p;
+            TriVertex[cell][t2][i1] = v2;
+            TriVertex[cell][t2][i2] = v3;
+            TriEdge[cell][t2][i1] = b;
+            TriEdge[cell][t2][i2] = t;
 
-	    if (b != BOUNDARY) {
-		TriEdge[cell][b][edg(cell, b, t)] = t2;
-		push(cell, t2);
-	    }
+            if (b != BOUNDARY) {
+                TriEdge[cell][b][edg(cell, b, t)] = t2;
+                push(cell, t2);
+            }
 
-	    if (c != BOUNDARY) push(cell, t);
+            if (c != BOUNDARY) push(cell, t);
 
-	    if (a == BOUNDARY) {
-		TriEdge[cell][t2][bflag] = BOUNDARY;
-	    } else {
-		TriEdge[cell][t2][bflag] = t2 + 1;
+            if (a == BOUNDARY) {
+                TriEdge[cell][t2][bflag] = BOUNDARY;
+            } else {
+                TriEdge[cell][t2][bflag] = t2 + 1;
 
-		if (TriEdge[cell][a][0] == t) i0 = 0;
-		else if (TriEdge[cell][a][1] == t) i0 = 1;
+                if (TriEdge[cell][a][0] == t) i0 = 0;
+                else if (TriEdge[cell][a][1] == t) i0 = 1;
 #if DEBUG == 1
-		else if (TriEdge[cell][a][2] == t) i0 = 2;
-		else {
-		    fprintf(stderr, "TriEdge[%d][%u][*] is incorrect.\n", cell, a);
-		    fflush(stderr);
-		}
+                else if (TriEdge[cell][a][2] == t) i0 = 2;
+                else {
+                    fprintf(stderr, "TriEdge[%d][%u][*] is incorrect.\n", cell, a);
+                    fflush(stderr);
+                }
 #else
-		else i0 = 2;
+                else i0 = 2;
 #endif
 
-		i1 = (i0 + 1) % 3;
-		i2 = (i0 + 2) % 3;
-		t = a;
-		t2 = ++NumTri[cell];
+                i1 = (i0 + 1) % 3;
+                i2 = (i0 + 2) % 3;
+                t = a;
+                t2 = ++NumTri[cell];
 
-		b = TriEdge[cell][a][i1];
-		c = TriEdge[cell][a][i2];
-		v1 = TriVertex[cell][a][i0];
-		v3 = TriVertex[cell][a][i2];
+                b = TriEdge[cell][a][i1];
+                c = TriEdge[cell][a][i2];
+                v1 = TriVertex[cell][a][i0];
+                v3 = TriVertex[cell][a][i2];
 
-		TriVertex[cell][a][i0] = p;
-		TriEdge[cell][a][i2] = t2;
+                TriVertex[cell][a][i0] = p;
+                TriEdge[cell][a][i2] = t2;
 
-		TriVertex[cell][t2][i0] = v1;
-		TriVertex[cell][t2][i1] = p;
-		TriVertex[cell][t2][i2] = v3;
-		TriEdge[cell][t2][i0] = t2 - 1;
-		TriEdge[cell][t2][i1] = a;
-		TriEdge[cell][t2][i2] = c;
+                TriVertex[cell][t2][i0] = v1;
+                TriVertex[cell][t2][i1] = p;
+                TriVertex[cell][t2][i2] = v3;
+                TriEdge[cell][t2][i0] = t2 - 1;
+                TriEdge[cell][t2][i1] = a;
+                TriEdge[cell][t2][i2] = c;
 
-		if (b != BOUNDARY) push(cell, a);
+                if (b != BOUNDARY) push(cell, a);
 
-		if (c != BOUNDARY) {
-		    TriEdge[cell][c][edg(cell, c, a)] = t2;
-		    push(cell, t2);
-		}
-	    }
-	}
+                if (c != BOUNDARY) {
+                    TriEdge[cell][c][edg(cell, c, a)] = t2;
+                    push(cell, t2);
+                }
+            }
+        }
 
-	while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
-	    l = pop(cell);
-	    r = TriEdge[cell][l][1];
-	    /*if (r == BOUNDARY) continue;*/
+        while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
+            l = pop(cell);
+            r = TriEdge[cell][l][1];
+            /*if (r == BOUNDARY) continue;*/
 
-	    /*circumcircle test*/
-	    erl = edg(cell, r, l);
-	    era = (erl + 1) % 3;
-	    erb = (era + 1) % 3;
-	    v1 = TriVertex[cell][r][erl];
-	    v2 = TriVertex[cell][r][era];
-	    v3 = TriVertex[cell][r][erb];
+            /*circumcircle test*/
+            erl = edg(cell, r, l);
+            era = (erl + 1) % 3;
+            erb = (era + 1) % 3;
+            v1 = TriVertex[cell][r][erl];
+            v2 = TriVertex[cell][r][era];
+            v3 = TriVertex[cell][r][erb];
 
-	    if (swap(cell, v1, v2, v3, p)) {
-		/*p is in circle of triangle r*/
-		a = TriEdge[cell][r][era];
-		b = TriEdge[cell][r][erb];
-		c = TriEdge[cell][l][2];
-		TriVertex[cell][l][2] = v3;
-		TriEdge[cell][l][1] = a;
-		TriEdge[cell][l][2] = r;
-		TriVertex[cell][r][0] = p;
-		TriVertex[cell][r][1] = v3;
-		TriVertex[cell][r][2] = v1;
-		TriEdge[cell][r][0] = l;
-		TriEdge[cell][r][1] = b;
-		TriEdge[cell][r][2] = c;
+            if (swap(cell, v1, v2, v3, p)) {
+                /*p is in circle of triangle r*/
+                a = TriEdge[cell][r][era];
+                b = TriEdge[cell][r][erb];
+                c = TriEdge[cell][l][2];
+                TriVertex[cell][l][2] = v3;
+                TriEdge[cell][l][1] = a;
+                TriEdge[cell][l][2] = r;
+                TriVertex[cell][r][0] = p;
+                TriVertex[cell][r][1] = v3;
+                TriVertex[cell][r][2] = v1;
+                TriEdge[cell][r][0] = l;
+                TriEdge[cell][r][1] = b;
+                TriEdge[cell][r][2] = c;
 
-		if (a != BOUNDARY) {
-		    TriEdge[cell][a][edg(cell, a, r)] = l;
-		    push(cell, l);
-		}
-		if (b != BOUNDARY) push(cell, r);
-		if (c != BOUNDARY) TriEdge[cell][c][edg(cell, c, l)] = r;
-	    }
-	}
+                if (a != BOUNDARY) {
+                    TriEdge[cell][a][edg(cell, a, r)] = l;
+                    push(cell, l);
+                }
+                if (b != BOUNDARY) push(cell, r);
+                if (c != BOUNDARY) TriEdge[cell][c][edg(cell, c, l)] = r;
+            }
+        }
 
-	p = p->next;
+        p = p->next;
     }
 }
 
@@ -394,11 +397,11 @@ void Delaunay(int cell) {
     BigTriangle[2].Y_c = ycen + 1.51 * DMAX;
 
     /*BigTriangle[0].X_c = 778;
-    BigTriangle[0].Y_c = 1778;
-    BigTriangle[1].X_c = 4227;
-    BigTriangle[1].Y_c = 1778;
-    BigTriangle[2].X_c = 2500;
-    BigTriangle[2].Y_c = 3500;*/
+      BigTriangle[0].Y_c = 1778;
+      BigTriangle[1].X_c = 4227;
+      BigTriangle[1].Y_c = 1778;
+      BigTriangle[2].X_c = 2500;
+      BigTriangle[2].Y_c = 3500;*/
 
     TriVertex[cell][0][0] = &BigTriangle[0];
     TriVertex[cell][0][1] = &BigTriangle[1];
@@ -407,32 +410,37 @@ void Delaunay(int cell) {
     TriEdge[cell][0][1] = BOUNDARY;
     TriEdge[cell][0][2] = BOUNDARY; 
     NumTri[cell] = 0; /*triangles are numbered from 0*/
- 
+
     /*insert points one by one*/
     /*for optimization we insert from bins in a specific order - details in the paper*/
     for (iy = 0; iy < NUM_BINS_Y; ++iy) {
-	if (iy % 2 == 1) {
+        if (iy % 2 == 1) {
             for (ix = 0; ix < NUM_BINS_X; ++ix) {
-		processBin(cell, NUM_BINS_X - ix - 1, iy);
-	    }
+                processBin(cell, NUM_BINS_X - ix - 1, iy);
+            }
         } else {
             for (ix = 0; ix < NUM_BINS_X; ++ix) {
-		processBin(cell, ix, iy);
-	    }
+                processBin(cell, ix, iy);
+            }
         }
     }
 
-    printf("Success\n");
-    fflush(stdout);
+#if DEBUG == 1
+    fprintf(stderr,"Success %u %u\n", NumTri[cell], numt);
+    if(NumTri[cell]==numt)
+        fprintf(stderr,"Equal\n");
+    fflush(stderr);
+#endif
 
     /*------------------remove pseudos-----------------------*/
     /*remove all triangles containing pseudo-triangle points*/
     /*first find triangle that is to be removed*/
     nt = 0;
     remove = 0;
+    numt=NumTri[cell]+1;
     while (!remove && nt < numt) {
-	i = 0;
-	while (!remove && i < 3) {
+        i = 0;
+        while (!remove && i < 3) {
             for (j = 0; j < 3; ++j) {
                 if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
                     remove = 1;
@@ -441,27 +449,28 @@ void Delaunay(int cell) {
             }
             ++i;
         }
+        /*nt is the first triangle that to be removed*/
+        if (remove) {
+            for (i = 0; i < 3; ++i) {
+                ix = TriEdge[cell][nt][i];
+                if (ix != BOUNDARY) {
+                    TriEdge[cell][ix][edg(cell, ix, nt)] = BOUNDARY;  
+                }
+            }
+            break;
+        }
         ++nt;
     }
 
-    /*nt is the first triangle that to be removed*/
-    if (remove) {
-        for (i = 0; i < 3; ++i) {
-            ix = TriEdge[cell][nt][i];
-            if (ix != BOUNDARY) {
-                TriEdge[cell][ix][edg(cell, ix, nt)] = BOUNDARY;  
-            }
-        }
-    }
 
     /*starting from nt now remove rest triangles*/
     tstart = nt + 1;
     tstop = numt;
     numt = nt - 1;
     for (nt = tstart; nt < tstop; ++nt) {
-	i = 0;
+        i = 0;
         while (!remove && i < 3) {
-	    for (j = 0; j < 3; ++j) {
+            for (j = 0; j < 3; ++j) {
                 if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
                     remove = 1;
                     break;
