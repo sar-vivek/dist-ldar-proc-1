@@ -366,7 +366,7 @@ void processBin(int cell, INT ix, INT iy) {
 }
 
 void Delaunay(int cell) {
-    LidarPointNode_t BigTriangle[3];
+    LidarPointNode_t BigTriangle[4];
     double DMAX;  /*pseudo-diagonal distance of a cell*/
     double xcen;
     double ycen;
@@ -387,6 +387,7 @@ void Delaunay(int cell) {
     topstk[cell] = BOUNDARY;
 
     /*calculate pseudo-triangle*/
+    /*
     xcen = 0.5 * (CellMax[cell].X_c + CellMin[cell].X_c);
     ycen = 0.5 * (CellMax[cell].Y_c + CellMin[cell].Y_c);
     BigTriangle[0].X_c = xcen - 1.01 * DMAX;
@@ -401,9 +402,36 @@ void Delaunay(int cell) {
     TriVertex[cell][0][2] = &BigTriangle[2];
     TriEdge[cell][0][0] = BOUNDARY; 
     TriEdge[cell][0][1] = BOUNDARY;
+    TriEdge[cell][0][2] = BOUNDARY; */
+    
+    BigTriangle[0].X_c = CellMin[cell].X_c; 
+    BigTriangle[0].Y_c = CellMin[cell].Y_c; 
+    BigTriangle[0].Z_c = Zinit[cell][0];
+    BigTriangle[1].X_c = CellMax[cell].X_c; 
+    BigTriangle[1].Y_c = CellMin[cell].Y_c; 
+    BigTriangle[1].Z_c = Zinit[cell][1];
+    BigTriangle[2].X_c = CellMin[cell].X_c; 
+    BigTriangle[2].Y_c = CellMax[cell].Y_c; 
+    BigTriangle[2].Z_c = Zinit[cell][2];
+    BigTriangle[3].X_c = CellMax[cell].X_c; 
+    BigTriangle[3].Y_c = CellMax[cell].Y_c; 
+    BigTriangle[3].Z_c = Zinit[cell][3];
+    
+    TriVertex[cell][0][0] = &BigTriangle[0];
+    TriVertex[cell][0][1] = &BigTriangle[1];
+    TriVertex[cell][0][2] = &BigTriangle[2];
+    TriVertex[cell][1][0] = &BigTriangle[2];
+    TriVertex[cell][1][1] = &BigTriangle[1];
+    TriVertex[cell][1][2] = &BigTriangle[3];
+    TriEdge[cell][0][0] = BOUNDARY; 
+    TriEdge[cell][0][1] = 1;
     TriEdge[cell][0][2] = BOUNDARY; 
-    NumTri[cell] = 0; /*triangles are numbered from 0*/
-
+    TriEdge[cell][1][0] = 0; 
+    TriEdge[cell][1][1] = BOUNDARY;
+    TriEdge[cell][1][2] = BOUNDARY; 
+    /*triangles are numbered from 0*/
+    NumTri[cell] = 1 ; 
+    
     /*insert points one by one*/
     /*for optimization we insert from bins in a specific order - details in the paper*/
     for (iy = 0; iy < NUM_BINS_Y; ++iy) {
@@ -427,7 +455,7 @@ void Delaunay(int cell) {
 
     /*------------------remove pseudos-----------------------*/
     /*remove all triangles containing pseudo-triangle points*/
-    /*first find triangle that is to be removed*/
+    /*first find triangle that is to be removed
     nt = 0;
     remove = 0;
     numt=NumTri[cell]+1;
@@ -444,8 +472,8 @@ void Delaunay(int cell) {
                 }   
             }
             ++i;
-        }
-        /*nt is the first triangle that to be removed*/
+        }*/
+        /*nt is the first triangle that to be removed
         if (remove) {
             for (i = 0; i < 3; ++i) {
                 ix = TriEdge[cell][nt][i];
@@ -456,10 +484,10 @@ void Delaunay(int cell) {
             break;
         }
         ++nt;
-    }
+    }*/
 
 
-    /*starting from nt now remove rest triangles*/
+    /*starting from nt now remove rest triangles
     tstart = nt + 1;
     tstop = numt;
     numt = nt - 1;
@@ -494,6 +522,6 @@ void Delaunay(int cell) {
                 if (ix != BOUNDARY) TriEdge[cell][ix][edg(cell, ix, nt)] = numt;
             }
         }
-    }
+    }*/
     /*-----------------------end remove pseudo----------------------------*/
 }
