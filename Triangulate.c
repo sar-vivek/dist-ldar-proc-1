@@ -395,14 +395,7 @@ void Delaunay(int cell) {
     BigTriangle[1].Y_c = ycen - 0.51 * DMAX;
     BigTriangle[2].X_c = xcen;
     BigTriangle[2].Y_c = ycen + 1.51 * DMAX;
-
-    /*BigTriangle[0].X_c = 778;
-      BigTriangle[0].Y_c = 1778;
-      BigTriangle[1].X_c = 4227;
-      BigTriangle[1].Y_c = 1778;
-      BigTriangle[2].X_c = 2500;
-      BigTriangle[2].Y_c = 3500;*/
-
+    
     TriVertex[cell][0][0] = &BigTriangle[0];
     TriVertex[cell][0][1] = &BigTriangle[1];
     TriVertex[cell][0][2] = &BigTriangle[2];
@@ -426,7 +419,7 @@ void Delaunay(int cell) {
     }
 
 #if DEBUG == 1
-    fprintf(stderr,"Success %u %u\n", NumTri[cell], numt);
+    fprintf(stderr,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
     if(NumTri[cell]==numt)
         fprintf(stderr,"Equal\n");
     fflush(stderr);
