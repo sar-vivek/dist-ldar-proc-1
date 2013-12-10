@@ -188,7 +188,6 @@ void processBin(int cell, INT ix, INT iy) {
     int erl;
     int era;
     int erb;
-    int i0;
     int i1;
     int i2;
 
@@ -262,14 +261,18 @@ void processBin(int cell, INT ix, INT iy) {
             v1 = TriVertex[cell][t][bflag];
             v2 = TriVertex[cell][t][i1];
             v3 = TriVertex[cell][t][i2];
-            TriVertex[cell][t][i1] = p;
-            TriEdge[cell][t][i1] = t2;
+            TriVertex[cell][t][0] = p;
+	    TriVertex[cell][t][1] = v3;
+	    TriVertex[cell][t][2] = v1;
+	    TriEdge[cell][t][0] = t2;
+            TriEdge[cell][t][1] = c;
+	    TriEdge[cell][t][2] = a;
 
-            TriVertex[cell][t2][bflag] = p;
-            TriVertex[cell][t2][i1] = v2;
-            TriVertex[cell][t2][i2] = v3;
-            TriEdge[cell][t2][i1] = b;
-            TriEdge[cell][t2][i2] = t;
+            TriVertex[cell][t2][0] = p;
+            TriVertex[cell][t2][1] = v2;
+            TriVertex[cell][t2][2] = v3;
+            TriEdge[cell][t2][1] = b;
+            TriEdge[cell][t2][2] = t;
 
             if (b != BOUNDARY) {
                 TriEdge[cell][b][edg(cell, b, t)] = t2;
@@ -279,52 +282,44 @@ void processBin(int cell, INT ix, INT iy) {
             if (c != BOUNDARY) push(cell, t);
 
             if (a == BOUNDARY) {
-                TriEdge[cell][t2][bflag] = BOUNDARY;
+                TriEdge[cell][t2][0] = BOUNDARY;
             } else {
-                TriEdge[cell][t2][bflag] = t2 + 1;
+                TriEdge[cell][t2][0] = t2 + 1;
 
-                if (TriEdge[cell][a][0] == t) i0 = 0;
-                else if (TriEdge[cell][a][1] == t) i0 = 1;
-#if DEBUG == 1
-                else if (TriEdge[cell][a][2] == t) i0 = 2;
-                else {
-                    fprintf(stderr, "TriEdge[%d][%u][*] is incorrect.\n", cell, a);
-                    fflush(stderr);
-                }
-#else
-                else i0 = 2;
-#endif
-
-                i1 = (i0 + 1) % 3;
-                i2 = (i0 + 2) % 3;
-                t = a;
+		bflag = edg(cell, a, t);
+                i1 = (bflag + 1) % 3;
+                i2 = (bflag + 2) % 3;
                 t2 = ++NumTri[cell];
 
-                b = TriEdge[cell][a][i1];
-                c = TriEdge[cell][a][i2];
-                v1 = TriVertex[cell][a][i0];
-                v3 = TriVertex[cell][a][i2];
+		b = TriEdge[cell][a][i1];
+		c = TriEdge[cell][a][i2];
+		v1 = TriVertex[cell][a][bflag];
+		v2 = TriVertex[cell][a][i1];
+		v3 = TriVertex[cell][a][i2];
+		TriVertex[cell][a][0] = p;
+		TriVertex[cell][a][1] = v2;
+		TriVertex[cell][a][2] = v3;
+		TriEdge[cell][a][0] = t;
+		TriEdge[cell][a][1] = b;
+		TriEdge[cell][a][2] = t2;
 
-                TriVertex[cell][a][i0] = p;
-                TriEdge[cell][a][i2] = t2;
+		TriVertex[cell][t2][0] = p;
+		TriVertex[cell][t2][1] = v3;
+		TriVertex[cell][t2][2] = v1;
+		TriEdge[cell][t2][0] = a;
+		TriEdge[cell][t2][1] = c;
+		TriEdge[cell][t2][2] = t2 - 1;
 
-                TriVertex[cell][t2][i0] = v1;
-                TriVertex[cell][t2][i1] = p;
-                TriVertex[cell][t2][i2] = v3;
-                TriEdge[cell][t2][i0] = t2 - 1;
-                TriEdge[cell][t2][i1] = a;
-                TriEdge[cell][t2][i2] = c;
+		if (b != BOUNDARY) push(cell, a);
 
-                if (b != BOUNDARY) push(cell, a);
+		if (c != BOUNDARY) {
+		    TriEdge[cell][c][edg(cell, c, a)] = t2;
+		    push(cell, t2);
+		}
+	    }
+	}
 
-                if (c != BOUNDARY) {
-                    TriEdge[cell][c][edg(cell, c, a)] = t2;
-                    push(cell, t2);
-                }
-            }
-        }
-
-        while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
+	while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
             l = pop(cell);
             r = TriEdge[cell][l][1];
             /*if (r == BOUNDARY) continue;*/
