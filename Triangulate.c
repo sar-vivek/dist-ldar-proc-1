@@ -33,7 +33,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     int found;
     int i;
 
-#if DEBUG == 2
+#if DEBUG >= 3
     assert(sizeof (double) == 8);
     assert(sizeof (uint64_t) == 8);
     uint8_t *x0 = (uint8_t *) &px;
@@ -59,11 +59,11 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             v2x = v2->X_c;
             v2y = v2->Y_c;
             det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
-#if DEBUG >= 1
+#if DEBUG >= 2 
 	    printf("Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
 	    printf("p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
 #endif
-#if DEBUG == 2
+#if DEBUG >= 3
 	    printf("px - v1x = %lg\n", px - v1x);
 	    printf("v2y - v1y = %lg\n", v2y - v1y);
 	    printf("v2x - v1x = %lg\n", v2x - v1x);
@@ -93,7 +93,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     *bfp = i;
                     *dfp = i;
 #if DEBUG >= 1
-                    fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
+                    fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v1x, v1y);
                     fflush(stderr);
 #endif
                     return t;
@@ -102,7 +102,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     *bfp = (i + 1) % 3;
                     *dfp = *bfp;
 #if DEBUG >= 1
-                    fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
+                    fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v2x, v2y);
                     fflush(stderr);
 #endif
                     return t;
@@ -117,7 +117,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                         return t;
                     }
                 }
-#if DEBUG == 2
+#if DEBUG >= 2
 		printf("Not returning.\n");
 		fflush(stdout);
 #endif
@@ -128,7 +128,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 #endif
                 t = TriEdge[cell][t][i];
                 found = 0;
-#if DEBUG == 2
+#if DEBUG >= 2
 		printf("Breaking now. t = %u\n", t);
 		fflush(stdout);
 #endif
@@ -399,7 +399,7 @@ void processBin(int cell, INT ix, INT iy) {
             v2 = TriVertex[cell][r][era];
             v3 = TriVertex[cell][r][erb];
 
-#if DEBUG >= 1
+#if DEBUG >= 2
             printf("Processing triangle %u from stack.\n", l);
             fflush(stdout);
 #endif
