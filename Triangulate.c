@@ -49,7 +49,10 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
 #if DEBUG == 1
 	    printf("Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
-	    printf("p = (%lg,%lg), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
+	    printf("p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
+	    printf("p = (0x%X,0x%X)\n", *((long long unsigned int *) &px), *((long long unsigned int *) &py)
+	    printf("v1 = (0x%X,0x%X)\n", *((long long unsigned int *) &v1x), *((long long unsigned int *) &v1y)
+	    printf("v2 = (0x%X,0x%X)\n", *((long long unsigned int *) &v2x), *((long long unsigned int *) &v2y)
 	    fflush(stdout);
 #endif
             if (det > 0) {
