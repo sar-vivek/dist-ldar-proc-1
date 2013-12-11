@@ -44,7 +44,7 @@ void MergeReceive() {
 	    ret = epoll_wait(polldesc, newevents, NUM_NODES - 1, -1);
 	    if (ret == -1) perror("epoll_wait()");
 
-#if DEBUG == 1
+#if DEBUG >= 1
 	    printf("Received %d events\n", ret);
 	    fflush(stdout);
 #endif
@@ -58,7 +58,7 @@ void MergeReceive() {
 		if (*((int32_t *) X_b) == 0 && *((int32_t *) Y_b) == 0 && *((int32_t *) Z_b) == 0) {
 		    if (epoll_ctl(polldesc, EPOLL_CTL_DEL, msock[i], &msockevents[i]) == -1) perror("epoll_ctl()");
 		    if (close(msock[i]) == -1) perror("close()");
-#if DEBUG == 1
+#if DEBUG >= 1
 		    printf("Socket %d closed.\n", msock[i]);
 		    fflush(stdout);
 #endif

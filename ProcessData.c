@@ -47,7 +47,7 @@ void *ProcessData(void *workerID) {
     double u2;
     LidarPointNode_t *node;
     VarWeight_t *vw;
-#if DEBUG == 1
+#if DEBUG >= 1
     uint32_t count2;
 #endif
     uint32_t ix;
@@ -61,7 +61,7 @@ void *ProcessData(void *workerID) {
 
     c = *((int *) workerID);
 
-#if DEBUG == 1
+#if DEBUG >= 1
     printf("Hello from thread 0x%08X\n", pthread_self());
     fflush(stdout);
     count2 = 0;
@@ -108,7 +108,7 @@ void *ProcessData(void *workerID) {
 	    u1 /= n;
 	    u2 /= n;
 
-#if DEBUG == 1
+#if DEBUG >= 1
 	    if ((ix == 134 && iy == 2) ||
 		(ix == 570 && iy == 1776) ||
 		(ix == 23 && iy == 2699) ||
@@ -141,7 +141,7 @@ void *ProcessData(void *workerID) {
 	}
     }
 
-#if DEBUG == 1
+#if DEBUG >= 1
     count2 = 0;
     for (ix = 0; ix < NumPointRec; ++ix) {
 	if (*(FiltTbl + ix) == 0) ++count2;

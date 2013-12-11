@@ -103,7 +103,7 @@ void DistributeSend() {
 
 	i = NUM_NODES_X * iy + ix;
 
-#if DEBUG == 1
+#if DEBUG >= 1
 	if (count % 1000000 == 478593) {
 	    printf("i=%d ", i);
 	}
@@ -112,7 +112,7 @@ void DistributeSend() {
 	if (i == 0) {
 	    AddPoint();
 	} else {
-#if DEBUG == 1
+#if DEBUG >= 1
 	    if (NUM_NODES == 1 || i < 0 || i >= NUM_NODES) {
 		printf("We shouldn't be here. i = %d, X_r = %d, Y_r = %d\n",
 			i, *((int32_t *) X_b), *((int32_t *) Y_b));

@@ -67,7 +67,7 @@ void AddPoint() {
 
     ix = lround(floor((X_c - CellMin[c].X_c) / Xint_bin));
     iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
-#if DEBUG == 1
+#if DEBUG >= 1
     if (ix < 0 || iy < 0 || ix > NUM_BINS_X || iy > NUM_BINS_Y) {
 	printf("Error: ix = %u, iy = %u out of bounds\n");
 	fflush(stdout);
@@ -75,14 +75,14 @@ void AddPoint() {
 #endif
     if (ix == NUM_BINS_X) {
 	--ix;
-#if DEBUG == 1
+#if DEBUG >= 1
 	printf("Bin right edge hit.\n");
 	fflush(stdout);
 #endif
     }
     if (iy == NUM_BINS_Y) {
 	--iy;
-#if DEBUG == 1
+#if DEBUG >= 1
 	printf("Bin top edge hit.\n");
 	fflush(stdout);
 #endif
@@ -98,7 +98,7 @@ void AddPoint() {
     BinU2[c][ix][iy] += *current2++;
     ++mycount;
 
-#if DEBUG == 1
+#if DEBUG >= 1
     if (mycount > NODE_POINTS_MAX) {
 	fprintf(stderr, "NODE_POINTS_MAX exceeded. Exiting.\n");
 	fflush(stderr);
@@ -124,7 +124,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     cnt = 0;
     i = 1;
 
-#if DEBUG == 1
+#if DEBUG >= 1
     if (ix < 0 || bx >= NUM_BINS_X) {
 	fprintf(stderr, "bx out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
 	fflush(stderr);
@@ -142,7 +142,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     node = BinTbl[c][ix][iy];
     while (node != NULL) {
 	if (boundary_begin - node > 0) {
-#if DEBUG == 1
+#if DEBUG >= 1
 	    printf("Found a point. i = 0, X_c = %lg, Y_c = %lg, Z_c = %lg\n", node->X_c, node->Y_c, node->Z_c);
 	    fflush(stdout);
 #endif
@@ -183,7 +183,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 		    else by += NUM_BINS_Y;
 		}
 		if (skip == 0) {
-#if DEBUG == 1
+#if DEBUG >= 1
 		    if (bx < 0 || bx >= NUM_BINS_X) {
 			fprintf(stderr, "bx out of range: c = %d, ax = %d, ay = %d, d = %d, bx = %d, by = %d\n",
 				c, ax, ay, d, bx, by);
@@ -203,7 +203,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 		    node = BinTbl[d][bx][by];
 		    while (node != NULL) {
 			if (boundary_begin - node > 0) {
-#if DEBUG == 1
+#if DEBUG >= 1
 			    printf("Found a point. i = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n", i, node->X_c, node->Y_c, node->Z_c);
 			    fflush(stdout);
 #endif
@@ -233,7 +233,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 
     Z_c /= cnt;
 
-#if DEBUG == 1
+#if DEBUG >= 1
     printf("Adding a point in cell %d. ix = %d, iy = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n",
 	   c, ix, iy, X_c, Y_c, Z_c);
     fflush(stdout);
@@ -252,7 +252,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     BinU2[c][ix][iy] += *current2++;
     ++mycount;
 
-#if DEBUG == 1
+#if DEBUG >= 1
     if (mycount > NODE_POINTS_MAX) {
 	fprintf(stderr, "NODE_POINTS_MAX exceeded. Exiting.\n");
 	fflush(stderr);
@@ -340,7 +340,7 @@ void DistributeReceive() {
     Receive(ssock, &MaxZ, DOUBLE_SIZE);
     Receive(ssock, &MinZ, DOUBLE_SIZE);
 
-#if DEBUG == 1
+#if DEBUG >= 1
     printf("-------------------------------------\n");
     printf("Xscale = %lg\n", Xscale);
     printf("Yscale = %lg\n", Yscale);
