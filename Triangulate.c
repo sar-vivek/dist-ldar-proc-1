@@ -47,7 +47,10 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             v2x = v2->X_c;
             v2y = v2->Y_c;
             det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
-
+#if DEBUG == 1
+	    printf("Looking at triangle %u.\n", t);
+	    fflush(stdout);
+#endif
             if (det > 0) {
                 t = TriEdge[cell][t][i];
                 found = 0;
