@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
     int ip3;
     int ip4;
 
-    if (argc != 2 && argc != 4) {
+    if (NUM_NODES == 1 && argc != 2 || NUM_NODES != 1 && (argc < 3 || argc > 4)) {
 	fprintf(stderr, "Usage (one node)......: %s INFILE\n", argv[0]);
 	fprintf(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE]\n", argv[0]);
 	fflush(stderr);
@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 
     gettimeofday(&t_start, NULL);
 
-    if (argc == 4) {
+    if (argc == 3 || argc == 4) {
 	NodeID = (int) strtol(argv[1], NULL, 10);
 
 	if ((addrfile = fopen(argv[2], "r")) == NULL) {
