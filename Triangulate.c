@@ -59,37 +59,32 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             v2x = v2->X_c;
             v2y = v2->Y_c;
             det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
-#if DEBUG == 2
+#if DEBUG == 1
 	    printf("Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
+	    printf("p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
+#endif
+#if DEBUG == 2
 	    printf("px - v1x = %lg\n", px - v1x);
 	    printf("v2y - v1y = %lg\n", v2y - v1y);
 	    printf("v2x - v1x = %lg\n", v2x - v1x);
 	    printf("py - v1y = %lg\n", py - v1y);
 	    printf("$1 * $2 = %lg\n", (px - v1x) * (v2y - v1y));
 	    printf("$3 * $4 = %lg\n", (v2x - v1x) * (py - v1y));
-	    printf("p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
-
 	    printf("p = (0x");
 	    for (j = 0; j < 8; ++j) printf("%02X", *(x0 + 7 - j));
 	    printf(",0x");
 	    for (j = 0; j < 8; ++j) printf("%02X", *(y0 + 7 - j));
 	    printf(")\n");
-
 	    printf("v1 = (0x");
 	    for (j = 0; j < 8; ++j) printf("%02X", *(x1 + 7 - j));
 	    printf(",0x");
 	    for (j = 0; j < 8; ++j) printf("%02X", *(y1 + 7 - j));
 	    printf(")\n");
-
 	    printf("v2 = (0x");
 	    for (j = 0; j < 8; ++j) printf("%02X", *(x2 + 7 - j));
 	    printf(",0x");
 	    for (j = 0; j < 8; ++j) printf("%02X", *(y2 + 7 - j));
 	    printf(")\n");
-
-	    printf("p = (0x%u,0x%u)\n", *x0, *y0);
-	    printf("v1 = (0x%X,0x%X)\n", *x1, *y1);
-	    printf("v2 = (0x%X,0x%X)\n", *x2, *y2);
 	    fflush(stdout);
 #endif
 
@@ -522,7 +517,7 @@ void Delaunay(int cell) {
         }
     }
 
-#if DEBUG == 1
+#if DEBUG >= 1
     fprintf(stderr,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
     if(NumTri[cell]==numt)
         fprintf(stderr,"Equal\n");
@@ -600,4 +595,4 @@ if (ix != BOUNDARY) TriEdge[cell][ix][edg(cell, ix, nt)] = numt;
 }
 }*/
     /*-----------------------end remove pseudo----------------------------*/
-    }
+}
