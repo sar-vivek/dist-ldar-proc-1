@@ -60,8 +60,8 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             v2y = v2->Y_c;
             det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
 #if DEBUG >= 2 
-	    printf("Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
-	    printf("p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
+	    fprintf(stderr, "Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
+	    fprintf(stderr, "p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
 #endif
 #if DEBUG >= 3
 	    printf("px - v1x = %lg\n", px - v1x);

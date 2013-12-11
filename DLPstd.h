@@ -31,18 +31,18 @@
 #define NODE_POINTS_MAX 16777216
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 6 
-#define NUM_BINS_Y 6 
+#define NUM_BINS_X 4 
+#define NUM_BINS_Y 4 
 
-#define NUM_CELLS 4 
-#define NUM_CELLS_X 2
-#define NUM_CELLS_Y 2
+#define NUM_CELLS 1 
+#define NUM_CELLS_X 1
+#define NUM_CELLS_Y 1
 
 #define NUM_NODES 1
 #define NUM_NODES_X 1
 #define NUM_NODES_Y 1
 
-#define NUM_WORKERS 3
+#define NUM_WORKERS 0
 
 #define POINT_DATA_SKIP 16
 
