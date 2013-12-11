@@ -317,7 +317,7 @@ void processBin(int cell, INT ix, INT iy) {
             i2 = (bflag + 2) % 3;
             t2 = ++NumTri[cell];
 
-#if DEBUG >= 1
+#if DEBUG >= 2 
             printf("Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
             fflush(stdout);
 #endif
