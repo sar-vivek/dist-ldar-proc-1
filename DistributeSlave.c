@@ -203,7 +203,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 		    node = BinTbl[d][bx][by];
 		    while (node != NULL) {
 			if (boundary_begin - node > 0) {
-#if DEBUG >= 1
+#if DEBUG >= 2
 			    printf("Found a point. i = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n", i, node->X_c, node->Y_c, node->Z_c);
 			    fflush(stdout);
 #endif
