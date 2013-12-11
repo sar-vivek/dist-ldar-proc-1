@@ -60,6 +60,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
                     fflush(stderr);
 #endif
+		    return t;
                 }
                 if (px == v2x && py == v2y) {
                     *bfp = (i + 1) % 3;
@@ -68,12 +69,18 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
                     fflush(stderr);
 #endif
+		    return t;
                 }
-                if (v1x < px && px < v2x || v1x > px && px > v2x) *bfp = i;
+                if (v1x < px && px < v2x || v1x > px && px > v2x) {
+		    *bfp = i;
+		    return t;
+		}
                 if (v1x == v2x) {
-                    if (v1y < py && py < v2y || v1y > py && py > v2y) *bfp = i;
+                    if (v1y < py && py < v2y || v1y > py && py > v2y) {
+			*bfp = i;
+			return t;
+		    }
                 }
-                return t;
             } else found = 1;
         }
     }
@@ -258,6 +265,11 @@ void processBin(int cell, INT ix, INT iy) {
             i2 = (bflag + 2) % 3;
             t2 = ++NumTri[cell];
 
+#if DEBUG == 1
+	    printf("Working on adding point 
+
+#endif
+
             a = TriEdge[cell][t][bflag];
             b = TriEdge[cell][t][i1];
             c = TriEdge[cell][t][i2];
@@ -334,6 +346,11 @@ void processBin(int cell, INT ix, INT iy) {
             v1 = TriVertex[cell][r][erl];
             v2 = TriVertex[cell][r][era];
             v3 = TriVertex[cell][r][erb];
+
+#if DEBUG == 1
+	    printf("Processing triangle %u from stack.\n", l);
+	    fflush(stdout);
+#endif
 
             if (swap(cell, v1, v2, v3, p)) {
                 /*p is in circle of triangle r*/
