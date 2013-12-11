@@ -26,12 +26,13 @@
 #include <unistd.h>
 
 #define DEBUG 1
-
+/*interpret double zero to be in between -DZERO to +DZERO*/
+#define DZERO 1.0e-8 
 #define NODE_POINTS_MAX 16777216
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 6
-#define NUM_BINS_Y 6 
+#define NUM_BINS_X 8
+#define NUM_BINS_Y 8 
 
 #define NUM_CELLS 1
 #define NUM_CELLS_X 1
