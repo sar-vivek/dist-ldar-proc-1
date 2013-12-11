@@ -92,19 +92,8 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 	    printf("v2 = (0x%X,0x%X)\n", *x2, *y2);
 	    fflush(stdout);
 #endif
-            if (det > 0) {
-#if DEBUG == 1
-		printf("det > 0; t = %u\n", t);
-		fflush(stdout);
-#endif
-                t = TriEdge[cell][t][i];
-                found = 0;
-#if DEBUG == 1
-		printf("Breaking now. t = %u\n", t);
-		fflush(stdout);
-#endif
-                break;
-            } else if (det == 0) {
+
+            if (det == 0 || (det > -0.0001 && det < 0.0001 )) {
                 if (px == v1x && py == v1y) {
                     *bfp = i;
                     *dfp = i;
@@ -137,7 +126,19 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 		printf("Not returning.\n");
 		fflush(stdout);
 #endif
-            } else found = 1;
+            } else if (det > 0) {
+#if DEBUG == 1
+		printf("det > 0; t = %u\n", t);
+		fflush(stdout);
+#endif
+                t = TriEdge[cell][t][i];
+                found = 0;
+#if DEBUG == 1
+		printf("Breaking now. t = %u\n", t);
+		fflush(stdout);
+#endif
+                break;
+            }else found = 1;
         }
     }
 
