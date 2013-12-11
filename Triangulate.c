@@ -36,12 +36,12 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 #if DEBUG == 1
     assert(sizeof (double) == 8);
     assert(sizeof (uint64_t) == 8);
-    uint8_t *x0 = &px;
-    uint8_t *x1 = &v1x;
-    uint8_t *x2 = &v2x;
-    uint8_t *y0 = &py;
-    uint8_t *y1 = &v1y;
-    uint8_t *y2 = &v2y;
+    uint8_t *x0 = (uint8_t *) &px;
+    uint8_t *x1 = (uint8_t *) &v1x;
+    uint8_t *x2 = (uint8_t *) &v2x;
+    uint8_t *y0 = (uint8_t *) &py;
+    uint8_t *y1 = (uint8_t *) &v1y;
+    uint8_t *y2 = (uint8_t *) &v2y;
     int j;
 #endif
 
