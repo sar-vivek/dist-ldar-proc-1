@@ -484,9 +484,11 @@ void Delaunay(int cell) {
     BigTriangle[3].Y_c = CellMax[cell].Y_c; 
     BigTriangle[3].Z_c = Zinit[cell][3];
 #if DEBUG >= 1
+    fprintf(stderr, "------------BigSquare------------------- \n"); 
     for(i=0;i<4;++i){
         fprintf(stderr,"%lg %lg %lg\n", BigTriangle[i].X_c, BigTriangle[i].Y_c, BigTriangle[i].Z_c);
     }
+    fprintf(stderr, "-----------------------------------------\n");
 #endif
     TriVertex[cell][0][0] = &BigTriangle[0];
     TriVertex[cell][0][1] = &BigTriangle[1];
