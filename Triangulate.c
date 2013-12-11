@@ -52,8 +52,16 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 	    fflush(stdout);
 #endif
             if (det > 0) {
+#if DEBUG == 1
+		printf("det > 0; t = %u\n", t);
+		fflush(stdout);
+#endif
                 t = TriEdge[cell][t][i];
                 found = 0;
+#if DEBUG == 1
+		printf("Breaking now.\n");
+		fflush(stdout);
+#endif
                 break;
             } else if (det == 0) {
                 if (px == v1x && py == v1y) {
