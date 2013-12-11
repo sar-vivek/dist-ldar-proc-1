@@ -45,7 +45,7 @@
 
 #define POINT_DATA_SKIP 16
 
-#define PORT_BASE 57842
+#define PORT_BASE 57000
 
 #define VAR_THRESHOLD 0.01
 
