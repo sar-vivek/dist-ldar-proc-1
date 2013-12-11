@@ -36,12 +36,12 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 #if DEBUG == 1
     assert(sizeof (double) == 8);
     assert(sizeof (uint64_t) == 8);
-    uint8_t *x0 = &px;
-    uint8_t *x1 = &v1x;
-    uint8_t *x2 = &v2x;
-    uint8_t *y0 = &py;
-    uint8_t *y1 = &v1y;
-    uint8_t *y2 = &v2y;
+    uint8_t *x0 = (uint8_t *) &px;
+    uint8_t *x1 = (uint8_t *) &v1x;
+    uint8_t *x2 = (uint8_t *) &v2x;
+    uint8_t *y0 = (uint8_t *) &py;
+    uint8_t *y1 = (uint8_t *) &v1y;
+    uint8_t *y2 = (uint8_t *) &v2y;
     int j;
 #endif
 
@@ -70,21 +70,21 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 	    printf("p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
 
 	    printf("p = (0x");
-	    for (j = 0; j < 8; ++j) printf("%02u", *(x0 + 7 - j));
+	    for (j = 0; j < 8; ++j) printf("%02X", *(x0 + 7 - j));
 	    printf(",0x");
-	    for (j = 0; j < 8; ++j) printf("%02u", *(y0 + 7 - j));
+	    for (j = 0; j < 8; ++j) printf("%02X", *(y0 + 7 - j));
 	    printf(")\n");
 
 	    printf("v1 = (0x");
-	    for (j = 0; j < 8; ++j) printf("%02u", *(x1 + 7 - j));
+	    for (j = 0; j < 8; ++j) printf("%02X", *(x1 + 7 - j));
 	    printf(",0x");
-	    for (j = 0; j < 8; ++j) printf("%02u", *(y1 + 7 - j));
+	    for (j = 0; j < 8; ++j) printf("%02X", *(y1 + 7 - j));
 	    printf(")\n");
 
 	    printf("v2 = (0x");
-	    for (j = 0; j < 8; ++j) printf("%02u", *(x2 + 7 - j));
+	    for (j = 0; j < 8; ++j) printf("%02X", *(x2 + 7 - j));
 	    printf(",0x");
-	    for (j = 0; j < 8; ++j) printf("%02u", *(y2 + 7 - j));
+	    for (j = 0; j < 8; ++j) printf("%02X", *(y2 + 7 - j));
 	    printf(")\n");
 
 	    printf("p = (0x%u,0x%u)\n", *x0, *y0);
