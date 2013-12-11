@@ -93,7 +93,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 	    fflush(stdout);
 #endif
 
-            if (det == 0 || (det > -0.0001 && det < 0.0001 )) {
+            if (det == 0 || (det > -DZERO && det < DZERO )) {
                 if (px == v1x && py == v1y) {
                     *bfp = i;
                     *dfp = i;
@@ -101,7 +101,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
                     fflush(stderr);
 #endif
-		    return t;
+                    return t;
                 }
                 if (px == v2x && py == v2y) {
                     *bfp = (i + 1) % 3;
@@ -110,17 +110,17 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
                     fflush(stderr);
 #endif
-		    return t;
+                    return t;
                 }
                 if (v1x < px && px < v2x || v1x > px && px > v2x) {
-		    *bfp = i;
-		    return t;
-		}
+                    *bfp = i;
+                    return t;
+                }
                 if (v1x == v2x) {
                     if (v1y < py && py < v2y || v1y > py && py > v2y) {
-			*bfp = i;
-			return t;
-		    }
+                        *bfp = i;
+                        return t;
+                    }
                 }
 #if DEBUG == 2
 		printf("Not returning.\n");
@@ -128,8 +128,8 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 #endif
             } else if (det > 0) {
 #if DEBUG == 1
-		printf("det > 0; t = %u\n", t);
-		fflush(stdout);
+                printf("det > 0; t = %u\n", t);
+                fflush(stdout);
 #endif
                 t = TriEdge[cell][t][i];
                 found = 0;
@@ -313,9 +313,9 @@ void processBin(int cell, INT ix, INT iy) {
             }
 
         } else {
-/*#if DEBUG == 1
-            p = p->next;
-            continue;
+            /*#if DEBUG == 1
+              p = p->next;
+              continue;
 #endif*/
             /* new point was on an edge - add 2 new and update 2 triangles */
             i1 = (bflag + 1) % 3;
@@ -323,8 +323,8 @@ void processBin(int cell, INT ix, INT iy) {
             t2 = ++NumTri[cell];
 
 #if DEBUG == 1
-	    printf("Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
-	    fflush(stdout);
+            printf("Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
+            fflush(stdout);
 #endif
 
             a = TriEdge[cell][t][bflag];
@@ -334,11 +334,11 @@ void processBin(int cell, INT ix, INT iy) {
             v2 = TriVertex[cell][t][i1];
             v3 = TriVertex[cell][t][i2];
             TriVertex[cell][t][0] = p;
-	    TriVertex[cell][t][1] = v3;
-	    TriVertex[cell][t][2] = v1;
-	    TriEdge[cell][t][0] = t2;
+            TriVertex[cell][t][1] = v3;
+            TriVertex[cell][t][2] = v1;
+            TriEdge[cell][t][0] = t2;
             TriEdge[cell][t][1] = c;
-	    TriEdge[cell][t][2] = a;
+            TriEdge[cell][t][2] = a;
 
             TriVertex[cell][t2][0] = p;
             TriVertex[cell][t2][1] = v2;
@@ -358,40 +358,40 @@ void processBin(int cell, INT ix, INT iy) {
             } else {
                 TriEdge[cell][t2][0] = t2 + 1;
 
-		bflag = edg(cell, a, t);
+                bflag = edg(cell, a, t);
                 i1 = (bflag + 1) % 3;
                 i2 = (bflag + 2) % 3;
                 t2 = ++NumTri[cell];
 
-		b = TriEdge[cell][a][i1];
-		c = TriEdge[cell][a][i2];
-		v1 = TriVertex[cell][a][bflag];
-		v2 = TriVertex[cell][a][i1];
-		v3 = TriVertex[cell][a][i2];
-		TriVertex[cell][a][0] = p;
-		TriVertex[cell][a][1] = v2;
-		TriVertex[cell][a][2] = v3;
-		TriEdge[cell][a][0] = t;
-		TriEdge[cell][a][1] = b;
-		TriEdge[cell][a][2] = t2;
+                b = TriEdge[cell][a][i1];
+                c = TriEdge[cell][a][i2];
+                v1 = TriVertex[cell][a][bflag];
+                v2 = TriVertex[cell][a][i1];
+                v3 = TriVertex[cell][a][i2];
+                TriVertex[cell][a][0] = p;
+                TriVertex[cell][a][1] = v2;
+                TriVertex[cell][a][2] = v3;
+                TriEdge[cell][a][0] = t;
+                TriEdge[cell][a][1] = b;
+                TriEdge[cell][a][2] = t2;
 
-		TriVertex[cell][t2][0] = p;
-		TriVertex[cell][t2][1] = v3;
-		TriVertex[cell][t2][2] = v1;
-		TriEdge[cell][t2][0] = a;
-		TriEdge[cell][t2][1] = c;
-		TriEdge[cell][t2][2] = t2 - 1;
+                TriVertex[cell][t2][0] = p;
+                TriVertex[cell][t2][1] = v3;
+                TriVertex[cell][t2][2] = v1;
+                TriEdge[cell][t2][0] = a;
+                TriEdge[cell][t2][1] = c;
+                TriEdge[cell][t2][2] = t2 - 1;
 
-		if (b != BOUNDARY) push(cell, a);
+                if (b != BOUNDARY) push(cell, a);
 
-		if (c != BOUNDARY) {
-		    TriEdge[cell][c][edg(cell, c, a)] = t2;
-		    push(cell, t2);
-		}
-	    }
-	}
+                if (c != BOUNDARY) {
+                    TriEdge[cell][c][edg(cell, c, a)] = t2;
+                    push(cell, t2);
+                }
+            }
+        }
 
-	while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
+        while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
             l = pop(cell);
             r = TriEdge[cell][l][1];
             /*if (r == BOUNDARY) continue;*/
@@ -405,8 +405,8 @@ void processBin(int cell, INT ix, INT iy) {
             v3 = TriVertex[cell][r][erb];
 
 #if DEBUG == 1
-	    printf("Processing triangle %u from stack.\n", l);
-	    fflush(stdout);
+            printf("Processing triangle %u from stack.\n", l);
+            fflush(stdout);
 #endif
 
             if (swap(cell, v1, v2, v3, p)) {
@@ -460,22 +460,22 @@ void Delaunay(int cell) {
 
     /*calculate pseudo-triangle*/
     /*
-    xcen = 0.5 * (CellMax[cell].X_c + CellMin[cell].X_c);
-    ycen = 0.5 * (CellMax[cell].Y_c + CellMin[cell].Y_c);
-    BigTriangle[0].X_c = xcen - 1.01 * DMAX;
-    BigTriangle[0].Y_c = ycen - 0.51 * DMAX;
-    BigTriangle[1].X_c = xcen + 1.01 * DMAX;
-    BigTriangle[1].Y_c = ycen - 0.51 * DMAX;
-    BigTriangle[2].X_c = xcen;
-    BigTriangle[2].Y_c = ycen + 1.51 * DMAX;
-    
-    TriVertex[cell][0][0] = &BigTriangle[0];
-    TriVertex[cell][0][1] = &BigTriangle[1];
-    TriVertex[cell][0][2] = &BigTriangle[2];
-    TriEdge[cell][0][0] = BOUNDARY; 
-    TriEdge[cell][0][1] = BOUNDARY;
-    TriEdge[cell][0][2] = BOUNDARY; */
-    
+       xcen = 0.5 * (CellMax[cell].X_c + CellMin[cell].X_c);
+       ycen = 0.5 * (CellMax[cell].Y_c + CellMin[cell].Y_c);
+       BigTriangle[0].X_c = xcen - 1.01 * DMAX;
+       BigTriangle[0].Y_c = ycen - 0.51 * DMAX;
+       BigTriangle[1].X_c = xcen + 1.01 * DMAX;
+       BigTriangle[1].Y_c = ycen - 0.51 * DMAX;
+       BigTriangle[2].X_c = xcen;
+       BigTriangle[2].Y_c = ycen + 1.51 * DMAX;
+
+       TriVertex[cell][0][0] = &BigTriangle[0];
+       TriVertex[cell][0][1] = &BigTriangle[1];
+       TriVertex[cell][0][2] = &BigTriangle[2];
+       TriEdge[cell][0][0] = BOUNDARY; 
+       TriEdge[cell][0][1] = BOUNDARY;
+       TriEdge[cell][0][2] = BOUNDARY; */
+
     BigTriangle[0].X_c = CellMin[cell].X_c; 
     BigTriangle[0].Y_c = CellMin[cell].Y_c; 
     BigTriangle[0].Z_c = Zinit[cell][0];
@@ -507,7 +507,7 @@ void Delaunay(int cell) {
     TriEdge[cell][1][2] = BOUNDARY; 
     /*triangles are numbered from 0*/
     NumTri[cell] = 1 ; 
-    
+
     /*insert points one by one*/
     /*for optimization we insert from bins in a specific order - details in the paper*/
     for (iy = 0; iy < NUM_BINS_Y; ++iy) {
@@ -532,72 +532,72 @@ void Delaunay(int cell) {
     /*------------------remove pseudos-----------------------*/
     /*remove all triangles containing pseudo-triangle points*/
     /*first find triangle that is to be removed
-    nt = 0;
-    remove = 0;
-    numt=NumTri[cell]+1;
-    while (!remove && nt < numt) {
-        i = 0;
-        while (!remove && i < 3) {
-            for (j = 0; j < 3; ++j) {
-                if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
-                    remove = 1;
+      nt = 0;
+      remove = 0;
+      numt=NumTri[cell]+1;
+      while (!remove && nt < numt) {
+      i = 0;
+      while (!remove && i < 3) {
+      for (j = 0; j < 3; ++j) {
+      if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
+      remove = 1;
 #if DEBUG == 1
-                    fprintf(stderr, "%d removing\n", j);
+fprintf(stderr, "%d removing\n", j);
 #endif
-                    break;
-                }   
-            }
-            ++i;
-        }*/
-        /*nt is the first triangle that to be removed
-        if (remove) {
-            for (i = 0; i < 3; ++i) {
-                ix = TriEdge[cell][nt][i];
-                if (ix != BOUNDARY) {
-                    TriEdge[cell][ix][edg(cell, ix, nt)] = BOUNDARY;  
-                }
-            }
-            break;
-        }
-        ++nt;
-    }*/
+break;
+}   
+}
+++i;
+}*/
+    /*nt is the first triangle that to be removed
+      if (remove) {
+      for (i = 0; i < 3; ++i) {
+      ix = TriEdge[cell][nt][i];
+      if (ix != BOUNDARY) {
+      TriEdge[cell][ix][edg(cell, ix, nt)] = BOUNDARY;  
+      }
+      }
+      break;
+      }
+      ++nt;
+      }*/
 
 
     /*starting from nt now remove rest triangles
-    tstart = nt + 1;
-    tstop = numt;
-    numt = nt - 1;
-    for (nt = tstart; nt < tstop; ++nt) {
-        i = 0;
-        remove=0;
-        while (!remove && i < 3) {
-            for (j = 0; j < 3; ++j) {
-                if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
-                    remove = 1;
+      tstart = nt + 1;
+      tstop = numt;
+      numt = nt - 1;
+      for (nt = tstart; nt < tstop; ++nt) {
+      i = 0;
+      remove=0;
+      while (!remove && i < 3) {
+      for (j = 0; j < 3; ++j) {
+      if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
+      remove = 1;
 #if DEBUG == 1
-                    fprintf(stderr, "%d removing rest\n", j);
+fprintf(stderr, "%d removing rest\n", j);
 #endif
-                    break;
-                }   
-            }
-            ++i;
-        }
-
-        if (remove) {
-            for (i = 0; i < 3; ++i) {
-                ix = TriEdge[cell][nt][i];
-                if (ix != BOUNDARY) TriEdge[cell][ix][edg(cell, ix, nt)] = BOUNDARY;
-            }
-        } else {
-            numt = numt + 1;
-
-            for (i = 0; i < 3; ++i) {
-                ix = TriEdge[cell][nt][i];
-                TriEdge[cell][numt][i] = ix;
-                TriVertex[cell][numt][i] = TriVertex[cell][nt][i];
-                if (ix != BOUNDARY) TriEdge[cell][ix][edg(cell, ix, nt)] = numt;
-            }
-        }
-    }*/
-    /*-----------------------end remove pseudo----------------------------*/
+break;
+}   
 }
+++i;
+}
+
+if (remove) {
+for (i = 0; i < 3; ++i) {
+ix = TriEdge[cell][nt][i];
+if (ix != BOUNDARY) TriEdge[cell][ix][edg(cell, ix, nt)] = BOUNDARY;
+}
+} else {
+numt = numt + 1;
+
+for (i = 0; i < 3; ++i) {
+ix = TriEdge[cell][nt][i];
+TriEdge[cell][numt][i] = ix;
+TriVertex[cell][numt][i] = TriVertex[cell][nt][i];
+if (ix != BOUNDARY) TriEdge[cell][ix][edg(cell, ix, nt)] = numt;
+}
+}
+}*/
+    /*-----------------------end remove pseudo----------------------------*/
+    }
