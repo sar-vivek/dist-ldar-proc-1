@@ -266,8 +266,8 @@ void processBin(int cell, INT ix, INT iy) {
             t2 = ++NumTri[cell];
 
 #if DEBUG == 1
-	    printf("Working on adding point 
-
+	    printf("Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
+	    fflush(stdout);
 #endif
 
             a = TriEdge[cell][t][bflag];
