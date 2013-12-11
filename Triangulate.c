@@ -32,11 +32,14 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     INT t;
     int found;
     int i;
+
 #if DEBUG == 1
-    long long unsigned int *x0 = &px;
+    assert(sizeof (double) == 8);
+    assert(sizeof (uint64_t) == 8);
+    uint64_t *x0 = &px;
     long long unsigned int *x1 = &v1x;
-    long long unsigned int *x2 = &v2x;
-    long long unsigned int *y0 = &py;
+    unsigned long long int *x2 = &v2x;
+    uint64_t *y0 = &py;
     long long unsigned int *y1 = &v1y;
     long long unsigned int *y2 = &v2y;
 #endif
@@ -58,7 +61,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 #if DEBUG == 1
 	    printf("Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
 	    printf("p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
-	    printf("p = (0x%X,0x%X)\n", *x0, *y0);
+	    printf("p = (0x%u,0x%u)\n", *x0, *y0);
 	    printf("v1 = (0x%X,0x%X)\n", *x1, *y1);
 	    printf("v2 = (0x%X,0x%X)\n", *x2, *y2);
 	    fflush(stdout);
