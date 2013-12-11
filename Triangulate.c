@@ -48,7 +48,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             v2y = v2->Y_c;
             det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
 #if DEBUG == 1
-	    printf("Looking at triangle %u.\n", t);
+	    printf("Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
 	    fflush(stdout);
 #endif
             if (det > 0) {
@@ -84,6 +84,10 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 			return t;
 		    }
                 }
+#if DEBUG == 1
+		printf("Not returning.\n");
+		fflush(stdout);
+#endif
             } else found = 1;
         }
     }
