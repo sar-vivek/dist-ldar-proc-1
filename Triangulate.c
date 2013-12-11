@@ -520,7 +520,7 @@ void Delaunay(int cell) {
     }
 
 #if DEBUG >= 1
-    fprintf(stderr,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
+    fprintf(stdout,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
     if(NumTri[cell]==numt)
         fprintf(stderr,"Equal\n");
     fflush(stderr);
