@@ -127,7 +127,7 @@ int main(int argc, char *argv[]) {
 
     gettimeofday(&t_start, NULL);
 
-    if (argc == 4) {
+    if (argc == 3 || argc == 4) {
 	NodeID = (int) strtol(argv[1], NULL, 10);
 
 	if ((addrfile = fopen(argv[2], "r")) == NULL) {
