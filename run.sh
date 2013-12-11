@@ -2,9 +2,9 @@
 
 # $Id: $
 make
-./DistLdarProc ../06204612.las > out.txt 2> err.txt
+./DistLdarProc $1 1> out.txt 2> err.txt
 EXIT_STATUS=$?
+echo "Lidar on `hostname` completed with $EXIT_STATUS" >mail.txt
 echo "$EXIT_STATUS" > mail.txt
-cat out.txt err.txt >> mail.txt
-mail -s 'Lidar on `hostname` completed with $EXIT_STATUS' vivek-sardeshmukh@uiowa.edu < mail.txt
+mail -s 'Lidar' -r sar.vivek@gmail.com vivek-sardeshmukh@uiowa.edu < mail.txt
 
