@@ -86,7 +86,7 @@ void LasFileInit(const char *filename) {
     fread(&MaxZ, DOUBLE_SIZE, 1, las_file_in);
     fread(&MinZ, DOUBLE_SIZE, 1, las_file_in);
 
-#if DEBUG == 1
+#if DEBUG >= 1
     printf("-------------------------------------\n");
     printf("NumPointRec = %u\n", NumPointRec);
     printf("Xscale = %lg\n", Xscale);
