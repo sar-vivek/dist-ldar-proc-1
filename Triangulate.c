@@ -97,7 +97,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                 if (px == v1x && py == v1y) {
                     *bfp = i;
                     *dfp = i;
-#if DEBUG == 1
+#if DEBUG >= 1
                     fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
                     fflush(stderr);
 #endif
@@ -106,7 +106,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                 if (px == v2x && py == v2y) {
                     *bfp = (i + 1) % 3;
                     *dfp = *bfp;
-#if DEBUG == 1
+#if DEBUG >= 1
                     fprintf(stderr, "Duplicate points at (%lg, %lg)\n", px, py);
                     fflush(stderr);
 #endif
@@ -127,7 +127,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 		fflush(stdout);
 #endif
             } else if (det > 0) {
-#if DEBUG == 1
+#if DEBUG >= 1
                 printf("det > 0; t = %u\n", t);
                 fflush(stdout);
 #endif
@@ -149,7 +149,7 @@ void push(int cell, INT e) {
     ++topstk[cell];
 
     if (topstk[cell] > CellCnt[cell]) {
-#if DEBUG == 1
+#if DEBUG >= 1
         fprintf(stderr, "%s:%d:stack full\n", __FILE__, __LINE__);
         fflush(stderr);
 #endif
@@ -165,7 +165,7 @@ INT pop(int cell) {
         --topstk[cell];
         return estack[cell][topstk[cell] + 1];
     }
-#if DEBUG == 1
+#if DEBUG >= 1
     fprintf(stderr, "%s:%d:stack empty\n", __FILE__, __LINE__);
     fflush(stderr);
 #endif
@@ -182,7 +182,7 @@ int edg(int cell, INT ix, INT nt) {
         if (TriEdge[cell][ix][i] == nt) return i;
     }
 
-#if DEBUG
+#if DEBUG >= 1
     fprintf(stderr, "%s:%d:triangles are not adjacent\n", __FILE__, __LINE__);
     fflush(stderr);
 #endif
@@ -313,7 +313,7 @@ void processBin(int cell, INT ix, INT iy) {
             }
 
         } else {
-            /*#if DEBUG == 1
+            /*#if DEBUG >= 1
               p = p->next;
               continue;
 #endif*/
@@ -322,7 +322,7 @@ void processBin(int cell, INT ix, INT iy) {
             i2 = (bflag + 2) % 3;
             t2 = ++NumTri[cell];
 
-#if DEBUG == 1
+#if DEBUG >= 1
             printf("Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
             fflush(stdout);
 #endif
@@ -404,7 +404,7 @@ void processBin(int cell, INT ix, INT iy) {
             v2 = TriVertex[cell][r][era];
             v3 = TriVertex[cell][r][erb];
 
-#if DEBUG == 1
+#if DEBUG >= 1
             printf("Processing triangle %u from stack.\n", l);
             fflush(stdout);
 #endif
@@ -488,7 +488,7 @@ void Delaunay(int cell) {
     BigTriangle[3].X_c = CellMax[cell].X_c; 
     BigTriangle[3].Y_c = CellMax[cell].Y_c; 
     BigTriangle[3].Z_c = Zinit[cell][3];
-#if DEBUG == 1
+#if DEBUG >= 1
     for(i=0;i<4;++i){
         fprintf(stderr,"%lg %lg %lg\n", BigTriangle[i].X_c, BigTriangle[i].Y_c, BigTriangle[i].Z_c);
     }
@@ -522,7 +522,7 @@ void Delaunay(int cell) {
         }
     }
 
-#if DEBUG == 1
+#if DEBUG >= 1
     fprintf(stderr,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
     if(NumTri[cell]==numt)
         fprintf(stderr,"Equal\n");
@@ -541,7 +541,7 @@ void Delaunay(int cell) {
       for (j = 0; j < 3; ++j) {
       if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
       remove = 1;
-#if DEBUG == 1
+#if DEBUG >= 1
 fprintf(stderr, "%d removing\n", j);
 #endif
 break;
@@ -574,7 +574,7 @@ break;
       for (j = 0; j < 3; ++j) {
       if (TriVertex[cell][nt][i] == &BigTriangle[j]) {
       remove = 1;
-#if DEBUG == 1
+#if DEBUG >= 1
 fprintf(stderr, "%d removing rest\n", j);
 #endif
 break;
