@@ -122,7 +122,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 		fflush(stdout);
 #endif
             } else if (det > 0) {
-#if DEBUG >= 1
+#if DEBUG >= 2 
                 printf("det > 0; t = %u\n", t);
                 fflush(stdout);
 #endif
