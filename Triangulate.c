@@ -33,7 +33,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     int found;
     int i;
 
-#if DEBUG >= 3
+#if DEBUG >= 4
     assert(sizeof (double) == 8);
     assert(sizeof (uint64_t) == 8);
     uint8_t *x0 = (uint8_t *) &px;
@@ -59,11 +59,11 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             v2x = v2->X_c;
             v2y = v2->Y_c;
             det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
-#if DEBUG >= 2 
+#if DEBUG >= 3 
 	    fprintf(stderr, "Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
 	    fprintf(stderr, "p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
 #endif
-#if DEBUG >= 3
+#if DEBUG >= 4
 	    printf("px - v1x = %lg\n", px - v1x);
 	    printf("v2y - v1y = %lg\n", v2y - v1y);
 	    printf("v2x - v1x = %lg\n", v2x - v1x);
@@ -117,18 +117,18 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                         return t;
                     }
                 }
-#if DEBUG >= 2
+#if DEBUG >= 3
 		printf("Not returning.\n");
 		fflush(stdout);
 #endif
             } else if (det > 0) {
-#if DEBUG >= 2 
+#if DEBUG >= 3 
                 printf("det > 0; t = %u\n", t);
                 fflush(stdout);
 #endif
                 t = TriEdge[cell][t][i];
                 found = 0;
-#if DEBUG >= 2
+#if DEBUG >= 3
 		printf("Breaking now. t = %u\n", t);
 		fflush(stdout);
 #endif
@@ -317,7 +317,7 @@ void processBin(int cell, INT ix, INT iy) {
             i2 = (bflag + 2) % 3;
             t2 = ++NumTri[cell];
 
-#if DEBUG >= 2 
+#if DEBUG >= 3
             printf("Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
             fflush(stdout);
 #endif
@@ -399,7 +399,7 @@ void processBin(int cell, INT ix, INT iy) {
             v2 = TriVertex[cell][r][era];
             v3 = TriVertex[cell][r][erb];
 
-#if DEBUG >= 2
+#if DEBUG >= 3
             printf("Processing triangle %u from stack.\n", l);
             fflush(stdout);
 #endif
