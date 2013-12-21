@@ -25,7 +25,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define DEBUG 2
+#define DEBUG 1
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
 #define NODE_POINTS_MAX 16777216

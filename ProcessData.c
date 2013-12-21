@@ -67,6 +67,7 @@ void *ProcessData(void *workerID) {
     mycount2 = 0;
     for (ix = 0; ix < NUM_BINS_X; ++ix) {
 	for (iy = 0; iy < NUM_BINS_Y; ++iy) {
+	    printf("Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
 	    if ((ix == 134 && iy == 2) ||
 		(ix == 570 && iy == 1776) ||
 		(ix == 23 && iy == 2699) ||
