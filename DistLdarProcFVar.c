@@ -133,6 +133,8 @@ int main(int argc, char *argv[]) {
     gettimeofday(&t_start, NULL);
 
     if (argc == 3 || argc == 4) {
+	assert(NUM_NODES > 1);
+
 	NodeID = (int) strtol(argv[1], NULL, 10);
 
 	if ((addrfile = fopen(argv[2], "r")) == NULL) {
@@ -149,13 +151,17 @@ int main(int argc, char *argv[]) {
 
 	if (fclose(addrfile)) perror("fclose()");
     } else {
+	assert(NUM_NODES == 1);
+
 	NodeID = 0;
     }
 
     if (NodeID == 0) {
 	if (argc == 2) {
+	    assert(NUM_NODES == 1);
 	    LasFileInit(argv[1]);
 	} else {
+	    assert(NUM_NODES > 1);
 	    LasFileInit(argv[3]);
 	}
     }
