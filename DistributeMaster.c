@@ -54,6 +54,8 @@ void DistributeSend() {
 	svr_addr[i].sin_addr.s_addr = inet_addr(NodeIPs[i]);
 
 	Connect(msock[i], &svr_addr[i], sizeof (struct sockaddr_in));
+
+	NodeSockIndex[msock[i]] = i;
     }
 
     for (i = 1; i < NUM_NODES; ++i) {

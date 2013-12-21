@@ -30,6 +30,11 @@ struct sockaddr_in svr_addr[NUM_NODES];
 struct epoll_event msockevents[NUM_NODES];
 int msock[NUM_NODES];
 
+/***************************/
+/*this can be removed later*/
+int NodeSockIndex[1000];
+/***************************/
+
 pthread_t Workers[NUM_WORKERS + 1];
 int WorkerIDs[NUM_WORKERS + 1];
 

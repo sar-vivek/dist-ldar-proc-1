@@ -23,6 +23,11 @@ extern struct sockaddr_in svr_addr[NUM_NODES];
 extern struct epoll_event msockevents[NUM_NODES];
 extern int msock[NUM_NODES];
 
+/***************************/
+/*this can be removed later*/
+extern int NodeSockIndex[1000];
+/***************************/
+
 extern pthread_t Workers[NUM_WORKERS + 1];
 extern int WorkerIDs[NUM_WORKERS + 1];
 

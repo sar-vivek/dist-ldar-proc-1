@@ -65,7 +65,7 @@ void MergeReceive() {
 		    --socketcount;
 		    continue;
 		}
-		fprintf(proc_file_out, "%2d %2d | %4d %4d %4d | ", c, t,
+		fprintf(proc_file_out, "%2d %2d %2d | %4d %4d %4d | ", NodeSockIndex[readsock], c, t,
 			*((uint32_t *) X_b), *((uint32_t *) Y_b), *((uint32_t *) Z_b));
 		Receive(readsock, X_b, XYZ_SIZE);
 		fprintf(proc_file_out, "%4d %4d %4d | ", *((uint32_t *) X_b),
@@ -85,7 +85,7 @@ void MergeReceive() {
 
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
-	    fprintf(proc_file_out, "%2d %2d | %4d %4d %4d | ", c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
+	    fprintf(proc_file_out, "%2d %2d %2d | %4d %4d %4d | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale));
 	    fprintf(proc_file_out, "%4d %4d %4d | ", lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
