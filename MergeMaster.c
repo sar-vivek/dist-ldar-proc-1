@@ -95,7 +95,7 @@ void MergeReceive() {
     }
 
 #if DEBUG >= 3
-    for (i = 0, i < mycount; ++i) {
+    for (i = 0; i < mycount; ++i) {
 	fprintf(stderr, "(%4d, %4d, %4d)\n", lround((PntTbl[i].X_c - Xoffset) / Xscale),
 		lround((PntTbl[i].Y_c - Yoffset) / Yscale), lround((PntTbl[i].Z_c - Zoffset) / Zscale));
     }
