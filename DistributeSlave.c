@@ -267,6 +267,7 @@ void BoundaryPointsAdd() {
     int32_t i;
     int c;
 
+    /* This should be multithreaded */
     for (c = 0; c < NUM_CELLS; ++c) {
 	X_c = CellMin[c].X_c;
 	Y_c = CellMin[c].Y_c;
