@@ -48,7 +48,7 @@ void *ProcessData(void *workerID) {
     LidarPointNode_t *node;
     VarWeight_t *vw;
 #if DEBUG >= 1
-    uint32_t count2;
+    uint32_t mycount2;
 #endif
     uint32_t ix;
     uint32_t iy;
@@ -64,7 +64,7 @@ void *ProcessData(void *workerID) {
 #if DEBUG >= 1
     printf("Hello from thread 0x%08X\n", pthread_self());
     fflush(stdout);
-    count2 = 0;
+    mycount2 = 0;
     for (ix = 0; ix < NUM_BINS_X; ++ix) {
 	for (iy = 0; iy < NUM_BINS_Y; ++iy) {
 	    if ((ix == 134 && iy == 2) ||
@@ -79,11 +79,11 @@ void *ProcessData(void *workerID) {
 	    {
 		printf("Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
 	    }
-	    count2 += BinCnt[c][ix][iy];
+	    mycount2 += BinCnt[c][ix][iy];
 	}
     }
-    printf("Count was at first %u\n", NumPointRec);
-    printf("Count is now %u\n", count2);
+    printf("Node count was %u before addition of boundary points.\n", mycount);
+    printf("Node count is %u after adding boundary points.\n", mycount2);
     fflush(stdout);
 #endif
 

@@ -250,8 +250,10 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     BinU1[c][ix][iy] += Z_c;
     *current2 = Z_c * Z_c;
     BinU2[c][ix][iy] += *current2++;
-    ++mycount;
+    /*++mycount;*/
 
+/* This is currently wrong, because I am temporarily not incrementing mycount
+during the addition of boundary points.*/
 #if DEBUG >= 1
     if (mycount > NODE_POINTS_MAX) {
 	fprintf(stderr, "NODE_POINTS_MAX exceeded. Exiting.\n");
