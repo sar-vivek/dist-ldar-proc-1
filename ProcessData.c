@@ -64,11 +64,14 @@ void *ProcessData(void *workerID) {
 #if DEBUG >= 1
     printf("Hello from thread 0x%08X\n", pthread_self());
     fflush(stdout);
+#endif
+
+#if DEBUG >= 2
     mycount2 = 0;
     for (ix = 0; ix < NUM_BINS_X; ++ix) {
 	for (iy = 0; iy < NUM_BINS_Y; ++iy) {
-	    printf("Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
-	    if ((ix == 134 && iy == 2) ||
+	    fprintf(stderr, "Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
+	    /*if ((ix == 134 && iy == 2) ||
 		(ix == 570 && iy == 1776) ||
 		(ix == 23 && iy == 2699) ||
 		(ix == 1046 && iy == 1809) ||
@@ -78,8 +81,8 @@ void *ProcessData(void *workerID) {
 		(ix == 2890 && iy == 1576) ||
 		(ix == 2615 && iy == 2910))
 	    {
-		printf("Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
-	    }
+		fprintf(stderr, "Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
+	    }*/
 	    mycount2 += BinCnt[c][ix][iy];
 	}
     }
