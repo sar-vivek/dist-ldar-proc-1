@@ -142,11 +142,11 @@ void *ProcessData(void *workerID) {
     }
 
 #if DEBUG >= 1
-    count2 = 0;
+    mycount2 = 0;
     for (ix = 0; ix < NumPointRec; ++ix) {
-	if (*(FiltTbl + ix) == 0) ++count2;
+	if (*(FiltTbl + ix) == 0) ++mycount2;
     }
-    printf("There are %u (original) points remaining after filtering.\n", count2);
+    printf("There are %u (original) points remaining after filtering.\n", mycount2);
     fflush(stdout);
 #endif
 
