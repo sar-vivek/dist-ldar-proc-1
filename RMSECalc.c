@@ -33,5 +33,5 @@ double FindZ(LidarPointNode_t *A, LidarPointNode_t *B, LidarPointNode_t *C) {
 
 
 
-
+    return 0.000;
 }
