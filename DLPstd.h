@@ -25,17 +25,17 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define DEBUG 3
+#define DEBUG 3 
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
 #define NODE_POINTS_MAX 16777216
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 4
-#define NUM_BINS_Y 4
+#define NUM_BINS_X 4 
+#define NUM_BINS_Y 2
 
-#define NUM_CELLS 2
-#define NUM_CELLS_X 2
+#define NUM_CELLS 1 
+#define NUM_CELLS_X 1
 #define NUM_CELLS_Y 1
 
 #define NUM_NODES 1
