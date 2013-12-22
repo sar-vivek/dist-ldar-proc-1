@@ -273,13 +273,13 @@ void BoundaryPointsAdd() {
 	X_c = CellMin[c].X_c;
 	Y_c = CellMin[c].Y_c;
 	AddPoint2(c, 0, 0);
-	X_c += 2 * Xint_bin;
 	Zinit[c][0] = Z_c;
 #if DEBUG >= 4
 	fprintf(stderr, "Lower left corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
 	fprintf(stderr, "Zinit[%d,0] = %lg\n", c, Z_c);
 	fflush(stderr);
 #endif
+	X_c += 2 * Xint_bin;
 	for (i = 1; i < NUM_BINS_X - 2; i += 2) {
 	    AddPoint2(c, i, 0);
 	    X_c += 2 * Xint_bin;
@@ -287,13 +287,13 @@ void BoundaryPointsAdd() {
 
 	X_c = CellMax[c].X_c;
 	AddPoint2(c, NUM_BINS_X - 1, 0);
-	Y_c += 2 * Yint_bin;
 	Zinit[c][1] = Z_c;
 #if DEBUG >= 4
 	fprintf(stderr, "Lower right corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
 	fprintf(stderr, "Zinit[%d,1] = %lg\n", c, Z_c);
 	fflush(stderr);
 #endif
+	Y_c += 2 * Yint_bin;
 	for (i = 1; i < NUM_BINS_Y - 2; i += 2) {
 	    AddPoint2(c, NUM_BINS_X - 1, i);
 	    Y_c += 2 * Yint_bin;
@@ -302,13 +302,13 @@ void BoundaryPointsAdd() {
 	X_c = CellMax[c].X_c;
 	Y_c = CellMax[c].Y_c;
 	AddPoint2(c, NUM_BINS_X - 1, NUM_BINS_Y - 1);
-	X_c -= 2 * Xint_bin;
 	Zinit[c][3] = Z_c;
 #if DEBUG >= 4
 	fprintf(stderr, "Upper right corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
 	fprintf(stderr, "Zinit[%d,3] = %lg\n", c, Z_c);
 	fflush(stderr);
 #endif
+	X_c -= 2 * Xint_bin;
 	for (i = NUM_BINS_X - 2; i > 1; i -= 2) {
 	    AddPoint2(c, i, NUM_BINS_Y - 1);
 	    X_c -= 2 * Xint_bin;
@@ -316,13 +316,13 @@ void BoundaryPointsAdd() {
 	
 	X_c = CellMin[c].X_c;
 	AddPoint2(c, 0, NUM_BINS_Y - 1);
-	Y_c -= 2 * Yint_bin;
 	Zinit[c][2] = Z_c;
 #if DEBUG >= 4
 	fprintf(stderr, "Upper left corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
 	fprintf(stderr, "Zinit[%d,2] = %lg\n", c, Z_c);
 	fflush(stderr);
 #endif
+	Y_c -= 2 * Yint_bin;
 	for (i = NUM_BINS_Y - 2; i > 1; i -= 2) {
 	    AddPoint2(c, 0, i);
 	    Y_c -= 2 * Yint_bin;
