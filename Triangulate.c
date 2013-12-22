@@ -72,7 +72,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 	    fprintf(stderr, "p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
 	    fflush(stderr);
 #endif
-#if DEBUG >= 4
+#if DEBUG >= 5
 	    fprintf(stderr, "px - v1x = %lg\n", px - v1x);
 	    fprintf(stderr, "v2y - v1y = %lg\n", v2y - v1y);
 	    fprintf(stderr, "v2x - v1x = %lg\n", v2x - v1x);
