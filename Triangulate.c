@@ -461,6 +461,10 @@ void Delaunay(int cell) {
     INT iy;
     INT tstart;
     INT tstop;
+#if DEBUG >=1
+    INT dbugi;
+    int dbugj;
+#endif
     int i;
     int j;
     int remove;
@@ -544,5 +548,13 @@ void Delaunay(int cell) {
         fprintf(stderr,"Equal\n");
     fflush(stderr);
 #endif
-
+#if DEBUG >=1
+	fprintf(stderr, "\n--------------TriVertex in the END------------\n");
+	for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
+	    for(dbugj = 0; dbugj < 3; dbugj++)
+		fprintf(stderr, "%4lg %4lg %4lg\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
+	    fprintf(stderr,"\n");
+	}
+	fflush(stderr);
+#endif	
 }
