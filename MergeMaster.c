@@ -110,14 +110,14 @@ void MergeReceive() {
 #if DEBUG >= 1
 fflush(proc_file_out);
 #endif
-#if DEBUG >= 1 
-fprintf(stderr, "%2d %2d %2d | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
-TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c);
-fprintf(stderr, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
-TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c);
-fprintf(stderr, "%lg %lg %lg\n", TriVertex[c][t][2]->X_c,
-TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
-fflush(stderr);
+#if DEBUG >= 5
+	    fprintf(stderr, "%2d %2d %2d | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
+		    TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c);
+	    fprintf(stderr, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
+		    TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c);
+	    fprintf(stderr, "%lg %lg %lg\n", TriVertex[c][t][2]->X_c,
+		    TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
+	    fflush(stderr);
 #endif
 }
 }*/
