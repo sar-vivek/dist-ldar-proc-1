@@ -327,7 +327,7 @@ void processBin(int cell, INT ix, INT iy) {
             t2 = ++NumTri[cell];
 
 #if DEBUG >= 3
-            fprintf(stderr, "Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
+            fprintf(stderr, "Working on adding point (%lg,%lg,%lg).\n", p->X_c, p->Y_c, p->Z_c);
             fflush(stderr);
 #endif
 
