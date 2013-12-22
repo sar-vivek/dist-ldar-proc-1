@@ -94,7 +94,7 @@ void MergeReceive() {
 #if DEBUG >= 1
 	    fflush(proc_file_out);
 #endif
-#if DEBUG >= 4
+#if DEBUG >= 5
 	    fprintf(stderr, "%2d %2d %2d | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
 		    TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c);
 	    fprintf(stderr, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
