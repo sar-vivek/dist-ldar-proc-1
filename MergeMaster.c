@@ -91,13 +91,17 @@ void MergeReceive() {
 		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
 	    fprintf(proc_file_out, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
+#if DEBUG >= 1
+	    fflush(proc_file_out);
+#endif
 #if DEBUG >= 4
 	    fprintf(stderr, "%2d %2d %2d | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
 		    TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c);
-	    fprintf(proc_file_out, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
+	    fprintf(stderr, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
 		    TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c);
-	    fprintf(proc_file_out, "%lg %lg %lg\n", TriVertex[c][t][2]->X_c,
+	    fprintf(stderr, "%lg %lg %lg\n", TriVertex[c][t][2]->X_c,
 		    TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
+	    fflush(stderr);
 #endif
 	}
     }
