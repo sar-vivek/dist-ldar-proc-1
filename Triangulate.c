@@ -22,6 +22,10 @@ INT topstk[NUM_CELLS];
 INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     double px;
     double py;
+    double d1x;
+    double d1y;
+    double d2x;
+    double d2y;
     double v1x;
     double v1y;
     double v2x;
@@ -58,38 +62,43 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
             v1y = v1->Y_c;
             v2x = v2->X_c;
             v2y = v2->Y_c;
-            det = (px - v1x) * (v2y - v1y) - (v2x - v1x) * (py - v1y);
+	    d1x = px - v1x;
+	    d1y = py - v1y;
+	    d2x = px - v2x;
+	    d2y = py - v2y;
+            det = d1x * (v2y - v1y) - (v2x - v1x) * d1y;
 #if DEBUG >= 3 
 	    fprintf(stderr, "Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
 	    fprintf(stderr, "p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
+	    fflush(stderr);
 #endif
 #if DEBUG >= 4
-	    printf("px - v1x = %lg\n", px - v1x);
-	    printf("v2y - v1y = %lg\n", v2y - v1y);
-	    printf("v2x - v1x = %lg\n", v2x - v1x);
-	    printf("py - v1y = %lg\n", py - v1y);
-	    printf("$1 * $2 = %lg\n", (px - v1x) * (v2y - v1y));
-	    printf("$3 * $4 = %lg\n", (v2x - v1x) * (py - v1y));
-	    printf("p = (0x");
-	    for (j = 0; j < 8; ++j) printf("%02X", *(x0 + 7 - j));
-	    printf(",0x");
-	    for (j = 0; j < 8; ++j) printf("%02X", *(y0 + 7 - j));
-	    printf(")\n");
-	    printf("v1 = (0x");
-	    for (j = 0; j < 8; ++j) printf("%02X", *(x1 + 7 - j));
-	    printf(",0x");
-	    for (j = 0; j < 8; ++j) printf("%02X", *(y1 + 7 - j));
-	    printf(")\n");
-	    printf("v2 = (0x");
-	    for (j = 0; j < 8; ++j) printf("%02X", *(x2 + 7 - j));
-	    printf(",0x");
-	    for (j = 0; j < 8; ++j) printf("%02X", *(y2 + 7 - j));
-	    printf(")\n");
-	    fflush(stdout);
+	    fprintf(stderr, "px - v1x = %lg\n", px - v1x);
+	    fprintf(stderr, "v2y - v1y = %lg\n", v2y - v1y);
+	    fprintf(stderr, "v2x - v1x = %lg\n", v2x - v1x);
+	    fprintf(stderr, "py - v1y = %lg\n", py - v1y);
+	    fprintf(stderr, "$1 * $2 = %lg\n", (px - v1x) * (v2y - v1y));
+	    fprintf(stderr, "$3 * $4 = %lg\n", (v2x - v1x) * (py - v1y));
+	    fprintf(stderr, "p = (0x");
+	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(x0 + 7 - j));
+	    fprintf(stderr, ",0x");
+	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(y0 + 7 - j));
+	    fprintf(stderr, ")\n");
+	    fprintf(stderr, "v1 = (0x");
+	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(x1 + 7 - j));
+	    fprintf(stderr, ",0x");
+	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(y1 + 7 - j));
+	    fprintf(stderr, ")\n");
+	    fprintf(stderr, "v2 = (0x");
+	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(x2 + 7 - j));
+	    fprintf(stderr, ",0x");
+	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(y2 + 7 - j));
+	    fprintf(stderr, ")\n");
+	    fflush(stderr);
 #endif
 
-            if (det == 0 || (det > -DZERO && det < DZERO )) {
-                if (px == v1x && py == v1y) {
+            if (det == 0 || (det < DZERO && det > -DZERO)) {
+                if (d1x < DZERO && d1x > -DZERO && d1y < DZERO && d1y > -DZERO) {
                     *bfp = i;
                     *dfp = i;
 #if DEBUG >= 1
@@ -98,7 +107,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 #endif
                     return t;
                 }
-                if (px == v2x && py == v2y) {
+                if (d2x < DZERO && d2x > -DZERO && d2y < DZERO && d2y > -DZERO) {
                     *bfp = (i + 1) % 3;
                     *dfp = *bfp;
 #if DEBUG >= 1
@@ -117,23 +126,23 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                         return t;
                     }
                 }
-#if DEBUG >= 3
-		printf("Not returning.\n");
-		fflush(stdout);
+#if DEBUG >= 2
+		fprintf(stderr, "Not returning.\n");
+		fflush(stderr);
 #endif
             } else if (det > 0) {
 #if DEBUG >= 3 
-                printf("det > 0; t = %u\n", t);
-                fflush(stdout);
+                fprintf(stderr, "det > 0; t = %u\n", t);
+                fflush(stderr);
 #endif
                 t = TriEdge[cell][t][i];
                 found = 0;
 #if DEBUG >= 3
-		printf("Breaking now. t = %u\n", t);
-		fflush(stdout);
+		fprintf(stderr, "Breaking now. t = %u\n", t);
+		fflush(stderr);
 #endif
                 break;
-            }else found = 1;
+            } else found = 1;
         }
     }
 
@@ -318,8 +327,8 @@ void processBin(int cell, INT ix, INT iy) {
             t2 = ++NumTri[cell];
 
 #if DEBUG >= 3
-            printf("Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
-            fflush(stdout);
+            fprintf(stderr, "Working on adding point (%lg,%lg).\n", p->X_c, p->Y_c);
+            fflush(stderr);
 #endif
 
             a = TriEdge[cell][t][bflag];
@@ -400,8 +409,8 @@ void processBin(int cell, INT ix, INT iy) {
             v3 = TriVertex[cell][r][erb];
 
 #if DEBUG >= 3
-            printf("Processing triangle %u from stack.\n", l);
-            fflush(stdout);
+	    fprintf(stderr, "Processing triangle %u from stack.\n", l);
+	    fflush(stderr);
 #endif
 
             if (swap(cell, v1, v2, v3, p)) {
@@ -485,10 +494,11 @@ void Delaunay(int cell) {
     BigTriangle[3].Z_c = Zinit[cell][3];
 #if DEBUG >= 1
     fprintf(stderr, "------------BigSquare------------------- \n"); 
-    for(i=0;i<4;++i){
-        fprintf(stderr,"%lg %lg %lg\n", BigTriangle[i].X_c, BigTriangle[i].Y_c, BigTriangle[i].Z_c);
+    for (i = 0; i < 4; ++i) {
+        fprintf(stderr, "%lg %lg %lg\n", BigTriangle[i].X_c, BigTriangle[i].Y_c, BigTriangle[i].Z_c);
     }
     fprintf(stderr, "-----------------------------------------\n");
+    fflush(stderr);
 #endif
     TriVertex[cell][0][0] = &BigTriangle[0];
     TriVertex[cell][0][1] = &BigTriangle[1];
