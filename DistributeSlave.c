@@ -125,12 +125,12 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     i = 1;
 
 #if DEBUG >= 1
-    if (ix < 0 || bx >= NUM_BINS_X) {
-	fprintf(stderr, "bx out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
+    if (ix < 0 || ix >= NUM_BINS_X) {
+	fprintf(stderr, "ix out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
 	fflush(stderr);
     }
-    if (iy < 0 || by >= NUM_BINS_Y) {
-	fprintf(stderr, "by out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
+    if (iy < 0 || iy >= NUM_BINS_Y) {
+	fprintf(stderr, "iy out of range: c = %d, ix = %d, iy = %d\n", c, ix, iy);
 	fflush(stderr);
     }
     if (c < 0 || c >= NUM_CELLS) {
