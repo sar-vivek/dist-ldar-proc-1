@@ -251,8 +251,10 @@ void processBin(int cell, INT ix, INT iy) {
     INT c;
     INT l;
     INT r;
+#if DEBUG >= 1
     INT dbugi;
     int dbugj;
+#endif
     int bflag;
     int dflag;
     int erl;
@@ -442,6 +444,7 @@ void processBin(int cell, INT ix, INT iy) {
 		fprintf(stderr, "%4lg %4lg %4lg\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
 	    fprintf(stderr,"\n");
 	}
+	fflush(stderr);
 #endif	
         p = p->next;
     }
