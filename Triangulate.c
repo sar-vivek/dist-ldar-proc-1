@@ -251,6 +251,8 @@ void processBin(int cell, INT ix, INT iy) {
     INT c;
     INT l;
     INT r;
+    INT dbugi;
+    int dbugj;
     int bflag;
     int dflag;
     int erl;
@@ -317,10 +319,6 @@ void processBin(int cell, INT ix, INT iy) {
             }
 
         } else {
-            /*#if DEBUG >= 1
-              p = p->next;
-              continue;
-#endif*/
             /* new point was on an edge - add 2 new and update 2 triangles */
             i1 = (bflag + 1) % 3;
             i2 = (bflag + 2) % 3;
@@ -437,6 +435,14 @@ void processBin(int cell, INT ix, INT iy) {
             }
         }
 
+#if DEBUG >=1
+	fprintf(stderr, "\n--------------TriVertex after adding %lg %lg %lg-------------\n", p->X_c, p->Y_c, p->Z_c);
+	for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
+	    for(dbugj = 0; dbugj < 3; dbugj++)
+		fprintf(stderr, "%4lg %4lg %4lg\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
+	    fprintf(stderr,"\n");
+	}
+#endif	
         p = p->next;
     }
 }
