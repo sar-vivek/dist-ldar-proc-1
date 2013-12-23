@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # $Id: $
+ulimit -c unlimited
 rm -f processed.out
 rm -f err.txt
 rm -f out.txt

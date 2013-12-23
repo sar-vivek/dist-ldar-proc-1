@@ -13,6 +13,7 @@
 #include "DistributeSlave.h"
 #include "MergeMaster.h"
 
+FILE *view_out;
 void MergeReceive() {
 
     uint32_t t;
@@ -24,7 +25,6 @@ void MergeReceive() {
 #if DEBUG >=1 
     INT dbugi;
     int dbugj;
-    FILE* view_out;
 #endif
 
     if ((proc_file_out = fopen("processed.out", "w")) == NULL) {
@@ -117,10 +117,12 @@ void MergeReceive() {
     fflush(stderr);
 #endif
 
-#if DEBGUG >=1
+#if DEBUG >=1
     view_out = fopen("view.out", "w");
-    if(view_out == NULL)
+    if(view_out == NULL){
 	perror("view_out open");
+	exit(-1);
+    }
 #endif
 
     for (c = 0; c < NUM_CELLS; ++c) {
@@ -131,16 +133,17 @@ void MergeReceive() {
 		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
 	    fprintf(proc_file_out, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
-#if DEBUG >= 1
+#if DEBUG >= 1 
 	    fflush(proc_file_out);
-	    fprintf(view_out, "A_%d%d%u = (%lg, %lg)\n", NodeID, c, t, TriVertex[c][t][0]->X_c,
+	    fprintf(view_out, "A%d%d%u = (%lg, %lg);\n", NodeID, c, t, TriVertex[c][t][0]->X_c,
 		    TriVertex[c][t][0]->Y_c);
-	    fprintf(view_out, "B_%d%d%u = (%lg, %lg)\n", NodeID, c, t, TriVertex[c][t][1]->X_c,
+	    fprintf(view_out, "B%d%d%u = (%lg, %lg);\n", NodeID, c, t, TriVertex[c][t][1]->X_c,
 		    TriVertex[c][t][1]->Y_c);
-	    fprintf(view_out, "C_%d%d%u = (%lg, %lg)\n", NodeID, c, t, TriVertex[c][t][2]->X_c,
+	    fprintf(view_out, "C%d%d%u = (%lg, %lg);\n", NodeID, c, t, TriVertex[c][t][2]->X_c,
 		    TriVertex[c][t][2]->Y_c);
-	    fprintf(view_out, "Polygon[A_%d%d%u, B_%d%d%u, C_%d%d%u]\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
-	    fflush(view_out);
+	    fprintf(view_out, "Polygon[A%d%d%u, B%d%d%u, C%d%d%u];\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
+	    fprintf(view_out, "Circle[A%d%d%u, B%d%d%u, C%d%d%u];\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
+	//    fflush(view_out);
 #endif
 	}
     }
