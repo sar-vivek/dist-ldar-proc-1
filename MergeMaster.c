@@ -87,7 +87,7 @@ void MergeReceive() {
 	free(newevents);
     }
 
-#if DEBUG >=1
+#if DEBUG >= 1
     fprintf(stderr, "\n--------------TriVertex in the MERGE------------\n");
     for(c = 0; c < NUM_CELLS; ++c){
         for(dbugi = 0; dbugi <= NumTri[c]; dbugi++){
@@ -95,22 +95,9 @@ void MergeReceive() {
 		fprintf(stderr, "%lg %lg %lg\t", TriVertex[c][dbugi][dbugj]->X_c, TriVertex[c][dbugi][dbugj]->Y_c, TriVertex[c][dbugi][dbugj]->Z_c);
 	    fprintf(stderr,"\n");
 	}
-	fflush(stderr);
-    }
-    fprintf(stderr, "\n--------------TriVertex in the MERGE with Cell------------\n");
-    for(c = 0; c < NUM_CELLS; ++c){
-	for(dbugi = 0; dbugi <= NumTri[c]; dbugi++){
-	    fprintf(proc_file_out,"%d %d %u ", NodeID, c, dbugi);
-	    for(dbugj = 0; dbugj < 3; dbugj++)
-		fprintf(proc_file_out, "| %d %lg %lg\t", lround((TriVertex[c][dbugi][dbugj]->X_c - Xoffset) / Xscale) , TriVertex[c][dbugi][dbugj]->Y_c, TriVertex[c][dbugi][dbugj]->Z_c);
-		//fprintf(proc_file_out, "| %lg %lg %lg\t", TriVertex[c][dbugi][0]->X_c, TriVertex[c][dbugi][0]->Y_c, TriVertex[c][dbugi][0]->Z_c);
-		//fprintf(proc_file_out, "| %lg %lg %lg\t", TriVertex[c][dbugi][1]->X_c, TriVertex[c][dbugi][1]->Y_c, TriVertex[c][dbugi][1]->Z_c);
-		//fprintf(proc_file_out, "| %lg %lg %lg\t", TriVertex[c][dbugi][2]->X_c, TriVertex[c][dbugi][2]->Y_c, TriVertex[c][dbugi][2]->Z_c);
-	    fprintf(proc_file_out,"\n");
-	}
+        fflush(stderr);
     }
 #endif
-
 
 #if DEBUG >= 5
     for (c = 0; c < NUM_CELLS; ++c) {
@@ -129,32 +116,28 @@ void MergeReceive() {
     fflush(stderr);
 #endif
 
-#if DEBUG >= 5
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
-	    fprintf(stderr, "%2d %2d %10u | 0x%lu 0x%lu 0x%lu | ", NodeID, c, t, TriVertex[c][t][0],
-		    TriVertex[c][t][0], TriVertex[c][t][0]);
-	    fflush(stderr);
-	    fprintf(stderr, "0x%lu 0x%lu 0x%lu | ", TriVertex[c][t][1],
-		    TriVertex[c][t][1], TriVertex[c][t][1]);
-	    fflush(stderr);
-	    fprintf(stderr, "0x%lu 0x%lu 0x%lu\n", TriVertex[c][t][2],
-		    TriVertex[c][t][2], TriVertex[c][t][2]);
-	    fflush(stderr);
+	    fprintf(proc_file_out, "%2d %2d %10u | %4d %4d %4d | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
+		    lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale));
+	    fprintf(proc_file_out, "%4d %4d %4d | ", lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale),
+		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
+	    fprintf(proc_file_out, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
+		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
+#if DEBUG >= 1
+	    fflush(proc_file_out);
+#endif
 	}
     }
-    fflush(stderr);
+    fflush(proc_file_out);
+
+    if (fclose(proc_file_out)) perror("fclose()");
+
+#if DEBUG >= 3
+    for (i = 0; i < mycount; ++i) {
+	fprintf(stderr, "(%4d, %4d, %4d)\n", lround((PntTbl[i].X_c - Xoffset) / Xscale),
+		lround((PntTbl[i].Y_c - Yoffset) / Yscale), lround((PntTbl[i].Z_c - Zoffset) / Zscale));
+    }
 #endif
-
-    fprintf(stderr, "PntTbl range is 0x%lu to 0x%lu\n", PntTbl, PntTbl + 10);
-
-    /*#if DEBUG >= 3
-      for (i = 0; i < mycount; ++i) {
-      fprintf(stderr, "(%4d, %4d, %4d)\n", lround((PntTbl[i].X_c - Xoffset) / Xscale),
-      lround((PntTbl[i].Y_c - Yoffset) / Yscale), lround((PntTbl[i].Z_c - Zoffset) / Zscale));
-      }
-#endif*/
-
-    usleep(500000);
 
 }
