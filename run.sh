@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # $Id: $
-rm -f processed.ou
+rm -f processed.out
 rm -f err.txt
 rm -f out.txt
 make

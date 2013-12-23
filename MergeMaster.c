@@ -24,6 +24,7 @@ void MergeReceive() {
 #if DEBUG >=1 
     INT dbugi;
     int dbugj;
+    FILE* view_out;
 #endif
 
     if ((proc_file_out = fopen("processed.out", "w")) == NULL) {
@@ -116,6 +117,12 @@ void MergeReceive() {
     fflush(stderr);
 #endif
 
+#if DEBGUG >=1
+    view_out = fopen("view.out", "w");
+    if(view_out == NULL)
+	perror("view_out open");
+#endif
+
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
 	    fprintf(proc_file_out, "%2d %2d %10u | %4d %4d %4d | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
@@ -126,12 +133,24 @@ void MergeReceive() {
 		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
 #if DEBUG >= 1
 	    fflush(proc_file_out);
+	    fprintf(view_out, "A_%d%d%u = (%lg, %lg)\n", NodeID, c, t, TriVertex[c][t][0]->X_c,
+		    TriVertex[c][t][0]->Y_c);
+	    fprintf(view_out, "B_%d%d%u = (%lg, %lg)\n", NodeID, c, t, TriVertex[c][t][1]->X_c,
+		    TriVertex[c][t][1]->Y_c);
+	    fprintf(view_out, "C_%d%d%u = (%lg, %lg)\n", NodeID, c, t, TriVertex[c][t][2]->X_c,
+		    TriVertex[c][t][2]->Y_c);
+	    fprintf(view_out, "Polygon[A_%d%d%u, B_%d%d%u, C_%d%d%u]\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
+	    fflush(view_out);
 #endif
 	}
     }
     fflush(proc_file_out);
 
-    if (fclose(proc_file_out)) perror("fclose()");
+    if (fclose(proc_file_out)) perror("proc_file_out close");
+
+#if DEBUG >= 1
+    if (fclose(view_out)) perror("view_out close");
+#endif
 
 #if DEBUG >= 3
     for (i = 0; i < mycount; ++i) {
