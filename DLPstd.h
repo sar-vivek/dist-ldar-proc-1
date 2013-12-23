@@ -34,7 +34,7 @@
 #define NUM_BINS_X 4 
 #define NUM_BINS_Y 2
 
-#define NUM_CELLS 1
+#define NUM_CELLS 1 
 #define NUM_CELLS_X 1 
 #define NUM_CELLS_Y 1
 

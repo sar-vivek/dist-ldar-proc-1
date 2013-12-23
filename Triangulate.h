@@ -16,6 +16,7 @@ extern INT **TriEdge[NUM_CELLS];
 extern INT *estack[NUM_CELLS];
 extern INT NumTri[NUM_CELLS];
 extern INT topstk[NUM_CELLS];
+extern LidarPointNode_t BigTriangle[NUM_CELLS][4];
 
 INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp);
 void Delaunay(int cell); 

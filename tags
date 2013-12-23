@@ -6,16 +6,21 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 AddPoint	DistributeSlave.c	/^void AddPoint() {$/;"	f
 AddPoint2	DistributeSlave.c	/^void AddPoint2(int c, int32_t ix, int32_t iy) {$/;"	f
+BOUNDARY	DLPstd.h	62;"	d
 BinCnt	DistLdarProcFVar.c	/^uint32_t BinCnt[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
 BinTbl	DistLdarProcFVar.c	/^LidarPointNode_t *BinTbl[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
 BinU1	DistLdarProcFVar.c	/^double BinU1[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
 BinU2	DistLdarProcFVar.c	/^double BinU2[NUM_CELLS][NUM_BINS_X][NUM_BINS_Y];$/;"	v
 BoundaryPointsAdd	DistributeSlave.c	/^void BoundaryPointsAdd() {$/;"	f
+CHAR_SIZE	DLPstd.h	53;"	d
 CellCnt	DistLdarProcFVar.c	/^uint32_t CellCnt[NUM_CELLS];$/;"	v
 CellMax	DistLdarProcFVar.c	/^LidarPointNode_t CellMax[NUM_CELLS];$/;"	v
 CellMin	DistLdarProcFVar.c	/^LidarPointNode_t CellMin[NUM_CELLS];$/;"	v
 Connect	DistributeMaster.c	/^void Connect(int sock, struct sockaddr_in *addr, socklen_t addr_len) {$/;"	f
 CreateMinMax	DistributeSlave.c	/^void CreateMinMax() {$/;"	f
+DEBUG	DLPstd.h	28;"	d
+DOUBLE_SIZE	DLPstd.h	59;"	d
+DZERO	DLPstd.h	30;"	d
 DataOffset	LdarReader.c	/^uint32_t DataOffset;$/;"	v
 DateJulian	LdarReader.c	/^uint16_t DateJulian;$/;"	v
 Delaunay	Triangulate.c	/^void Delaunay(int cell) {$/;"	f
@@ -30,7 +35,12 @@ Guid2	LdarReader.c	/^uint16_t Guid2;$/;"	v
 Guid3	LdarReader.c	/^uint16_t Guid3;$/;"	v
 Guid4	LdarReader.c	/^unsigned char Guid4[8];$/;"	v
 HeaderSize	LdarReader.c	/^uint16_t HeaderSize;$/;"	v
+INT	DLPstd.h	63;"	d
+INT32_SIZE	DLPstd.h	57;"	d
+INT8_SIZE	DLPstd.h	55;"	d
 LasFileInit	LdarReader.c	/^void LasFileInit(const char *filename) {$/;"	f
+LidarPointNode	LdarReader.h	/^struct LidarPointNode {$/;"	s
+LidarPointNode_t	LdarReader.h	/^typedef struct LidarPointNode LidarPointNode_t;$/;"	t	typeref:struct:LidarPointNode
 MajorVers	LdarReader.c	/^unsigned char MajorVers;$/;"	v
 Malloc	DistLdarProcFVar.c	/^void *Malloc(size_t len) {$/;"	f
 MaxX	LdarReader.c	/^double MaxX;$/;"	v
@@ -42,6 +52,16 @@ MinX	LdarReader.c	/^double MinX;$/;"	v
 MinY	LdarReader.c	/^double MinY;$/;"	v
 MinZ	LdarReader.c	/^double MinZ;$/;"	v
 MinorVers	LdarReader.c	/^unsigned char MinorVers;$/;"	v
+NODE_POINTS_MAX	DLPstd.h	31;"	d
+NUM_BINS_X	DLPstd.h	34;"	d
+NUM_BINS_Y	DLPstd.h	35;"	d
+NUM_CELLS	DLPstd.h	37;"	d
+NUM_CELLS_X	DLPstd.h	38;"	d
+NUM_CELLS_Y	DLPstd.h	39;"	d
+NUM_NODES	DLPstd.h	41;"	d
+NUM_NODES_X	DLPstd.h	42;"	d
+NUM_NODES_Y	DLPstd.h	43;"	d
+NUM_WORKERS	DLPstd.h	45;"	d
 NodeID	DistLdarProcFVar.c	/^int NodeID;$/;"	v
 NodeIPs	DistLdarProcFVar.c	/^char NodeIPs[NUM_NODES][16];$/;"	v
 NodeMax	DistLdarProcFVar.c	/^LidarPointNode_t NodeMax;$/;"	v
@@ -51,6 +71,9 @@ NumPointRec	LdarReader.c	/^uint32_t NumPointRec;$/;"	v
 NumPointsByRet	LdarReader.c	/^uint32_t NumPointsByRet[5];$/;"	v
 NumTri	Triangulate.c	/^INT NumTri[NUM_CELLS];$/;"	v
 NumVarLenRec	LdarReader.c	/^uint32_t NumVarLenRec;$/;"	v
+PERROR	DLPstd.h	65;"	d
+POINT_DATA_SKIP	DLPstd.h	47;"	d
+PORT_BASE	DLPstd.h	49;"	d
 PntTbl	DistLdarProcFVar.c	/^LidarPointNode_t *PntTbl;$/;"	v
 PointDataFormatID	LdarReader.c	/^unsigned char PointDataFormatID;$/;"	v
 PointDataRecLen	LdarReader.c	/^uint16_t PointDataRecLen;$/;"	v
@@ -63,13 +86,19 @@ Socket	DistributeMaster.c	/^int Socket(int domain, int type, int protocol) {$/;"
 SysID	LdarReader.c	/^char SysID[32];$/;"	v
 TriEdge	Triangulate.c	/^INT **TriEdge[NUM_CELLS];$/;"	v
 TriVertex	Triangulate.c	/^LidarPointNode_t ***TriVertex[NUM_CELLS];$/;"	v
+UCHAR_SIZE	DLPstd.h	54;"	d
+UINT16_SIZE	DLPstd.h	56;"	d
+UINT32_SIZE	DLPstd.h	58;"	d
+VAR_THRESHOLD	DLPstd.h	51;"	d
 VarWeight	ProcessData.c	/^typedef struct VarWeight {$/;"	s	file:
 VarWeight_t	ProcessData.c	/^} VarWeight_t;$/;"	t	typeref:struct:VarWeight	file:
 WorkerIDs	DistLdarProcFVar.c	/^int WorkerIDs[NUM_WORKERS + 1];$/;"	v
 Workers	DistLdarProcFVar.c	/^pthread_t Workers[NUM_WORKERS + 1];$/;"	v
 X	DistLdarProcFVar.c	/^int32_t X;$/;"	v
+XYZ_SIZE	DLPstd.h	60;"	d
 X_b	DistLdarProcFVar.c	/^void *X_b;$/;"	v
 X_c	DistLdarProcFVar.c	/^double X_c;$/;"	v
+X_c	LdarReader.h	/^    double X_c;$/;"	m	struct:LidarPointNode
 Xdiff	DistLdarProcFVar.c	/^double Xdiff;$/;"	v
 Xint	DistLdarProcFVar.c	/^double Xint;$/;"	v
 Xint_bin	DistLdarProcFVar.c	/^double Xint_bin;$/;"	v
@@ -80,6 +109,7 @@ Xscale	LdarReader.c	/^double Xscale;$/;"	v
 Y	DistLdarProcFVar.c	/^int32_t Y;$/;"	v
 Y_b	DistLdarProcFVar.c	/^void *Y_b;$/;"	v
 Y_c	DistLdarProcFVar.c	/^double Y_c;$/;"	v
+Y_c	LdarReader.h	/^    double Y_c;$/;"	m	struct:LidarPointNode
 Ydiff	DistLdarProcFVar.c	/^double Ydiff;$/;"	v
 Year	LdarReader.c	/^uint16_t Year;$/;"	v
 Yint	DistLdarProcFVar.c	/^double Yint;$/;"	v
@@ -92,9 +122,20 @@ Z	DistLdarProcFVar.c	/^int32_t Z;$/;"	v
 Z2	DistLdarProcFVar.c	/^double *Z2;$/;"	v
 Z_b	DistLdarProcFVar.c	/^void *Z_b;$/;"	v
 Z_c	DistLdarProcFVar.c	/^double Z_c;$/;"	v
+Z_c	LdarReader.h	/^    double Z_c;$/;"	m	struct:LidarPointNode
 Zinit	DistLdarProcFVar.c	/^double Zinit[NUM_CELLS][4];$/;"	v
 Zoffset	LdarReader.c	/^double Zoffset;$/;"	v
 Zscale	LdarReader.c	/^double Zscale;$/;"	v
+__DISTRIBUTE_MASTER_H__	DistributeMaster.h	10;"	d
+__DISTRIBUTE_SLAVE_H__	DistributeSlave.h	10;"	d
+__DIST_LDAR_PROC_FVAR_H__	DistLdarProcFVar.h	10;"	d
+__DLP_STD_H__	DLPstd.h	10;"	d
+__LDAR_READER_H__	LdarReader.h	10;"	d
+__MERGE_MASTER_H__	MergeMaster.h	10;"	d
+__MERGE_SLAVE_H__	MergeSlave.h	10;"	d
+__PROCESS_DATA_H__	ProcessData.h	10;"	d
+__RMSE_CALC_H__	RMSECalc.h	10;"	d
+__TRIANGULATE_H__	Triangulate.h	12;"	d
 addrfile	DistLdarProcFVar.c	/^FILE *addrfile;$/;"	v
 boundary_begin	DistLdarProcFVar.c	/^LidarPointNode_t *boundary_begin;$/;"	v
 count	DistLdarProcFVar.c	/^uint32_t count;$/;"	v
@@ -110,6 +151,7 @@ msock	DistLdarProcFVar.c	/^int msock[NUM_NODES];$/;"	v
 msockevents	DistLdarProcFVar.c	/^struct epoll_event msockevents[NUM_NODES];$/;"	v	typeref:struct:epoll_event
 mycount	DistLdarProcFVar.c	/^uint32_t mycount = 0;$/;"	v
 newevents	DistLdarProcFVar.c	/^struct epoll_event *newevents;$/;"	v	typeref:struct:epoll_event
+next	LdarReader.h	/^    struct LidarPointNode *next;$/;"	m	struct:LidarPointNode	typeref:struct:LidarPointNode::LidarPointNode
 polldesc	DistLdarProcFVar.c	/^int polldesc;$/;"	v
 pop	Triangulate.c	/^INT pop(int cell) {$/;"	f
 proc_file_out	LdarReader.c	/^FILE *proc_file_out;$/;"	v

@@ -18,6 +18,7 @@ INT **TriEdge[NUM_CELLS];
 INT *estack[NUM_CELLS];
 INT NumTri[NUM_CELLS];
 INT topstk[NUM_CELLS];
+LidarPointNode_t BigTriangle[NUM_CELLS][4];
 
 INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     double px;
@@ -451,7 +452,6 @@ void processBin(int cell, INT ix, INT iy) {
 }
 
 void Delaunay(int cell) {
-    LidarPointNode_t BigTriangle[4];
     double DMAX;  /*pseudo-diagonal distance of a cell*/
     double xcen;
     double ycen;
@@ -479,46 +479,46 @@ void Delaunay(int cell) {
     /*
        xcen = 0.5 * (CellMax[cell].X_c + CellMin[cell].X_c);
        ycen = 0.5 * (CellMax[cell].Y_c + CellMin[cell].Y_c);
-       BigTriangle[0].X_c = xcen - 1.01 * DMAX;
-       BigTriangle[0].Y_c = ycen - 0.51 * DMAX;
-       BigTriangle[1].X_c = xcen + 1.01 * DMAX;
-       BigTriangle[1].Y_c = ycen - 0.51 * DMAX;
-       BigTriangle[2].X_c = xcen;
-       BigTriangle[2].Y_c = ycen + 1.51 * DMAX;
+       BigTriangle[cell][0].X_c = xcen - 1.01 * DMAX;
+       BigTriangle[cell][0].Y_c = ycen - 0.51 * DMAX;
+       BigTriangle[cell][1].X_c = xcen + 1.01 * DMAX;
+       BigTriangle[cell][1].Y_c = ycen - 0.51 * DMAX;
+       BigTriangle[cell][2].X_c = xcen;
+       BigTriangle[cell][2].Y_c = ycen + 1.51 * DMAX;
 
-       TriVertex[cell][0][0] = &BigTriangle[0];
-       TriVertex[cell][0][1] = &BigTriangle[1];
-       TriVertex[cell][0][2] = &BigTriangle[2];
+       TriVertex[cell][0][0] = &BigTriangle[cell][0];
+       TriVertex[cell][0][1] = &BigTriangle[cell][1];
+       TriVertex[cell][0][2] = &BigTriangle[cell][2];
        TriEdge[cell][0][0] = BOUNDARY; 
        TriEdge[cell][0][1] = BOUNDARY;
        TriEdge[cell][0][2] = BOUNDARY; */
 
-    BigTriangle[0].X_c = CellMin[cell].X_c; 
-    BigTriangle[0].Y_c = CellMin[cell].Y_c; 
-    BigTriangle[0].Z_c = Zinit[cell][0];
-    BigTriangle[1].X_c = CellMax[cell].X_c; 
-    BigTriangle[1].Y_c = CellMin[cell].Y_c; 
-    BigTriangle[1].Z_c = Zinit[cell][1];
-    BigTriangle[2].X_c = CellMin[cell].X_c; 
-    BigTriangle[2].Y_c = CellMax[cell].Y_c; 
-    BigTriangle[2].Z_c = Zinit[cell][2];
-    BigTriangle[3].X_c = CellMax[cell].X_c; 
-    BigTriangle[3].Y_c = CellMax[cell].Y_c; 
-    BigTriangle[3].Z_c = Zinit[cell][3];
+    BigTriangle[cell][0].X_c = CellMin[cell].X_c; 
+    BigTriangle[cell][0].Y_c = CellMin[cell].Y_c; 
+    BigTriangle[cell][0].Z_c = Zinit[cell][0];
+    BigTriangle[cell][1].X_c = CellMax[cell].X_c; 
+    BigTriangle[cell][1].Y_c = CellMin[cell].Y_c; 
+    BigTriangle[cell][1].Z_c = Zinit[cell][1];
+    BigTriangle[cell][2].X_c = CellMin[cell].X_c; 
+    BigTriangle[cell][2].Y_c = CellMax[cell].Y_c; 
+    BigTriangle[cell][2].Z_c = Zinit[cell][2];
+    BigTriangle[cell][3].X_c = CellMax[cell].X_c; 
+    BigTriangle[cell][3].Y_c = CellMax[cell].Y_c; 
+    BigTriangle[cell][3].Z_c = Zinit[cell][3];
 #if DEBUG >= 1
     fprintf(stderr, "------------BigSquare------------------- \n"); 
     for (i = 0; i < 4; ++i) {
-        fprintf(stderr, "%lg %lg %lg\n", BigTriangle[i].X_c, BigTriangle[i].Y_c, BigTriangle[i].Z_c);
+        fprintf(stderr, "%lg %lg %lg\n", BigTriangle[cell][i].X_c, BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
     }
     fprintf(stderr, "-----------------------------------------\n");
     fflush(stderr);
 #endif
-    TriVertex[cell][0][0] = &BigTriangle[0];
-    TriVertex[cell][0][1] = &BigTriangle[1];
-    TriVertex[cell][0][2] = &BigTriangle[2];
-    TriVertex[cell][1][0] = &BigTriangle[2];
-    TriVertex[cell][1][1] = &BigTriangle[1];
-    TriVertex[cell][1][2] = &BigTriangle[3];
+    TriVertex[cell][0][0] = &BigTriangle[cell][0];
+    TriVertex[cell][0][1] = &BigTriangle[cell][1];
+    TriVertex[cell][0][2] = &BigTriangle[cell][2];
+    TriVertex[cell][1][0] = &BigTriangle[cell][2];
+    TriVertex[cell][1][1] = &BigTriangle[cell][1];
+    TriVertex[cell][1][2] = &BigTriangle[cell][3];
     TriEdge[cell][0][0] = BOUNDARY; 
     TriEdge[cell][0][1] = 1;
     TriEdge[cell][0][2] = BOUNDARY; 

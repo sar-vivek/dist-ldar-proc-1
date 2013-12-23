@@ -1,6 +1,9 @@
 #!/bin/bash
 
 # $Id: $
+rm -f processed.ou
+rm -f err.txt
+rm -f out.txt
 make
 ./DistLdarProc $1 1> out.txt 2> err.txt
 EXIT_STATUS=$?
