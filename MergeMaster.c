@@ -87,22 +87,6 @@ void MergeReceive() {
 	free(newevents);
     }
 
-#if DEBUG >= 1
-    for (c = 0; c < NUM_CELLS; ++c) {
-	for (t = 0; t <= NumTri[c]; ++t) {
-	    fprintf(stderr, "%2d %2d %10u | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
-		    TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c);
-	    fflush(stderr);
-	    fprintf(stderr, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
-		    TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c);
-	    fflush(stderr);
-	    fprintf(stderr, "%lg %lg %lg\n", TriVertex[c][t][2]->X_c,
-		    TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
-	    fflush(stderr);
-	}
-    }
-#endif
-
 #if DEBUG >=1
     fprintf(stderr, "\n--------------TriVertex in the MERGE------------\n");
     for(c = 0; c < NUM_CELLS; ++c){
@@ -131,29 +115,78 @@ void MergeReceive() {
     }
     fflush(stderr);
 #endif
-
+/*
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
-	    fprintf(proc_file_out, "%2d %2d %10u | %4d %4d %4d | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
+	    fprintf(stdout, "%4d %4d %4d | ", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
+		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
+	    fprintf(stdout, "%2d %2d %10u | %4d %4d %4d | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale));
-	    fprintf(proc_file_out, "%4d %4d %4d | ", lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale),
+	    fprintf(stdout, "%4d %4d %4d | ", lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
-	    fprintf(proc_file_out, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
+	    fprintf(stdout, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
 #if DEBUG >= 1
-	    fflush(proc_file_out);
-#endif*/
+	    fflush(stdout);
+#endif
 	}
     }
     fflush(proc_file_out);
 
-    if (fclose(proc_file_out)) perror("fclose()");
+    if (fclose(proc_file_out)) perror("fclose()");*/
 
-#if DEBUG >= 3
+/*#if DEBUG >= 3
     for (i = 0; i < mycount; ++i) {
 	fprintf(stderr, "(%4d, %4d, %4d)\n", lround((PntTbl[i].X_c - Xoffset) / Xscale),
 		lround((PntTbl[i].Y_c - Yoffset) / Yscale), lround((PntTbl[i].Z_c - Zoffset) / Zscale));
     }
+#endif*/
+
+    usleep(500000);
+
+#if DEBUG >= 5
+    for (c = 0; c < NUM_CELLS; ++c) {
+	for (t = 0; t <= NumTri[c]; ++t) {
+	    fprintf(stderr, "%2d %2d %10u | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
+		    TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c);
+	    fflush(stderr);
+	    fprintf(stderr, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
+		    TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c);
+	    fflush(stderr);
+	    fprintf(stderr, "%lg %lg %lg\n", TriVertex[c][t][2]->X_c,
+		    TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
+	    fflush(stderr);
+	}
+    }
+    fflush(stderr);
 #endif
+
+#if DEBUG >= 5
+    for (c = 0; c < NUM_CELLS; ++c) {
+	for (t = 0; t <= NumTri[c]; ++t) {
+	    fprintf(stderr, "%2d %2d %10u | 0x%lu 0x%lu 0x%lu | ", NodeID, c, t, TriVertex[c][t][0],
+		    TriVertex[c][t][0], TriVertex[c][t][0]);
+	    fflush(stderr);
+	    fprintf(stderr, "0x%lu 0x%lu 0x%lu | ", TriVertex[c][t][1],
+		    TriVertex[c][t][1], TriVertex[c][t][1]);
+	    fflush(stderr);
+	    fprintf(stderr, "0x%lu 0x%lu 0x%lu\n", TriVertex[c][t][2],
+		    TriVertex[c][t][2], TriVertex[c][t][2]);
+	    fflush(stderr);
+	}
+    }
+    fflush(stderr);
+#endif
+
+    fprintf(stderr, "PntTbl range is 0x%lu to 0x%lu\n", PntTbl, PntTbl + 10);
+
+/*#if DEBUG >= 3
+    for (i = 0; i < mycount; ++i) {
+	fprintf(stderr, "(%4d, %4d, %4d)\n", lround((PntTbl[i].X_c - Xoffset) / Xscale),
+		lround((PntTbl[i].Y_c - Yoffset) / Yscale), lround((PntTbl[i].Z_c - Zoffset) / Zscale));
+    }
+#endif*/
+
+    usleep(500000);
 
 }
