@@ -242,179 +242,179 @@ void processBin(int cell, INT ix, INT iy) {
 
     p = BinTbl[cell][ix][iy];
 
-    while (p != NULL) {
-        /*locate index of triangle containing p*/
-        bflag = -1;
-        dflag = -1;
-        t = triLoc(cell, p, &bflag, &dflag);
-
-        if (dflag > -1) {
-            p = p->next;
-            continue;
-        }
-
-        if (bflag == -1) {
-            /*add 2 new and update 1 triangle*/
-            a = TriEdge[cell][t][0];
-            b = TriEdge[cell][t][1];
-            c = TriEdge[cell][t][2];
-            v1 = TriVertex[cell][t][0];
-            v2 = TriVertex[cell][t][1];
-            v3 = TriVertex[cell][t][2];
-            TriVertex[cell][t][0] = p;
-            TriVertex[cell][t][1] = v1;
-            TriVertex[cell][t][2] = v2;
-            TriEdge[cell][t][0] = NumTri[cell] + 2;
-            TriEdge[cell][t][1] = a;
-            TriEdge[cell][t][2] = NumTri[cell] + 1;
-
-            t2 = ++NumTri[cell];
-            TriVertex[cell][t2][0] = p;
-            TriVertex[cell][t2][1] = v2;
-            TriVertex[cell][t2][2] = v3;
-            TriEdge[cell][t2][0] = t;
-            TriEdge[cell][t2][1] = b;
-            TriEdge[cell][t2][2] = NumTri[cell] + 1;
-
-            t2 = ++NumTri[cell];
-            TriVertex[cell][t2][0] = p;
-            TriVertex[cell][t2][1] = v3;
-            TriVertex[cell][t2][2] = v1;
-            TriEdge[cell][t2][0] = NumTri[cell] - 1;
-            TriEdge[cell][t2][1] = c;
-            TriEdge[cell][t2][2] = t;
-
-            /*update adjacency lists*/
-            if (a != BOUNDARY) push(cell, t);
-
-            if (b != BOUNDARY) {
-                TriEdge[cell][b][edg(cell, b, t)] = NumTri[cell] - 1;
-                push(cell, NumTri[cell] - 1);
-            }
-
-            if (c != BOUNDARY) {
-                TriEdge[cell][c][edg(cell, c, t)] = NumTri[cell];
-                push(cell, NumTri[cell]);
-            }
-
-        } else {
-            /* new point was on an edge - add 2 new and update 2 triangles */
-            i1 = (bflag + 1) % 3;
-            i2 = (bflag + 2) % 3;
-            t2 = ++NumTri[cell];
-
-#if DEBUG >= 3
-            fprintf(stderr, "Working on adding point (%lg,%lg,%lg).\n", p->X_c, p->Y_c, p->Z_c);
-            fflush(stderr);
+#if DEBUG >= 2 
+    fprintf(stderr, "Working on adding point (%lg,%lg,%lg).\n", p->X_c, p->Y_c, p->Z_c);
+    fflush(stderr);
 #endif
+    while (p != NULL) {
+	/*locate index of triangle containing p*/
+	bflag = -1;
+	dflag = -1;
+	t = triLoc(cell, p, &bflag, &dflag);
 
-            a = TriEdge[cell][t][bflag];
-            b = TriEdge[cell][t][i1];
-            c = TriEdge[cell][t][i2];
-            v1 = TriVertex[cell][t][bflag];
-            v2 = TriVertex[cell][t][i1];
-            v3 = TriVertex[cell][t][i2];
-            TriVertex[cell][t][0] = p;
-            TriVertex[cell][t][1] = v3;
-            TriVertex[cell][t][2] = v1;
-            TriEdge[cell][t][0] = t2;
-            TriEdge[cell][t][1] = c;
-            TriEdge[cell][t][2] = a;
+	if (dflag > -1) {
+	    p = p->next;
+	    continue;
+	}
 
-            TriVertex[cell][t2][0] = p;
-            TriVertex[cell][t2][1] = v2;
-            TriVertex[cell][t2][2] = v3;
-            TriEdge[cell][t2][1] = b;
-            TriEdge[cell][t2][2] = t;
+	if (bflag == -1) {
+	    /*add 2 new and update 1 triangle*/
+	    a = TriEdge[cell][t][0];
+	    b = TriEdge[cell][t][1];
+	    c = TriEdge[cell][t][2];
+	    v1 = TriVertex[cell][t][0];
+	    v2 = TriVertex[cell][t][1];
+	    v3 = TriVertex[cell][t][2];
+	    TriVertex[cell][t][0] = p;
+	    TriVertex[cell][t][1] = v1;
+	    TriVertex[cell][t][2] = v2;
+	    TriEdge[cell][t][0] = NumTri[cell] + 2;
+	    TriEdge[cell][t][1] = a;
+	    TriEdge[cell][t][2] = NumTri[cell] + 1;
 
-            if (b != BOUNDARY) {
-                TriEdge[cell][b][edg(cell, b, t)] = t2;
-                push(cell, t2);
-            }
+	    t2 = ++NumTri[cell];
+	    TriVertex[cell][t2][0] = p;
+	    TriVertex[cell][t2][1] = v2;
+	    TriVertex[cell][t2][2] = v3;
+	    TriEdge[cell][t2][0] = t;
+	    TriEdge[cell][t2][1] = b;
+	    TriEdge[cell][t2][2] = NumTri[cell] + 1;
 
-            if (c != BOUNDARY) push(cell, t);
+	    t2 = ++NumTri[cell];
+	    TriVertex[cell][t2][0] = p;
+	    TriVertex[cell][t2][1] = v3;
+	    TriVertex[cell][t2][2] = v1;
+	    TriEdge[cell][t2][0] = NumTri[cell] - 1;
+	    TriEdge[cell][t2][1] = c;
+	    TriEdge[cell][t2][2] = t;
 
-            if (a == BOUNDARY) {
-                TriEdge[cell][t2][0] = BOUNDARY;
-            } else {
-                TriEdge[cell][t2][0] = t2 + 1;
+	    /*update adjacency lists*/
+	    if (a != BOUNDARY) push(cell, t);
 
-                bflag = edg(cell, a, t);
-                i1 = (bflag + 1) % 3;
-                i2 = (bflag + 2) % 3;
-                t2 = ++NumTri[cell];
+	    if (b != BOUNDARY) {
+		TriEdge[cell][b][edg(cell, b, t)] = NumTri[cell] - 1;
+		push(cell, NumTri[cell] - 1);
+	    }
 
-                b = TriEdge[cell][a][i1];
-                c = TriEdge[cell][a][i2];
-                v1 = TriVertex[cell][a][bflag];
-                v2 = TriVertex[cell][a][i1];
-                v3 = TriVertex[cell][a][i2];
-                TriVertex[cell][a][0] = p;
-                TriVertex[cell][a][1] = v2;
-                TriVertex[cell][a][2] = v3;
-                TriEdge[cell][a][0] = t;
-                TriEdge[cell][a][1] = b;
-                TriEdge[cell][a][2] = t2;
+	    if (c != BOUNDARY) {
+		TriEdge[cell][c][edg(cell, c, t)] = NumTri[cell];
+		push(cell, NumTri[cell]);
+	    }
 
-                TriVertex[cell][t2][0] = p;
-                TriVertex[cell][t2][1] = v3;
-                TriVertex[cell][t2][2] = v1;
-                TriEdge[cell][t2][0] = a;
-                TriEdge[cell][t2][1] = c;
-                TriEdge[cell][t2][2] = t2 - 1;
+	} else {
+	    /* new point was on an edge - add 2 new and update 2 triangles */
+	    i1 = (bflag + 1) % 3;
+	    i2 = (bflag + 2) % 3;
+	    t2 = ++NumTri[cell];
 
-                if (b != BOUNDARY) push(cell, a);
 
-                if (c != BOUNDARY) {
-                    TriEdge[cell][c][edg(cell, c, a)] = t2;
-                    push(cell, t2);
-                }
-            }
-        }
+	    a = TriEdge[cell][t][bflag];
+	    b = TriEdge[cell][t][i1];
+	    c = TriEdge[cell][t][i2];
+	    v1 = TriVertex[cell][t][bflag];
+	    v2 = TriVertex[cell][t][i1];
+	    v3 = TriVertex[cell][t][i2];
+	    TriVertex[cell][t][0] = p;
+	    TriVertex[cell][t][1] = v3;
+	    TriVertex[cell][t][2] = v1;
+	    TriEdge[cell][t][0] = t2;
+	    TriEdge[cell][t][1] = c;
+	    TriEdge[cell][t][2] = a;
 
-        while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
-            l = pop(cell);
-            r = TriEdge[cell][l][1];
-            /*if (r == BOUNDARY) continue;*/
+	    TriVertex[cell][t2][0] = p;
+	    TriVertex[cell][t2][1] = v2;
+	    TriVertex[cell][t2][2] = v3;
+	    TriEdge[cell][t2][1] = b;
+	    TriEdge[cell][t2][2] = t;
 
-            /*circumcircle test*/
-            erl = edg(cell, r, l);
-            era = (erl + 1) % 3;
-            erb = (era + 1) % 3;
-            v1 = TriVertex[cell][r][erl];
-            v2 = TriVertex[cell][r][era];
-            v3 = TriVertex[cell][r][erb];
+	    if (b != BOUNDARY) {
+		TriEdge[cell][b][edg(cell, b, t)] = t2;
+		push(cell, t2);
+	    }
+
+	    if (c != BOUNDARY) push(cell, t);
+
+	    if (a == BOUNDARY) {
+		TriEdge[cell][t2][0] = BOUNDARY;
+	    } else {
+		TriEdge[cell][t2][0] = t2 + 1;
+
+		bflag = edg(cell, a, t);
+		i1 = (bflag + 1) % 3;
+		i2 = (bflag + 2) % 3;
+		t2 = ++NumTri[cell];
+
+		b = TriEdge[cell][a][i1];
+		c = TriEdge[cell][a][i2];
+		v1 = TriVertex[cell][a][bflag];
+		v2 = TriVertex[cell][a][i1];
+		v3 = TriVertex[cell][a][i2];
+		TriVertex[cell][a][0] = p;
+		TriVertex[cell][a][1] = v2;
+		TriVertex[cell][a][2] = v3;
+		TriEdge[cell][a][0] = t;
+		TriEdge[cell][a][1] = b;
+		TriEdge[cell][a][2] = t2;
+
+		TriVertex[cell][t2][0] = p;
+		TriVertex[cell][t2][1] = v3;
+		TriVertex[cell][t2][2] = v1;
+		TriEdge[cell][t2][0] = a;
+		TriEdge[cell][t2][1] = c;
+		TriEdge[cell][t2][2] = t2 - 1;
+
+		if (b != BOUNDARY) push(cell, a);
+
+		if (c != BOUNDARY) {
+		    TriEdge[cell][c][edg(cell, c, a)] = t2;
+		    push(cell, t2);
+		}
+	    }
+	}
+
+	while (topstk[cell] != BOUNDARY) {   /*simply saying >=0 */
+	    l = pop(cell);
+	    r = TriEdge[cell][l][1];
+	    /*if (r == BOUNDARY) continue;*/
+
+	    /*circumcircle test*/
+	    erl = edg(cell, r, l);
+	    era = (erl + 1) % 3;
+	    erb = (era + 1) % 3;
+	    v1 = TriVertex[cell][r][erl];
+	    v2 = TriVertex[cell][r][era];
+	    v3 = TriVertex[cell][r][erb];
 
 #if DEBUG >= 3
 	    fprintf(stderr, "Processing triangle %u from stack.\n", l);
 	    fflush(stderr);
 #endif
 
-            if (swap(cell, v1, v2, v3, p)) {
-                /*p is in circle of triangle r*/
-                a = TriEdge[cell][r][era];
-                b = TriEdge[cell][r][erb];
-                c = TriEdge[cell][l][2];
-                TriVertex[cell][l][2] = v3;
-                TriEdge[cell][l][1] = a;
-                TriEdge[cell][l][2] = r;
-                TriVertex[cell][r][0] = p;
-                TriVertex[cell][r][1] = v3;
-                TriVertex[cell][r][2] = v1;
-                TriEdge[cell][r][0] = l;
-                TriEdge[cell][r][1] = b;
-                TriEdge[cell][r][2] = c;
+	    if (swap(cell, v1, v2, v3, p)) {
+		/*p is in circle of triangle r*/
+		a = TriEdge[cell][r][era];
+		b = TriEdge[cell][r][erb];
+		c = TriEdge[cell][l][2];
+		TriVertex[cell][l][2] = v3;
+		TriEdge[cell][l][1] = a;
+		TriEdge[cell][l][2] = r;
+		TriVertex[cell][r][0] = p;
+		TriVertex[cell][r][1] = v3;
+		TriVertex[cell][r][2] = v1;
+		TriEdge[cell][r][0] = l;
+		TriEdge[cell][r][1] = b;
+		TriEdge[cell][r][2] = c;
 
-                if (a != BOUNDARY) {
-                    TriEdge[cell][a][edg(cell, a, r)] = l;
-                    push(cell, l);
-                }
-                if (b != BOUNDARY) push(cell, r);
-                if (c != BOUNDARY) TriEdge[cell][c][edg(cell, c, l)] = r;
-            }
-        }
+		if (a != BOUNDARY) {
+		    TriEdge[cell][a][edg(cell, a, r)] = l;
+		    push(cell, l);
+		}
+		if (b != BOUNDARY) push(cell, r);
+		if (c != BOUNDARY) TriEdge[cell][c][edg(cell, c, l)] = r;
+	    }
+	}
 
-        p = p->next;
+	p = p->next;
     }
 }
 
@@ -457,7 +457,7 @@ void Delaunay(int cell) {
 #if DEBUG >= 1
     fprintf(stderr, "------------BigSquare------------------- \n"); 
     for (i = 0; i < 4; ++i) {
-        fprintf(stderr, "%lg %lg %lg\n", BigTriangle[cell][i].X_c, BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
+	fprintf(stderr, "%lg %lg %lg\n", BigTriangle[cell][i].X_c, BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
     }
     fprintf(stderr, "-----------------------------------------\n");
     fflush(stderr);
@@ -480,30 +480,30 @@ void Delaunay(int cell) {
     /*insert points one by one*/
     /*for optimization we insert from bins in a specific order - details in the paper*/
     for (iy = 0; iy < NUM_BINS_Y; ++iy) {
-        if (iy % 2 == 1) {
-            for (ix = 0; ix < NUM_BINS_X; ++ix) {
-                processBin(cell, NUM_BINS_X - ix - 1, iy);
-            }
-        } else {
-            for (ix = 0; ix < NUM_BINS_X; ++ix) {
-                processBin(cell, ix, iy);
-            }
-        }
+	if (iy % 2 == 1) {
+	    for (ix = 0; ix < NUM_BINS_X; ++ix) {
+		processBin(cell, NUM_BINS_X - ix - 1, iy);
+	    }
+	} else {
+	    for (ix = 0; ix < NUM_BINS_X; ++ix) {
+		processBin(cell, ix, iy);
+	    }
+	}
     }
 
 #if DEBUG >= 1
     fprintf(stdout,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
     if(NumTri[cell]==numt)
-        fprintf(stderr,"Equal\n");
+	fprintf(stderr,"Equal\n");
     fflush(stderr);
 #endif
 #if DEBUG >=3
-	fprintf(stderr, "\n--------------TriVertex in the END------------\n");
-	for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
-	    for(dbugj = 0; dbugj < 3; dbugj++)
-		fprintf(stderr, "%4lg %4lg %4lg\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
-	    fprintf(stderr,"\n");
-	}
-	fflush(stderr);
+    fprintf(stderr, "\n--------------TriVertex in the END------------\n");
+    for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
+	for(dbugj = 0; dbugj < 3; dbugj++)
+	    fprintf(stderr, "%4lg %4lg %4lg\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
+	fprintf(stderr,"\n");
+    }
+    fflush(stderr);
 #endif	
 }
