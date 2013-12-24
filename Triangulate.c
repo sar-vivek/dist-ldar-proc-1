@@ -73,36 +73,12 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 	    fprintf(stderr, "p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
 	    fflush(stderr);
 #endif
-#if DEBUG >= 5
-	    fprintf(stderr, "px - v1x = %lg\n", px - v1x);
-	    fprintf(stderr, "v2y - v1y = %lg\n", v2y - v1y);
-	    fprintf(stderr, "v2x - v1x = %lg\n", v2x - v1x);
-	    fprintf(stderr, "py - v1y = %lg\n", py - v1y);
-	    fprintf(stderr, "$1 * $2 = %lg\n", (px - v1x) * (v2y - v1y));
-	    fprintf(stderr, "$3 * $4 = %lg\n", (v2x - v1x) * (py - v1y));
-	    fprintf(stderr, "p = (0x");
-	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(x0 + 7 - j));
-	    fprintf(stderr, ",0x");
-	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(y0 + 7 - j));
-	    fprintf(stderr, ")\n");
-	    fprintf(stderr, "v1 = (0x");
-	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(x1 + 7 - j));
-	    fprintf(stderr, ",0x");
-	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(y1 + 7 - j));
-	    fprintf(stderr, ")\n");
-	    fprintf(stderr, "v2 = (0x");
-	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(x2 + 7 - j));
-	    fprintf(stderr, ",0x");
-	    for (j = 0; j < 8; ++j) fprintf(stderr, "%02X", *(y2 + 7 - j));
-	    fprintf(stderr, ")\n");
-	    fflush(stderr);
-#endif
 
             if (det == 0 || (det < DZERO && det > -DZERO)) {
                 if (d1x < DZERO && d1x > -DZERO && d1y < DZERO && d1y > -DZERO) {
                     *bfp = i;
                     *dfp = i;
-#if DEBUG >= 1
+#if DEBUG >= 2
                     fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v1x, v1y);
                     fflush(stderr);
 #endif
@@ -111,7 +87,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                 if (d2x < DZERO && d2x > -DZERO && d2y < DZERO && d2y > -DZERO) {
                     *bfp = (i + 1) % 3;
                     *dfp = *bfp;
-#if DEBUG >= 1
+#if DEBUG >= 2
                     fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v2x, v2y);
                     fflush(stderr);
 #endif
@@ -438,15 +414,6 @@ void processBin(int cell, INT ix, INT iy) {
             }
         }
 
-#if DEBUG >=5
-	fprintf(stderr, "\n--------------TriVertex after adding %lg %lg %lg-------------\n", p->X_c, p->Y_c, p->Z_c);
-	for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
-	    for(dbugj = 0; dbugj < 3; dbugj++)
-		fprintf(stderr, "%4lg %4lg %4lg\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
-	    fprintf(stderr,"\n");
-	}
-	fflush(stderr);
-#endif	
         p = p->next;
     }
 }
@@ -474,24 +441,6 @@ void Delaunay(int cell) {
 
     numt = 2 * CellCnt[cell] + 1;
     topstk[cell] = BOUNDARY;
-
-    /*calculate pseudo-triangle*/
-    /*
-       xcen = 0.5 * (CellMax[cell].X_c + CellMin[cell].X_c);
-       ycen = 0.5 * (CellMax[cell].Y_c + CellMin[cell].Y_c);
-       BigTriangle[cell][0].X_c = xcen - 1.01 * DMAX;
-       BigTriangle[cell][0].Y_c = ycen - 0.51 * DMAX;
-       BigTriangle[cell][1].X_c = xcen + 1.01 * DMAX;
-       BigTriangle[cell][1].Y_c = ycen - 0.51 * DMAX;
-       BigTriangle[cell][2].X_c = xcen;
-       BigTriangle[cell][2].Y_c = ycen + 1.51 * DMAX;
-
-       TriVertex[cell][0][0] = &BigTriangle[cell][0];
-       TriVertex[cell][0][1] = &BigTriangle[cell][1];
-       TriVertex[cell][0][2] = &BigTriangle[cell][2];
-       TriEdge[cell][0][0] = BOUNDARY; 
-       TriEdge[cell][0][1] = BOUNDARY;
-       TriEdge[cell][0][2] = BOUNDARY; */
 
     BigTriangle[cell][0].X_c = CellMin[cell].X_c; 
     BigTriangle[cell][0].Y_c = CellMin[cell].Y_c; 
@@ -548,7 +497,7 @@ void Delaunay(int cell) {
         fprintf(stderr,"Equal\n");
     fflush(stderr);
 #endif
-#if DEBUG >=1
+#if DEBUG >=3
 	fprintf(stderr, "\n--------------TriVertex in the END------------\n");
 	for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
 	    for(dbugj = 0; dbugj < 3; dbugj++)
