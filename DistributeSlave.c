@@ -65,19 +65,24 @@ void AddPoint() {
     current->Y_c = Y_c;
     current->Z_c = Z_c;
 
-/*#if DEBUG >= 1
+#if DEBUG >= 1
     if (X_c < MinX || X_c > MaxX) {
-	fprintf(stderr, "X_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
+	fprintf(stderr, "\nX_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
 	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
-	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n", Z_c, MinZ, MaxZ);
+	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
     }
     if (Y_c < MinY || Y_c > MaxY) {
-
+	fprintf(stderr, "\nY_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
     }
     if (Z_c < MinZ || Z_c > MaxZ) {
-
+	fprintf(stderr, "\nZ_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
     }
-#endif*/
+    fflush(stderr);
+#endif
 
     ix = lround(floor((X_c - NodeMin.X_c) / Xint_cell));
     iy = lround(floor((Y_c - NodeMin.Y_c) / Yint_cell));
