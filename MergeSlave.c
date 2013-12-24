@@ -20,13 +20,6 @@ void MergeSend() {
     int c;
     int i;
 
-#if DEBUG >= 5
-    for (i = 0; i < mycount; ++i) {
-	fprintf(stderr, "(%4d, %4d, %4d)\n", lround((PntTbl[i].X_c - Xoffset) / Xscale),
-		lround((PntTbl[i].Y_c - Yoffset) / Yscale), lround((PntTbl[i].Z_c - Zoffset) / Zscale));
-    }
-#endif
-
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
 	    *((uint32_t *) X_b) = t;
@@ -57,9 +50,7 @@ void MergeSend() {
 	if (ret == 1) {
 	    fprintf(stderr, "Received byte %X after socket was supposed to close.\n", (int) *((char *) X_b));
 	    fflush(stderr);
-	} else {
-	    perror("recv()");
-	}
+	} else perror("recv()");
     }
 
     if (close(ssock) == -1) perror("close()");

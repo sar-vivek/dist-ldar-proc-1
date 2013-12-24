@@ -234,6 +234,11 @@ int main(int argc, char *argv[]) {
     printf("\nTime taken: %lg seconds\n\n", t_diff);
     fflush(stdout);
 
+/*
+    if (NodeID == 0) RMSECalcMaster();
+    else RMSECalcSlave();
+*/
+
     free(PntTbl);
     free(Z2);
     free(FiltTbl);

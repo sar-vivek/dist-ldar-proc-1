@@ -10,10 +10,11 @@
 #include "LdarReader.h"
 #include "RMSECalc.h"
 
-void RMSECalc() {
+void RMSECalcMaster() {
 
+}
 
-
+void RMSECalcSlave() {
 
 }
 
@@ -40,7 +41,6 @@ double FindZ(LidarPointNode_t *A, LidarPointNode_t *B, LidarPointNode_t *C, Lida
 
     /* Solve for dx3 in the determinant equation: */
     /* dx1*(db2*dc3-db3*dc2) - dx2*(db1*dc3-db3*dc1) + dx3*(db1*dc2-db2*dc1) = 0 */
-
     if (b1 * c2 == b2 * c1) {
 	perror("det = 0");
     }

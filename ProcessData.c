@@ -47,9 +47,6 @@ void *ProcessData(void *workerID) {
     double u2;
     LidarPointNode_t *node;
     VarWeight_t *vw;
-#if DEBUG >= 1
-    uint32_t mycount2;
-#endif
     uint32_t ix;
     uint32_t iy;
     uint32_t n;
@@ -59,6 +56,10 @@ void *ProcessData(void *workerID) {
     int dy;
     int weight;
 
+#if DEBUG >= 1
+    uint32_t mycount2;
+#endif
+
     c = *((int *) workerID);
 
 #if DEBUG >= 1
@@ -66,29 +67,19 @@ void *ProcessData(void *workerID) {
     fflush(stdout);
 #endif
 
-#if DEBUG >= 2
+#if DEBUG >= 3
     mycount2 = 0;
     for (ix = 0; ix < NUM_BINS_X; ++ix) {
 	for (iy = 0; iy < NUM_BINS_Y; ++iy) {
 	    fprintf(stderr, "Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
-	    /*if ((ix == 134 && iy == 2) ||
-		(ix == 570 && iy == 1776) ||
-		(ix == 23 && iy == 2699) ||
-		(ix == 1046 && iy == 1809) ||
-		(ix == 1798 && iy == 2143) ||
-		(ix == 1309 && iy == 98) ||
-		(ix == 2094 && iy == 579) ||
-		(ix == 2890 && iy == 1576) ||
-		(ix == 2615 && iy == 2910))
-	    {
-		fprintf(stderr, "Bin [%u,%u] has %u points.\n", ix, iy, BinCnt[c][ix][iy]);
-	    }*/
 	    mycount2 += BinCnt[c][ix][iy];
 	}
     }
-    printf("Node count was %u before addition of boundary points.\n", mycount);
-    printf("Node count is %u after adding boundary points.\n", mycount2);
-    fflush(stdout);
+#endif
+
+#if DEBUG >= 1
+    fprintf(stderr, "Node count is %u (not including boundary points).\n", mycount);
+    fflush(stderr);
 #endif
 
     for (ix = 2; ix < NUM_BINS_X - 2; ++ix) {
@@ -112,22 +103,6 @@ void *ProcessData(void *workerID) {
 	    u1 /= n;
 	    u2 /= n;
 
-#if DEBUG >= 1
-	    if ((ix == 134 && iy == 2) ||
-		(ix == 570 && iy == 1776) ||
-		(ix == 23 && iy == 2699) ||
-		(ix == 1046 && iy == 1809) ||
-		(ix == 1798 && iy == 2143) ||
-		(ix == 1309 && iy == 98) ||
-		(ix == 2094 && iy == 579) ||
-		(ix == 2890 && iy == 1576) ||
-		(ix == 2615 && iy == 2910))
-	    {
-		printf("Bin [%u,%u] has variance %lg.\n", ix, iy, u2 - (u1 * u1));
-		fflush(stdout);
-	    }
-#endif
-
 	    if (n > 1 && u2 < u1 * u1 + VAR_THRESHOLD) {
 		node = BinTbl[c][ix][iy];
 		while (node != NULL) {
@@ -147,7 +122,7 @@ void *ProcessData(void *workerID) {
 
 #if DEBUG >= 1
     mycount2 = 0;
-    for (ix = 0; ix < NumPointRec; ++ix) {
+    for (ix = 0; ix < mycount; ++ix) {
 	if (*(FiltTbl + ix) == 0) ++mycount2;
     }
     printf("There are %u (original) points remaining after filtering.\n", mycount2);

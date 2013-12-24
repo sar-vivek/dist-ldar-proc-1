@@ -94,24 +94,12 @@ void AddPoint() {
     iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
 #if DEBUG >= 1
     if (ix < 0 || iy < 0 || ix > NUM_BINS_X || iy > NUM_BINS_Y) {
-	printf("Error: ix = %u, iy = %u out of bounds\n");
-	fflush(stdout);
+	fprintf(stderr, "Error: ix = %u, iy = %u out of bounds\n");
+	fflush(stderr);
     }
 #endif
-    if (ix == NUM_BINS_X) {
-	--ix;
-#if DEBUG >= 2
-	fprintf(stderr, "Bin right edge hit.\n");
-	fflush(stdout);
-#endif
-    }
-    if (iy == NUM_BINS_Y) {
-	--iy;
-#if DEBUG >= 2
-	fprintf(stderr, "Bin top edge hit.\n");
-	fflush(stdout);
-#endif
-    }
+    if (ix == NUM_BINS_X) --ix;
+    if (iy == NUM_BINS_Y) --iy;
 
     current->next = BinTbl[c][ix][iy];
     BinTbl[c][ix][iy] = current++;
@@ -167,10 +155,6 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     node = BinTbl[c][ix][iy];
     while (node != NULL) {
 	if (boundary_begin - node > 0) {
-#if DEBUG >= 3
-	    fprintf(stderr, "Found a point. i = 0, X_c = %lg, Y_c = %lg, Z_c = %lg\n", node->X_c, node->Y_c, node->Z_c);
-	    fflush(stderr);
-#endif
 	    Z_c += node->Z_c;
 	    ++cnt;
 	}
@@ -228,10 +212,6 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 		    node = BinTbl[d][bx][by];
 		    while (node != NULL) {
 			if (boundary_begin - node > 0) {
-#if DEBUG >= 2
-			    fprintf(stderr, "Found a point. i = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n", i, node->X_c, node->Y_c, node->Z_c);
-			    fflush(stderr);
-#endif
 			    Z_c += node->Z_c;
 			    ++cnt;
 			}
@@ -258,12 +238,6 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 
     Z_c /= cnt;
 
-#if DEBUG >=3 
-    fprintf(stderr, "Adding a point in cell %d. ix = %d, iy = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n",
-	   c, ix, iy, X_c, Y_c, Z_c);
-    fflush(stderr);
-#endif
-
     current->X_c = X_c;
     current->Y_c = Y_c;
     current->Z_c = Z_c;
@@ -275,23 +249,19 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
     BinU1[c][ix][iy] += Z_c;
     *current2 = Z_c * Z_c;
     BinU2[c][ix][iy] += *current2++;
-    /*++mycount;*/
-    ++mycount;  /* Temporarily, increment mycount during the addition of boundary points */
-
-    /* This is currently wrong, because I am temporarily not incrementing mycount
-       during the addition of boundary points.*/
-#if DEBUG >= 1
-    if (mycount > NODE_POINTS_MAX) {
-	fprintf(stderr, "NODE_POINTS_MAX exceeded. Exiting.\n");
-	fflush(stderr);
-	exit(-1);
-    }
-#endif
 }
 
 void BoundaryPointsAdd() {
     int32_t i;
     int c;
+
+#if DEBUG >= 1
+    if (NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y) + mycount > NODE_POINTS_MAX) {
+	fprintf(stderr, "NODE_POINTS_MAX going to be exceeded. Exiting.\n");
+	fflush(stderr);
+	exit(-1);
+    }
+#endif
 
     /* This should be multithreaded */
     for (c = 0; c < NUM_CELLS; ++c) {
@@ -299,11 +269,6 @@ void BoundaryPointsAdd() {
 	Y_c = CellMin[c].Y_c;
 	AddPoint2(c, 0, 0);
 	Zinit[c][0] = Z_c;
-#if DEBUG >= 4
-	fprintf(stderr, "Lower left corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
-	fprintf(stderr, "Zinit[%d,0] = %lg\n", c, Z_c);
-	fflush(stderr);
-#endif
 	X_c += 2 * Xint_bin;
 	for (i = 1; i < NUM_BINS_X - 2; i += 2) {
 	    AddPoint2(c, i, 0);
@@ -313,11 +278,6 @@ void BoundaryPointsAdd() {
 	X_c = CellMax[c].X_c;
 	AddPoint2(c, NUM_BINS_X - 1, 0);
 	Zinit[c][1] = Z_c;
-#if DEBUG >= 4
-	fprintf(stderr, "Lower right corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
-	fprintf(stderr, "Zinit[%d,1] = %lg\n", c, Z_c);
-	fflush(stderr);
-#endif
 	Y_c += 2 * Yint_bin;
 	for (i = 1; i < NUM_BINS_Y - 2; i += 2) {
 	    AddPoint2(c, NUM_BINS_X - 1, i);
@@ -328,11 +288,6 @@ void BoundaryPointsAdd() {
 	Y_c = CellMax[c].Y_c;
 	AddPoint2(c, NUM_BINS_X - 1, NUM_BINS_Y - 1);
 	Zinit[c][3] = Z_c;
-#if DEBUG >= 4
-	fprintf(stderr, "Upper right corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
-	fprintf(stderr, "Zinit[%d,3] = %lg\n", c, Z_c);
-	fflush(stderr);
-#endif
 	X_c -= 2 * Xint_bin;
 	for (i = NUM_BINS_X - 2; i > 1; i -= 2) {
 	    AddPoint2(c, i, NUM_BINS_Y - 1);
@@ -342,11 +297,6 @@ void BoundaryPointsAdd() {
 	X_c = CellMin[c].X_c;
 	AddPoint2(c, 0, NUM_BINS_Y - 1);
 	Zinit[c][2] = Z_c;
-#if DEBUG >= 4
-	fprintf(stderr, "Upper left corner of cell %d is (%lg, %lg, %lg)\n", c, X_c, Y_c, Z_c);
-	fprintf(stderr, "Zinit[%d,2] = %lg\n", c, Z_c);
-	fflush(stderr);
-#endif
 	Y_c -= 2 * Yint_bin;
 	for (i = NUM_BINS_Y - 2; i > 1; i -= 2) {
 	    AddPoint2(c, 0, i);
