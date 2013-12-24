@@ -438,7 +438,7 @@ void processBin(int cell, INT ix, INT iy) {
             }
         }
 
-#if DEBUG >=1
+#if DEBUG >=5
 	fprintf(stderr, "\n--------------TriVertex after adding %lg %lg %lg-------------\n", p->X_c, p->Y_c, p->Z_c);
 	for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
 	    for(dbugj = 0; dbugj < 3; dbugj++)
