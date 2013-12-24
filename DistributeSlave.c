@@ -13,8 +13,14 @@
 
 void Receive(int sd, void *buffer, size_t len) {
     ssize_t ret;
-    ret = recv(sd, buffer, len, 0);
-    if (ret != len) perror("recv()");
+    ret = recv(sd, buffer, len, MSG_WAITALL);
+    if (ret != len) {
+#if DEBUG >= 1
+	fprintf(stderr, "ret = %d, len = %d\n", ret, len);
+	fflush(stderr);
+#endif
+	perror("recv()");
+    }
 }
 
 void CreateMinMax() {
@@ -58,6 +64,20 @@ void AddPoint() {
     current->X_c = X_c;
     current->Y_c = Y_c;
     current->Z_c = Z_c;
+
+/*#if DEBUG >= 1
+    if (X_c < MinX || X_c > MaxX) {
+	fprintf(stderr, "X_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n", Z_c, MinZ, MaxZ);
+    }
+    if (Y_c < MinY || Y_c > MaxY) {
+
+    }
+    if (Z_c < MinZ || Z_c > MaxZ) {
+
+    }
+#endif*/
 
     ix = lround(floor((X_c - NodeMin.X_c) / Xint_cell));
     iy = lround(floor((Y_c - NodeMin.Y_c) / Yint_cell));
