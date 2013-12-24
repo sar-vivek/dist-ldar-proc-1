@@ -13,7 +13,10 @@
 #include "DistributeSlave.h"
 #include "MergeMaster.h"
 
+#if DEBUG >= 1
 FILE *view_out;
+#endif
+
 void MergeReceive() {
 
     uint32_t t;
@@ -22,7 +25,7 @@ void MergeReceive() {
     int ret;
     int readsock;
     int socketcount = NUM_NODES - 1;
-#if DEBUG >=1 
+#if DEBUG >= 1 
     INT dbugi;
     int dbugj;
 #endif
@@ -56,10 +59,12 @@ void MergeReceive() {
 		c = *((int *) Y_b);
 		Receive(readsock, X_b, XYZ_SIZE);
 		if (*((int32_t *) X_b) == 0 && *((int32_t *) Y_b) == 0 && *((int32_t *) Z_b) == 0) {
-		    if (epoll_ctl(polldesc, EPOLL_CTL_DEL, msock[i], &msockevents[i]) == -1) perror("epoll_ctl()");
-		    if (close(msock[i]) == -1) perror("close()");
+		    if (epoll_ctl(polldesc, EPOLL_CTL_DEL, readsock, &msockevents[NodeSockIndex[readsock]]) == -1) {
+			perror("epoll_ctl()");
+		    }
+		    if (close(readsock) == -1) perror("close()");
 #if DEBUG >= 1
-		    printf("Socket %d closed.\n", msock[i]);
+		    printf("Socket %d closed.\n", readsock);
 		    fflush(stdout);
 #endif
 		    --socketcount;
@@ -85,34 +90,18 @@ void MergeReceive() {
 
 /*#if DEBUG >= 5
     fprintf(stderr, "\n--------------TriVertex in the MERGE------------\n");
-    for(c = 0; c < NUM_CELLS; ++c){
-        for(dbugi = 0; dbugi <= NumTri[c]; dbugi++){
-	   for(dbugj = 0; dbugj < 3; dbugj++)
-		fprintf(stderr, "%lg %lg %lg\t", TriVertex[c][dbugi][dbugj]->X_c, TriVertex[c][dbugi][dbugj]->Y_c, TriVertex[c][dbugi][dbugj]->Z_c);
+    for (c = 0; c < NUM_CELLS; ++c) {
+        for (dbugi = 0; dbugi <= NumTri[c]; dbugi++) {
+	    for (dbugj = 0; dbugj < 3; dbugj++)
+		fprintf(stderr, "%lg %lg %lg\t", TriVertex[c][dbugi][dbugj]->X_c,
+			TriVertex[c][dbugi][dbugj]->Y_c, TriVertex[c][dbugi][dbugj]->Z_c);
 	    fprintf(stderr,"\n");
 	}
         fflush(stderr);
     }
 #endif*/
 
-/*#if DEBUG >= 5
-    for (c = 0; c < NUM_CELLS; ++c) {
-	for (t = 0; t <= NumTri[c]; ++t) {
-	    fprintf(stderr, "%2d %2d %10u | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
-		    TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c);
-	    fflush(stderr);
-	    fprintf(stderr, "%lg %lg %lg | ", TriVertex[c][t][1]->X_c,
-		    TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c);
-	    fflush(stderr);
-	    fprintf(stderr, "%lg %lg %lg\n", TriVertex[c][t][2]->X_c,
-		    TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
-	    fflush(stderr);
-	}
-    }
-    fflush(stderr);
-#endif*/
-
-#if DEBUG >=1
+#if DEBUG >= 2
     view_out = fopen("view.out", "w");
     if(view_out == NULL){
 	perror("view_out open");
@@ -128,7 +117,7 @@ void MergeReceive() {
 		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
 	    fprintf(proc_file_out, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
-#if DEBUG >= 1 
+#if DEBUG >= 2
 	    fflush(proc_file_out);
 	    fprintf(view_out, "A%d%d%u = (%lg, %lg);\n", NodeID, c, t, TriVertex[c][t][0]->X_c,
 		    TriVertex[c][t][0]->Y_c);
@@ -138,7 +127,6 @@ void MergeReceive() {
 		    TriVertex[c][t][2]->Y_c);
 	    fprintf(view_out, "Polygon[A%d%d%u, B%d%d%u, C%d%d%u];\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
 	    fprintf(view_out, "Circle[A%d%d%u, B%d%d%u, C%d%d%u];\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
-	//    fflush(view_out);
 #endif
 	}
     }
@@ -146,15 +134,8 @@ void MergeReceive() {
 
     if (fclose(proc_file_out)) perror("proc_file_out close");
 
-#if DEBUG >= 1
+#if DEBUG >= 2
     if (fclose(view_out)) perror("view_out close");
 #endif
-
-/*#if DEBUG >= 3
-    for (i = 0; i < mycount; ++i) {
-	fprintf(stderr, "(%4d, %4d, %4d)\n", lround((PntTbl[i].X_c - Xoffset) / Xscale),
-		lround((PntTbl[i].Y_c - Yoffset) / Yscale), lround((PntTbl[i].Z_c - Zoffset) / Zscale));
-    }
-#endif*/
 
 }
