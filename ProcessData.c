@@ -128,7 +128,7 @@ void *ProcessData(void *workerID) {
 	    }
 #endif
 
-	    if (u2 < u1 * u1 + VAR_THRESHOLD) {
+	    if (n > 1 && u2 < u1 * u1 + VAR_THRESHOLD) {
 		node = BinTbl[c][ix][iy];
 		while (node != NULL) {
 		    *(FiltTbl + (node - PntTbl)) = 1;
