@@ -105,12 +105,6 @@ void DistributeSend() {
 
 	i = NUM_NODES_X * iy + ix;
 
-#if DEBUG >= 1
-	if (count % 1000 == 637) {
-	    printf("i=%d ", i);
-	}
-#endif
-
 	if (i == 0) {
 	    AddPoint();
 	} else {
