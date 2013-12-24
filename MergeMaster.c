@@ -49,11 +49,6 @@ void MergeReceive() {
 	    ret = epoll_wait(polldesc, newevents, NUM_NODES - 1, -1);
 	    if (ret == -1) perror("epoll_wait()");
 
-#if DEBUG >= 1
-	    printf("Received %d events\n", ret);
-	    fflush(stdout);
-#endif
-
 	    for (i = 0; i < ret; ++i) {
 		readsock = newevents[i].data.fd;
 		Receive(readsock, X_b, XYZ_SIZE);
