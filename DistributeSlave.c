@@ -65,7 +65,7 @@ void AddPoint() {
     current->Y_c = Y_c;
     current->Z_c = Z_c;
 
-#if DEBUG >= 1
+#if DEBUG >= 1 
     if (X_c < MinX || X_c > MaxX) {
 	fprintf(stderr, "\nX_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
 	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
@@ -258,7 +258,7 @@ void AddPoint2(int c, int32_t ix, int32_t iy) {
 
     Z_c /= cnt;
 
-#if DEBUG >= 1
+#if DEBUG >=3 
     fprintf(stderr, "Adding a point in cell %d. ix = %d, iy = %d, X_c = %lg, Y_c = %lg, Z_c = %lg\n",
 	   c, ix, iy, X_c, Y_c, Z_c);
     fflush(stderr);
