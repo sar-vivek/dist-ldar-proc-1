@@ -106,7 +106,7 @@ void DistributeSend() {
 	i = NUM_NODES_X * iy + ix;
 
 #if DEBUG >= 1
-	if (count % 1000000 == 478593) {
+	if (count % 1000 == 637) {
 	    printf("i=%d ", i);
 	}
 #endif
@@ -116,9 +116,9 @@ void DistributeSend() {
 	} else {
 #if DEBUG >= 1
 	    if (NUM_NODES == 1 || i < 0 || i >= NUM_NODES) {
-		printf("We shouldn't be here. i = %d, X_r = %d, Y_r = %d\n",
+		fprintf(stderr, "We shouldn't be here. i = %d, X_r = %d, Y_r = %d\n",
 			i, *((int32_t *) X_b), *((int32_t *) Y_b));
-		fflush(stdout);
+		fflush(stderr);
 	    }
 #endif
 	    Send(msock[i], X_b, XYZ_SIZE);
