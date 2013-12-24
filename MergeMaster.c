@@ -88,7 +88,7 @@ void MergeReceive() {
 	free(newevents);
     }
 
-#if DEBUG >= 1
+/*#if DEBUG >= 5
     fprintf(stderr, "\n--------------TriVertex in the MERGE------------\n");
     for(c = 0; c < NUM_CELLS; ++c){
         for(dbugi = 0; dbugi <= NumTri[c]; dbugi++){
@@ -98,9 +98,9 @@ void MergeReceive() {
 	}
         fflush(stderr);
     }
-#endif
+#endif*/
 
-#if DEBUG >= 5
+/*#if DEBUG >= 5
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
 	    fprintf(stderr, "%2d %2d %10u | %lg %lg %lg | ", NodeID, c, t, TriVertex[c][t][0]->X_c,
@@ -115,7 +115,7 @@ void MergeReceive() {
 	}
     }
     fflush(stderr);
-#endif
+#endif*/
 
 #if DEBUG >=1
     view_out = fopen("view.out", "w");
