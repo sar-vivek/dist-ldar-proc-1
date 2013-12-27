@@ -108,7 +108,7 @@ double ComputeLocalMSE() {
 		diff = Z_c - Z_inter;
 		mse += diff * diff;
 
-#if DEBUG >= 1
+#if DEBUG >= 2
 		printf("Point = (%lg,%lg,%lg) : Triangle = (%lg,%lg,%lg) , (%lg,%lg,%lg) , (%lg,%lg,%lg)\n",
 		       X_c, Y_c, Z_c, TriVertex[c][t][0]->X_c, TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c,
 		       TriVertex[c][t][1]->X_c, TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c,
