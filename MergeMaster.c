@@ -77,11 +77,11 @@ void MergeReceive() {
 
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
-	    fprintf(proc_file_out, "%2d %2d %10u | %4d %4d %4d | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
+	    fprintf(proc_file_out, "%2d %2d %10u | %4ld %4ld %4ld | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale));
-	    fprintf(proc_file_out, "%4d %4d %4d | ", lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale),
+	    fprintf(proc_file_out, "%4ld %4ld %4ld | ", lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
-	    fprintf(proc_file_out, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
+	    fprintf(proc_file_out, "%4ld %4ld %4ld\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
 	}
     }
