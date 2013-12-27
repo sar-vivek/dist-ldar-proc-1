@@ -66,46 +66,56 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                 if (d1x < DZERO && d1x > -DZERO && d1y < DZERO && d1y > -DZERO) {
                     *bfp = i;
                     *dfp = i;
+
 #if DEBUG >= 2
                     fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v1x, v1y);
                     fflush(stderr);
 #endif
+
                     return t;
                 }
                 if (d2x < DZERO && d2x > -DZERO && d2y < DZERO && d2y > -DZERO) {
                     *bfp = (i + 1) % 3;
                     *dfp = *bfp;
+
 #if DEBUG >= 2
                     fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v2x, v2y);
                     fflush(stderr);
 #endif
+
                     return t;
                 }
-                if (v1x < px && px < v2x || v1x > px && px > v2x) {
+                if ((v1x < px && px < v2x) || (v1x > px && px > v2x)) {
                     *bfp = i;
                     return t;
                 }
                 if (v1x == v2x) {
-                    if (v1y < py && py < v2y || v1y > py && py > v2y) {
+                    if ((v1y < py && py < v2y) || (v1y > py && py > v2y)) {
                         *bfp = i;
                         return t;
                     }
                 }
+
 #if DEBUG >= 2
 		fprintf(stderr, "Not returning.\n");
 		fflush(stderr);
 #endif
+
             } else if (det > 0) {
+
 #if DEBUG >= 3 
                 fprintf(stderr, "det > 0; t = %u\n", t);
                 fflush(stderr);
 #endif
+
                 t = TriEdge[cell][t][i];
                 found = 0;
+
 #if DEBUG >= 3
 		fprintf(stderr, "Breaking now. t = %u\n", t);
 		fflush(stderr);
 #endif
+
                 break;
             } else found = 1;
         }

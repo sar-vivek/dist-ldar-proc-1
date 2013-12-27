@@ -15,10 +15,8 @@
 
 void MergeSend() {
 
-    ssize_t ret;
     uint32_t t;
     int c;
-    int i;
 
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {

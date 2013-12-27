@@ -63,7 +63,7 @@ void *ProcessData(void *workerID) {
     c = *((int *) workerID);
 
 #if DEBUG >= 1
-    printf("Hello from thread 0x%08X\n", pthread_self());
+    printf("Hello from thread 0x%08X\n", (unsigned int) pthread_self());
     fflush(stdout);
 #endif
 

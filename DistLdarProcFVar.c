@@ -10,6 +10,7 @@
 #include "LdarReader.h"
 #include "DistLdarProcFVar.h"
 #include "Triangulate.h"
+#include "RMSECalc.h"
 #include "ProcessData.h"
 #include "MergeSlave.h"
 #include "MergeMaster.h"
@@ -103,7 +104,7 @@ int main(int argc, char *argv[]) {
     int ip3;
     int ip4;
 
-    if (NUM_NODES == 1 && argc != 2 || NUM_NODES != 1 && (argc < 3 || argc > 4)) {
+    if ((NUM_NODES == 1 && argc != 2) || (NUM_NODES != 1 && (argc < 3 || argc > 4))) {
 	fprintf(stderr, "Usage (one node)......: %s INFILE\n", argv[0]);
 	fprintf(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE]\n", argv[0]);
 	fflush(stderr);

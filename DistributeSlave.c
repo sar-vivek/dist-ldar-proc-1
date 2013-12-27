@@ -16,7 +16,7 @@ void Receive(int sd, void *buffer, size_t len) {
     ret = recv(sd, buffer, len, MSG_WAITALL);
     if (ret != len) {
 #if DEBUG >= 1
-	fprintf(stderr, "ret = %d, len = %d\n", ret, len);
+	fprintf(stderr, "ret = %ld, len = %lu\n", ret, len);
 	fflush(stderr);
 #endif
 	perror("recv()");
@@ -277,7 +277,7 @@ void AddPoint() {
     iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
 #if DEBUG >= 1
     if (ix < 0 || iy < 0 || ix > NUM_BINS_X || iy > NUM_BINS_Y) {
-	fprintf(stderr, "Error: ix = %u, iy = %u out of bounds\n");
+	fprintf(stderr, "Error: ix = %u, iy = %u out of bounds\n", ix, iy);
 	fflush(stderr);
     }
 #endif

@@ -9,6 +9,8 @@
 #include "DLPstd.h"
 #include "LdarReader.h"
 #include "DistLdarProcFVar.h"
+#include "DistributeMaster.h"
+#include "DistributeSlave.h"
 #include "Triangulate.h"
 #include "RMSECalc.h"
 
@@ -53,7 +55,6 @@ double ComputeLocalMSE() {
     int bflag;
     int c;
     int dflag;
-    int i;
     int r;
     int ri;
     int rmax;
@@ -87,10 +88,9 @@ double ComputeLocalMSE() {
 		if (ix == NUM_CELLS_X) --ix;
 		if (iy == NUM_CELLS_Y) --iy;
 		c = NUM_CELLS_X * iy + ix;
+		bflag = -1;
+		dflag = -1;
 		t = triLoc(c, PntTbl + ri, &bflag, &dflag);
-
-		/* check bflag and dflag here*/
-
 		diff = Z_c - RMSEFindZ(TriVertex[c][t][0], TriVertex[c][t][1], TriVertex[c][t][2], PntTbl + ri);
 		mse += diff * diff;
 	    }
