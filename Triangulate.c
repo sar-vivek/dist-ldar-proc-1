@@ -237,7 +237,7 @@ void processBin(int cell, INT ix, INT iy) {
     p = BinTbl[cell][ix][iy];
 
 #if DEBUG >= 2 
-    fprintf(stderr, "Working on adding point (%lg,%lg,%lg).\n", p->X_c, p->Y_c, p->Z_c);
+    fprintf(stderr, "Working on adding point (%lg,%lg,%lg)\n", p->X_c, p->Y_c, p->Z_c);
     fflush(stderr);
 #endif
     while (p != NULL) {
