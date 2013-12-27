@@ -13,10 +13,6 @@
 #include "DistributeSlave.h"
 #include "MergeMaster.h"
 
-#if DEBUG >= 1
-FILE *view_out;
-#endif
-
 void MergeReceive() {
 
     uint32_t t;
@@ -25,10 +21,6 @@ void MergeReceive() {
     int ret;
     int readsock;
     int socketcount = NUM_NODES - 1;
-#if DEBUG >= 1 
-    INT dbugi;
-    int dbugj;
-#endif
 
     if ((proc_file_out = fopen("processed.out", "w")) == NULL) {
 	fprintf(stderr, "Could not open file %s for writing. Exiting.\n", "processed.out");
@@ -58,15 +50,10 @@ void MergeReceive() {
 		t = *((uint32_t *) X_b);
 		c = *((int *) Y_b);
 		Receive(readsock, X_b, XYZ_SIZE);
-		if (*((int32_t *) X_b) == 0 && *((int32_t *) Y_b) == 0 && *((int32_t *) Z_b) == 0) {
+		if (t == 0 && c == 0 && *((int32_t *) X_b) == 0 && *((int32_t *) Y_b) == 0 && *((int32_t *) Z_b) == 0) {
 		    if (epoll_ctl(polldesc, EPOLL_CTL_DEL, readsock, &msockevents[NodeSockIndex[readsock]]) == -1) {
 			perror("epoll_ctl()");
 		    }
-		    if (close(readsock) == -1) perror("close()");
-#if DEBUG >= 1
-		    printf("Socket %d closed.\n", readsock);
-		    fflush(stdout);
-#endif
 		    --socketcount;
 		    continue;
 		}
@@ -88,27 +75,6 @@ void MergeReceive() {
 	free(newevents);
     }
 
-/*#if DEBUG >= 5
-    fprintf(stderr, "\n--------------TriVertex in the MERGE------------\n");
-    for (c = 0; c < NUM_CELLS; ++c) {
-        for (dbugi = 0; dbugi <= NumTri[c]; dbugi++) {
-	    for (dbugj = 0; dbugj < 3; dbugj++)
-		fprintf(stderr, "%lg %lg %lg\t", TriVertex[c][dbugi][dbugj]->X_c,
-			TriVertex[c][dbugi][dbugj]->Y_c, TriVertex[c][dbugi][dbugj]->Z_c);
-	    fprintf(stderr,"\n");
-	}
-        fflush(stderr);
-    }
-#endif*/
-
-#if DEBUG >= 2
-    view_out = fopen("view.out", "w");
-    if(view_out == NULL){
-	perror("view_out open");
-	exit(-1);
-    }
-#endif
-
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
 	    fprintf(proc_file_out, "%2d %2d %10u | %4d %4d %4d | ", NodeID, c, t, lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale),
@@ -117,25 +83,10 @@ void MergeReceive() {
 		    lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale));
 	    fprintf(proc_file_out, "%4d %4d %4d\n", lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale),
 		    lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale), lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale));
-#if DEBUG >= 2
-	    fflush(proc_file_out);
-	    fprintf(view_out, "A%d%d%u = (%lg, %lg);\n", NodeID, c, t, TriVertex[c][t][0]->X_c,
-		    TriVertex[c][t][0]->Y_c);
-	    fprintf(view_out, "B%d%d%u = (%lg, %lg);\n", NodeID, c, t, TriVertex[c][t][1]->X_c,
-		    TriVertex[c][t][1]->Y_c);
-	    fprintf(view_out, "C%d%d%u = (%lg, %lg);\n", NodeID, c, t, TriVertex[c][t][2]->X_c,
-		    TriVertex[c][t][2]->Y_c);
-	    fprintf(view_out, "Polygon[A%d%d%u, B%d%d%u, C%d%d%u];\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
-	    fprintf(view_out, "Circle[A%d%d%u, B%d%d%u, C%d%d%u];\n", NodeID, c, t,NodeID, c, t,NodeID, c, t);
-#endif
 	}
     }
     fflush(proc_file_out);
 
     if (fclose(proc_file_out)) perror("proc_file_out close");
-
-#if DEBUG >= 2
-    if (fclose(view_out)) perror("view_out close");
-#endif
 
 }
