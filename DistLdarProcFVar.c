@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
     assert(NUM_BINS_X % 2 == 0);
     assert(NUM_BINS_Y % 2 == 0);
     assert(NUM_NODES >= 1);
-    assert(NUM_NODES % 1 == NUM_NODES);
+    assert(NUM_NODES % 1 == 0);
     assert(NUM_NODES_X * NUM_NODES_Y == NUM_NODES);
     assert(NUM_CELLS_X * NUM_CELLS_Y == NUM_CELLS);
     assert(NUM_WORKERS == NUM_CELLS - 1);
