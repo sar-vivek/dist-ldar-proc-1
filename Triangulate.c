@@ -38,18 +38,6 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     int found;
     int i;
 
-#if DEBUG >= 4
-    assert(sizeof (double) == 8);
-    assert(sizeof (uint64_t) == 8);
-    uint8_t *x0 = (uint8_t *) &px;
-    uint8_t *x1 = (uint8_t *) &v1x;
-    uint8_t *x2 = (uint8_t *) &v2x;
-    uint8_t *y0 = (uint8_t *) &py;
-    uint8_t *y1 = (uint8_t *) &v1y;
-    uint8_t *y2 = (uint8_t *) &v2y;
-    int j;
-#endif
-
     px = point->X_c;
     py = point->Y_c;
     t = NumTri[cell];
@@ -228,10 +216,6 @@ void processBin(int cell, INT ix, INT iy) {
     INT c;
     INT l;
     INT r;
-#if DEBUG >= 1
-    INT dbugi;
-    int dbugj;
-#endif
     int bflag;
     int dflag;
     int erl;
@@ -385,11 +369,6 @@ void processBin(int cell, INT ix, INT iy) {
 	    v2 = TriVertex[cell][r][era];
 	    v3 = TriVertex[cell][r][erb];
 
-#if DEBUG >= 3
-	    fprintf(stderr, "Processing triangle %u from stack.\n", l);
-	    fflush(stderr);
-#endif
-
 	    if (swap(cell, v1, v2, v3, p)) {
 		/*p is in circle of triangle r*/
 		a = TriEdge[cell][r][era];
@@ -419,25 +398,14 @@ void processBin(int cell, INT ix, INT iy) {
 }
 
 void Delaunay(int cell) {
-    double DMAX;  /*pseudo-diagonal distance of a cell*/
-    double xcen;
-    double ycen;
     INT numt;
-    INT nt;
     INT ix;
     INT iy;
-    INT tstart;
-    INT tstop;
-#if DEBUG >=1
+#if DEBUG >=3
     INT dbugi;
     int dbugj;
 #endif
     int i;
-    int j;
-    int remove;
-
-    DMAX = CellMax[cell].X_c - CellMin[cell].X_c;
-    DMAX = DMAX > CellMax[cell].Y_c - CellMin[cell].Y_c ? DMAX : CellMax[cell].Y_c - CellMin[cell].Y_c;
 
     numt = 2 * CellCnt[cell] + 1;
     topstk[cell] = BOUNDARY;
@@ -493,9 +461,7 @@ void Delaunay(int cell) {
 
 #if DEBUG >= 1
     fprintf(stdout,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
-    if(NumTri[cell]==numt)
-	fprintf(stderr,"Equal\n");
-    fflush(stderr);
+    fflush(stdout);
 #endif
 #if DEBUG >=3
     fprintf(stderr, "\n--------------TriVertex in the END------------\n");

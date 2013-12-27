@@ -13,7 +13,7 @@
 COMPILER=gcc
 LIBS=-lpthread -lm
 OPTM=-O1
-OPTS=-m64 -fPIC -g
+OPTS=-m64 -fPIC -g -Wall
 OBJ=DistLdarProcFVar.o DistributeMaster.o DistributeSlave.o LdarReader.o MergeMaster.o MergeSlave.o ProcessData.o Triangle.o
 
 DLP:
