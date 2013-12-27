@@ -91,6 +91,18 @@ double ComputeLocalMSE() {
 		bflag = -1;
 		dflag = -1;
 		t = triLoc(c, PntTbl + ri, &bflag, &dflag);
+
+#if DEBUG >= 1
+		if (dflag > -1) {
+		    fprintf(stderr, "\nThat's interesting. Point (%lg,%lg,%lg) was filtered out ",
+			    X_c, Y_c, Z_c);
+		    fprintf(stderr, "but is within the error tolerance of point (%lg,%lg,%lg).\n\n",
+			    TriVertex[c][t][dflag]->X_c, TriVertex[c][t][dflag]->Y_c,
+			    TriVertex[c][t][dflag]->Z_c);
+		    fflush(stderr);
+		}
+#endif
+
 		diff = Z_c - RMSEFindZ(TriVertex[c][t][0], TriVertex[c][t][1], TriVertex[c][t][2], PntTbl + ri);
 		mse += diff * diff;
 	    }
