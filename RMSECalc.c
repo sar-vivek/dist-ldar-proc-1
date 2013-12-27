@@ -41,12 +41,13 @@ double RMSEFindZ(LidarPointNode_t *A, LidarPointNode_t *B, LidarPointNode_t *C, 
 
     x3 = (x2 * (b1 * c3 - b3 * c1) - x1 * (b2 * c3 - b3 * c2)) / (b1 * c2 - b2 * c1);
 
-    return x3;
+    return (x3 + A->Z_c);
 }
 
 double ComputeLocalMSE() {
 
     double mse;
+    double Z_inter;
     double diff;
     time_t t_r;
     uint32_t ix;
@@ -103,8 +104,17 @@ double ComputeLocalMSE() {
 		}
 #endif
 
-		diff = Z_c - RMSEFindZ(TriVertex[c][t][0], TriVertex[c][t][1], TriVertex[c][t][2], PntTbl + ri);
+		Z_inter = RMSEFindZ(TriVertex[c][t][0], TriVertex[c][t][1], TriVertex[c][t][2], PntTbl + ri);
+		diff = Z_c - Z_inter;
 		mse += diff * diff;
+
+#if DEBUG >= 1
+		printf("Point = (%lg,%lg,%lg) : Triangle = (%lg,%lg,%lg) , (%lg,%lg,%lg) , (%lg,%lg,%lg)\n",
+		       X_c, Y_c, Z_c, TriVertex[c][t][0]->X_c, TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c,
+		       TriVertex[c][t][1]->X_c, TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c,
+		       TriVertex[c][t][2]->X_c, TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
+		printf("Z_inter = %lg, diff = %lg, mse (sum) = %lg\n\n", Z_inter, diff, mse);
+#endif
 	    }
 
 	    ++vcnt;
@@ -112,6 +122,10 @@ double ComputeLocalMSE() {
     }
 
     mse /= VERIFY_POINTS_PER_NODE;
+
+#if DEBUG >= 1
+    printf("\nmse = %lg\n\n", mse);
+#endif
 
     return mse;
 }
@@ -147,7 +161,7 @@ void RMSECalcMaster() {
     mse[0] /= NUM_NODES;
     rmse = sqrt(mse[0]);
 
-    printf("\nRMSE = %lg.\n\n", rmse);
+    printf("\nRMSE = %lg\n\n", rmse);
     fflush(stdout);
 }
 
