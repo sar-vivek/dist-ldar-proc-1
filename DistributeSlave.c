@@ -53,73 +53,6 @@ void CreateMinMax() {
     }
 }
 
-void AddPoint() {
-    uint32_t ix;
-    uint32_t iy;
-    int c;
-
-    X_c = *((int32_t *) X_b) * Xscale + Xoffset;
-    Y_c = *((int32_t *) Y_b) * Yscale + Yoffset;
-    Z_c = *((int32_t *) Z_b) * Zscale + Zoffset;
-    current->X_c = X_c;
-    current->Y_c = Y_c;
-    current->Z_c = Z_c;
-
-#if DEBUG >= 1 
-    if (X_c < MinX || X_c > MaxX) {
-	fprintf(stderr, "\nX_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
-	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
-	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
-    }
-    if (Y_c < MinY || Y_c > MaxY) {
-	fprintf(stderr, "\nY_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
-	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
-	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
-    }
-    if (Z_c < MinZ || Z_c > MaxZ) {
-	fprintf(stderr, "\nZ_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
-	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
-	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
-    }
-    fflush(stderr);
-#endif
-
-    ix = lround(floor((X_c - NodeMin.X_c) / Xint_cell));
-    iy = lround(floor((Y_c - NodeMin.Y_c) / Yint_cell));
-    if (ix == NUM_CELLS_X) --ix;
-    if (iy == NUM_CELLS_Y) --iy;
-    c = NUM_CELLS_X * iy + ix;
-
-    ix = lround(floor((X_c - CellMin[c].X_c) / Xint_bin));
-    iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
-#if DEBUG >= 1
-    if (ix < 0 || iy < 0 || ix > NUM_BINS_X || iy > NUM_BINS_Y) {
-	fprintf(stderr, "Error: ix = %u, iy = %u out of bounds\n");
-	fflush(stderr);
-    }
-#endif
-    if (ix == NUM_BINS_X) --ix;
-    if (iy == NUM_BINS_Y) --iy;
-
-    current->next = BinTbl[c][ix][iy];
-    BinTbl[c][ix][iy] = current++;
-
-    BinCnt[c][ix][iy]++;
-    CellCnt[c]++;
-    BinU1[c][ix][iy] += Z_c;
-    *current2 = Z_c * Z_c;
-    BinU2[c][ix][iy] += *current2++;
-    ++mycount;
-
-#if DEBUG >= 1
-    if (mycount > NODE_POINTS_MAX) {
-	fprintf(stderr, "NODE_POINTS_MAX exceeded. Exiting.\n");
-	fflush(stderr);
-	exit(-1);
-    }
-#endif
-}
-
 void AddPoint2(int c, int32_t ix, int32_t iy) {
     LidarPointNode_t *node;
     int32_t ax;
@@ -255,13 +188,11 @@ void BoundaryPointsAdd() {
     int32_t i;
     int c;
 
-#if DEBUG >= 1
     if (NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y) + mycount > NODE_POINTS_MAX) {
 	fprintf(stderr, "NODE_POINTS_MAX going to be exceeded. Exiting.\n");
 	fflush(stderr);
 	exit(-1);
     }
-#endif
 
     /* This should be multithreaded */
     for (c = 0; c < NUM_CELLS; ++c) {
@@ -303,6 +234,71 @@ void BoundaryPointsAdd() {
 	    Y_c -= 2 * Yint_bin;
 	}
     }    
+}
+
+void AddPoint() {
+    uint32_t ix;
+    uint32_t iy;
+    int c;
+
+    X_c = *((int32_t *) X_b) * Xscale + Xoffset;
+    Y_c = *((int32_t *) Y_b) * Yscale + Yoffset;
+    Z_c = *((int32_t *) Z_b) * Zscale + Zoffset;
+    current->X_c = X_c;
+    current->Y_c = Y_c;
+    current->Z_c = Z_c;
+
+#if DEBUG >= 1 
+    if (X_c < MinX || X_c > MaxX) {
+	fprintf(stderr, "\nX_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
+    }
+    if (Y_c < MinY || Y_c > MaxY) {
+	fprintf(stderr, "\nY_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
+    }
+    if (Z_c < MinZ || Z_c > MaxZ) {
+	fprintf(stderr, "\nZ_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
+    }
+    fflush(stderr);
+#endif
+
+    ix = lround(floor((X_c - NodeMin.X_c) / Xint_cell));
+    iy = lround(floor((Y_c - NodeMin.Y_c) / Yint_cell));
+    if (ix == NUM_CELLS_X) --ix;
+    if (iy == NUM_CELLS_Y) --iy;
+    c = NUM_CELLS_X * iy + ix;
+
+    ix = lround(floor((X_c - CellMin[c].X_c) / Xint_bin));
+    iy = lround(floor((Y_c - CellMin[c].Y_c) / Yint_bin));
+#if DEBUG >= 1
+    if (ix < 0 || iy < 0 || ix > NUM_BINS_X || iy > NUM_BINS_Y) {
+	fprintf(stderr, "Error: ix = %u, iy = %u out of bounds\n");
+	fflush(stderr);
+    }
+#endif
+    if (ix == NUM_BINS_X) --ix;
+    if (iy == NUM_BINS_Y) --iy;
+
+    current->next = BinTbl[c][ix][iy];
+    BinTbl[c][ix][iy] = current++;
+
+    BinCnt[c][ix][iy]++;
+    CellCnt[c]++;
+    BinU1[c][ix][iy] += Z_c;
+    *current2 = Z_c * Z_c;
+    BinU2[c][ix][iy] += *current2++;
+    ++mycount;
+
+    if (mycount > NODE_POINTS_MAX) {
+	fprintf(stderr, "NODE_POINTS_MAX exceeded. Exiting.\n");
+	fflush(stderr);
+	exit(-1);
+    }
 }
 
 void DistributeReceive() {

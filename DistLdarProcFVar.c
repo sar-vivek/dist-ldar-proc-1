@@ -116,11 +116,13 @@ int main(int argc, char *argv[]) {
     assert(sizeof (int32_t) == INT32_SIZE);
     assert(sizeof (uint32_t) == UINT32_SIZE);
     assert(sizeof (double) == DOUBLE_SIZE);
+    assert(INT_MAX == 2147483647);
     assert(NUM_BINS_X >= 2);
     assert(NUM_BINS_Y >= 2);
     assert(NUM_BINS_X % 2 == 0);
     assert(NUM_BINS_Y % 2 == 0);
     assert(NUM_NODES >= 1);
+    assert(NUM_NODES % 1 == NUM_NODES);
     assert(NUM_NODES_X * NUM_NODES_Y == NUM_NODES);
     assert(NUM_CELLS_X * NUM_CELLS_Y == NUM_CELLS);
     assert(NUM_WORKERS == NUM_CELLS - 1);
@@ -228,21 +230,32 @@ int main(int argc, char *argv[]) {
     if (NodeID == 0) MergeReceive();
     else MergeSend();
 
-    gettimeofday(&t_end, NULL);
-    t_diff = 1000000 * (t_end.tv_sec - t_start.tv_sec) + t_end.tv_usec - t_start.tv_usec;
-    t_diff /= 1000000;
-    printf("\nTime taken: %lg seconds\n\n", t_diff);
+    if (NodeID == 0) {
+	gettimeofday(&t_end, NULL);
+	t_diff = 1000000 * (t_end.tv_sec - t_start.tv_sec) + t_end.tv_usec - t_start.tv_usec;
+	t_diff /= 1000000;
+	printf("\nTime taken: %lg seconds\n\n", t_diff);
+    }
     fflush(stdout);
 
-/*
     if (NodeID == 0) RMSECalcMaster();
     else RMSECalcSlave();
-*/
 
-    free(PntTbl);
     free(Z2);
     free(FiltTbl);
     free(X_b);
+    for (i = 0; i < NUM_CELLS; ++i) {
+	for (nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
+	    free(TriVertex[i][nt]);
+	}
+	free(TriVertex[i]);
+	for(nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
+	    free(TriEdge[i][nt]);
+	}
+	free(TriEdge[i]);
+	free(estack[i]);
+    }
+    free(PntTbl);
 
     return 0;
 }

@@ -11,9 +11,9 @@
 
 void Receive(int sd, void *buffer, size_t len);
 void CreateMinMax();
-void AddPoint();
 void AddPoint2();
 void BoundaryPointsAdd();
+void AddPoint();
 void DistributeReceive();
 
 #endif

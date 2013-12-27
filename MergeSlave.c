@@ -41,17 +41,11 @@ void MergeSend() {
     }
 
     *((int32_t *) X_b) = 0;
+    *((int *) Y_b) = 0;
+    Send(ssock, X_b, XYZ_SIZE);
+    *((int32_t *) X_b) = 0;
     *((int32_t *) Y_b) = 0;
     *((int32_t *) Z_b) = 0;
     Send(ssock, X_b, XYZ_SIZE);
-    Send(ssock, X_b, XYZ_SIZE);
 
-    while ((ret = recv(ssock, X_b, 1, 0)) != 0) {
-	if (ret == 1) {
-	    fprintf(stderr, "Received byte %X after socket was supposed to close.\n", (int) *((char *) X_b));
-	    fflush(stderr);
-	} else perror("recv()");
-    }
-
-    if (close(ssock) == -1) perror("close()");
 }

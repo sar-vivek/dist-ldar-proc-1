@@ -11,6 +11,7 @@
 
 #include <arpa/inet.h>
 #include <assert.h>
+#include <limits.h>
 #include <math.h>
 #include <netinet/in.h>
 #include <pthread.h>
@@ -25,24 +26,26 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define DEBUG 1 
+#define DEBUG 1
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
 #define NODE_POINTS_MAX 16777216
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 4 
-#define NUM_BINS_Y 4
+#define NUM_BINS_X 1000
+#define NUM_BINS_Y 1000
 
-#define NUM_CELLS 4 
-#define NUM_CELLS_X 2 
-#define NUM_CELLS_Y 2
+#define NUM_CELLS 8
+#define NUM_CELLS_X 2
+#define NUM_CELLS_Y 4
 
-#define NUM_NODES 1
-#define NUM_NODES_X 1
+#define NUM_NODES 3
+#define NUM_NODES_X 3
 #define NUM_NODES_Y 1
 
 #define NUM_WORKERS (NUM_CELLS - 1)
+
+#define VERIFY_POINTS_PER_NODE 100
 
 #define POINT_DATA_SKIP 16
 
