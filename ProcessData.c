@@ -103,7 +103,7 @@ void *ProcessData(void *workerID) {
 	    u1 /= n;
 	    u2 /= n;
 
-	    if (n > 1 && u2 < u1 * u1 + VAR_THRESHOLD) {
+	    if (n > 1 && u2 < u1 * u1 + VarThreshold) {
 		node = BinTbl[c][ix][iy];
 		while (node != NULL) {
 		    *(FiltTbl + (node - PntTbl)) = 1;

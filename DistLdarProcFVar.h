@@ -53,6 +53,7 @@ extern double Yint_bin;
 extern double X_c;
 extern double Y_c;
 extern double Z_c;
+extern double VarThreshold;
 
 extern FILE *addrfile;
 extern LidarPointNode_t *PntTbl;

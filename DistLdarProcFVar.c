@@ -61,6 +61,7 @@ double Yint_bin;
 double X_c;
 double Y_c;
 double Z_c;
+double VarThreshold = 0;
 
 FILE *addrfile;
 LidarPointNode_t *PntTbl;
@@ -104,9 +105,9 @@ int main(int argc, char *argv[]) {
     int ip3;
     int ip4;
 
-    if ((NUM_NODES == 1 && argc != 2) || (NUM_NODES != 1 && (argc < 3 || argc > 4))) {
-	fprintf(stderr, "Usage (one node)......: %s INFILE\n", argv[0]);
-	fprintf(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE]\n", argv[0]);
+    if ((NUM_NODES == 1 && (argc < 2 || argc > 3)) || (NUM_NODES != 1 && (argc < 3 || argc > 5))) {
+	fprintf(stderr, "Usage (one node)......: %s INFILE [VAR_THRESHOLD]\n", argv[0]);
+	fprintf(stderr, "Usage (multiple nodes): %s NODE_ID ADDRFILE [INFILE] [VAR_THRESHOLD]\n", argv[0]);
 	fflush(stderr);
 	exit(-1);
     }
@@ -135,7 +136,12 @@ int main(int argc, char *argv[]) {
 
     gettimeofday(&t_start, NULL);
 
-    if (argc == 3 || argc == 4) {
+    if (NUM_NODES == 1) {
+	NodeID = 0;
+
+	if (argc == 3) VarThreshold = strtod(argv[2], NULL);
+	else VarThreshold = VAR_THRESHOLD;
+    } else {
 	assert(NUM_NODES > 1);
 
 	NodeID = (int) strtol(argv[1], NULL, 10);
@@ -145,28 +151,30 @@ int main(int argc, char *argv[]) {
 	    fflush(stderr);
 	    exit(-1);
 	}
-
 	for (i = 0; i < NUM_NODES; ++i) {
 	    fscanf(addrfile, "%d %d.%d.%d.%d", &id, &ip1, &ip2, &ip3, &ip4);
 	    snprintf(ip, 16, "%d.%d.%d.%d", ip1, ip2, ip3, ip4);
 	    strncpy(NodeIPs[id], ip, 16);
 	}
-
 	if (fclose(addrfile)) perror("fclose()");
-    } else {
-	assert(NUM_NODES == 1);
 
-	NodeID = 0;
+	if (NodeID == 0) {
+	    if (argc == 5) VarThreshold = strtod(argv[4], NULL);
+	    else VarThreshold = VAR_THRESHOLD;
+	} else {
+	    if (argc == 4) VarThreshold = strtod(argv[3], NULL);
+	    else VarThreshold = VAR_THRESHOLD;
+	}
     }
 
+#if DEBUG >= 1
+    fprintf(stderr, "\nVarThreshold = %lg\n\n", VarThreshold);
+    fflush(stderr);
+#endif
+
     if (NodeID == 0) {
-	if (argc == 2) {
-	    assert(NUM_NODES == 1);
-	    LasFileInit(argv[1]);
-	} else {
-	    assert(NUM_NODES > 1);
-	    LasFileInit(argv[3]);
-	}
+	if (NUM_NODES == 1) LasFileInit(argv[1]);
+	else LasFileInit(argv[3]);
     }
 
     PntTbl = (LidarPointNode_t *) Malloc(NODE_POINTS_MAX * sizeof (LidarPointNode_t));
