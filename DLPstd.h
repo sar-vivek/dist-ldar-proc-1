@@ -35,9 +35,9 @@
 #define NUM_BINS_X 21000
 #define NUM_BINS_Y 21000
 
-#define NUM_CELLS 8
-#define NUM_CELLS_X 2
-#define NUM_CELLS_Y 4
+#define NUM_CELLS 1 
+#define NUM_CELLS_X 1
+#define NUM_CELLS_Y 1
 
 #define NUM_NODES 8
 #define NUM_NODES_X 4
