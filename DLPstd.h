@@ -29,19 +29,19 @@
 #define DEBUG 1
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
-#define NODE_POINTS_MAX 16777216
+#define NODE_POINTS_MAX 550000000
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 21000
-#define NUM_BINS_Y 21000
+#define NUM_BINS_X 5100
+#define NUM_BINS_Y 5100
 
-#define NUM_CELLS 1 
-#define NUM_CELLS_X 1
-#define NUM_CELLS_Y 1
+#define NUM_CELLS 16
+#define NUM_CELLS_X 4
+#define NUM_CELLS_Y 4
 
-#define NUM_NODES 8
-#define NUM_NODES_X 4
-#define NUM_NODES_Y 2
+#define NUM_NODES 9
+#define NUM_NODES_X 3
+#define NUM_NODES_Y 3
 
 #define NUM_WORKERS (NUM_CELLS - 1)
 
@@ -51,7 +51,7 @@
 
 #define PORT_BASE 57394
 
-#define VAR_THRESHOLD 5
+#define VAR_THRESHOLD 10
 
 #define CHAR_SIZE 1
 #define UCHAR_SIZE 1
