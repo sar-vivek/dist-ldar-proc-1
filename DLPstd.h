@@ -35,12 +35,12 @@
 #define NUM_BINS_X 1000
 #define NUM_BINS_Y 1000
 
-#define NUM_CELLS 8
-#define NUM_CELLS_X 2
-#define NUM_CELLS_Y 4
+#define NUM_CELLS 1 
+#define NUM_CELLS_X 1
+#define NUM_CELLS_Y 1
 
-#define NUM_NODES 3
-#define NUM_NODES_X 3
+#define NUM_NODES 1
+#define NUM_NODES_X 1
 #define NUM_NODES_Y 1
 
 #define NUM_WORKERS (NUM_CELLS - 1)
@@ -51,7 +51,7 @@
 
 #define PORT_BASE 57394
 
-#define VAR_THRESHOLD 0.01
+#define VAR_THRESHOLD 10 
 
 #define CHAR_SIZE 1
 #define UCHAR_SIZE 1
