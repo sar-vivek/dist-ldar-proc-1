@@ -229,16 +229,6 @@ int main(int argc, char *argv[]) {
 	if (estack[i] == NULL) perror("estack[i] = malloc()");
     }
 
-#if DEBUG >= 1
-    mycount2 = 0;
-    for (ix = 0; ix < mycount; ++ix) {
-	if (*(FiltTbl + ix) == 0) ++mycount2;
-    }
-    printf("Original point count for node: %u\n", mycount);
-    printf("Point count after filtering: %u\n", mycount2);
-    fflush(stdout);
-#endif
-
     WorkerIDs[0] = 0;
     for (i = 1; i <= NUM_WORKERS; ++i) {
         WorkerIDs[i] = i;
@@ -249,6 +239,16 @@ int main(int argc, char *argv[]) {
     for (i = 1; i <= NUM_WORKERS; ++i) {
         pthread_join(Workers[i], NULL);
     }
+
+#if DEBUG >= 1
+    mycount2 = 0;
+    for (ix = 0; ix < mycount; ++ix) {
+	if (*(FiltTbl + ix) == 0) ++mycount2;
+    }
+    printf("Original point count for node: %u\n", mycount);
+    printf("Point count after filtering: %u\n", mycount2);
+    fflush(stdout);
+#endif
 
     if (NodeID == 0) MergeReceive();
     else MergeSend();
