@@ -57,8 +57,8 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
 	    d2y = py - v2y;
             det = d1x * (v2y - v1y) - (v2x - v1x) * d1y;
 #if DEBUG >= 3 
-	    fprintf(stderr, "Looking at triangle %u. i = %d, det = %lg\n", t, i, det);
-	    fprintf(stderr, "p = (%lf,%lf), v1 = (%lg,%lg), v2 = (%lg,%lg)\n", px, py, v1x, v1y, v2x, v2y);
+	    fprintf(stderr, "Looking at triangle %u. i = %d, det = %lf\n", t, i, det);
+	    fprintf(stderr, "p = (%lf,%lf), v1 = (%lf,%lf), v2 = (%lf,%lf)\n", px, py, v1x, v1y, v2x, v2y);
 	    fflush(stderr);
 #endif
 
@@ -68,7 +68,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     *dfp = i;
 
 #if DEBUG >= 2
-                    fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v1x, v1y);
+                    fprintf(stderr, "Duplicate points at (%lf,%lf) (%lf,%lf) \n", px, py, v1x, v1y);
                     fflush(stderr);
 #endif
 
@@ -79,7 +79,7 @@ INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
                     *dfp = *bfp;
 
 #if DEBUG >= 2
-                    fprintf(stderr, "Duplicate points at (%lg, %lg) (%lg, %lg) \n", px, py, v2x, v2y);
+                    fprintf(stderr, "Duplicate points at (%lf,%lf) (%lf,%lf) \n", px, py, v2x, v2y);
                     fflush(stderr);
 #endif
 
@@ -237,7 +237,7 @@ void processBin(int cell, INT ix, INT iy) {
     p = BinTbl[cell][ix][iy];
 
 #if DEBUG >= 2 
-    fprintf(stderr, "Working on adding point (%lg,%lg,%lg)\n", p->X_c, p->Y_c, p->Z_c);
+    fprintf(stderr, "Working on adding point (%lf,%lf,%lf)\n", p->X_c, p->Y_c, p->Z_c);
     fflush(stderr);
 #endif
     while (p != NULL) {
@@ -435,7 +435,7 @@ void Delaunay(int cell) {
 #if DEBUG >= 1
     fprintf(stderr, "------------BigSquare------------------- \n"); 
     for (i = 0; i < 4; ++i) {
-	fprintf(stderr, "%lg %lg %lg\n", BigTriangle[cell][i].X_c, BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
+	fprintf(stderr, "%lf %lf %lf\n", BigTriangle[cell][i].X_c, BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
     }
     fprintf(stderr, "-----------------------------------------\n");
     fflush(stderr);
@@ -477,7 +477,7 @@ void Delaunay(int cell) {
     fprintf(stderr, "\n--------------TriVertex in the END------------\n");
     for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
 	for(dbugj = 0; dbugj < 3; dbugj++)
-	    fprintf(stderr, "%4lg %4lg %4lg\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
+	    fprintf(stderr, "%4lf %4lf %4lf\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
 	fprintf(stderr,"\n");
     }
     fflush(stderr);

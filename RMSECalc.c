@@ -95,9 +95,9 @@ double ComputeLocalMSE() {
 
 #if DEBUG >= 1
 		if (dflag > -1) {
-		    fprintf(stderr, "\nThat's interesting. Point (%lg,%lg,%lg) was filtered out ",
+		    fprintf(stderr, "\nThat's interesting. Point (%lf,%lf,%lf) was filtered out ",
 			    X_c, Y_c, Z_c);
-		    fprintf(stderr, "but is within the error tolerance of point (%lg,%lg,%lg).\n\n",
+		    fprintf(stderr, "but is within the error tolerance of point (%lf,%lf,%lf).\n\n",
 			    TriVertex[c][t][dflag]->X_c, TriVertex[c][t][dflag]->Y_c,
 			    TriVertex[c][t][dflag]->Z_c);
 		    fflush(stderr);
@@ -109,11 +109,11 @@ double ComputeLocalMSE() {
 		mse += diff * diff;
 
 #if DEBUG >= 2
-		printf("Point = (%lg,%lg,%lg) : Triangle = (%lg,%lg,%lg) , (%lg,%lg,%lg) , (%lg,%lg,%lg)\n",
+		printf("Point = (%lf,%lf,%lf) : Triangle = (%lf,%lf,%lf) , (%lf,%lf,%lf) , (%lf,%lf,%lf)\n",
 		       X_c, Y_c, Z_c, TriVertex[c][t][0]->X_c, TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c,
 		       TriVertex[c][t][1]->X_c, TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c,
 		       TriVertex[c][t][2]->X_c, TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
-		printf("Z_inter = %lg, diff = %lg, mse (sum) = %lg\n\n", Z_inter, diff, mse);
+		printf("Z_inter = %lf, diff = %lf, mse (sum) = %lf\n\n", Z_inter, diff, mse);
 #endif
 	    }
 
@@ -124,7 +124,7 @@ double ComputeLocalMSE() {
     mse /= VERIFY_POINTS_PER_NODE;
 
 #if DEBUG >= 1
-    printf("\nmse = %lg\n\n", mse);
+    printf("\nmse = %lf\n\n", mse);
 #endif
 
     return mse;
@@ -161,7 +161,7 @@ void RMSECalcMaster() {
     mse[0] /= NUM_NODES;
     rmse = sqrt(mse[0]);
 
-    printf("\nRMSE = %lg\n\n", rmse);
+    printf("\nRMSE = %lf\n\n", rmse);
     fflush(stdout);
 }
 

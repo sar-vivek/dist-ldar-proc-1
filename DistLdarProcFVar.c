@@ -168,7 +168,7 @@ int main(int argc, char *argv[]) {
     }
 
 #if DEBUG >= 1
-    fprintf(stderr, "\nVarThreshold = %lg\n\n", VarThreshold);
+    fprintf(stderr, "\nVarThreshold = %lf\n\n", VarThreshold);
     fflush(stderr);
 #endif
 
@@ -243,7 +243,7 @@ int main(int argc, char *argv[]) {
 	gettimeofday(&t_end, NULL);
 	t_diff = 1000000 * (t_end.tv_sec - t_start.tv_sec) + t_end.tv_usec - t_start.tv_usec;
 	t_diff /= 1000000;
-	printf("\nTime taken: %lg seconds\n\n", t_diff);
+	printf("\nTime taken: %lf seconds\n\n", t_diff);
     }
     fflush(stdout);
 

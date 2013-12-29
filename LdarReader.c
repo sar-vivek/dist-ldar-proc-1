@@ -89,18 +89,18 @@ void LasFileInit(const char *filename) {
 #if DEBUG >= 1
     printf("-------------------------------------\n");
     printf("NumPointRec = %u\n", NumPointRec);
-    printf("Xscale = %lg\n", Xscale);
-    printf("Yscale = %lg\n", Yscale);
-    printf("Zscale = %lg\n", Zscale);
-    printf("Xoffset = %lg\n", Xoffset);
-    printf("Yoffset = %lg\n", Yoffset);
-    printf("Zoffset = %lg\n", Zoffset);
-    printf("MaxX = %lg\n", MaxX);
-    printf("MinX = %lg\n", MinX);
-    printf("MaxY = %lg\n", MaxY);
-    printf("MinY = %lg\n", MinY);
-    printf("MaxZ = %lg\n", MaxZ);
-    printf("MinZ = %lg\n", MinZ);
+    printf("Xscale = %lf\n", Xscale);
+    printf("Yscale = %lf\n", Yscale);
+    printf("Zscale = %lf\n", Zscale);
+    printf("Xoffset = %lf\n", Xoffset);
+    printf("Yoffset = %lf\n", Yoffset);
+    printf("Zoffset = %lf\n", Zoffset);
+    printf("MaxX = %lf\n", MaxX);
+    printf("MinX = %lf\n", MinX);
+    printf("MaxY = %lf\n", MaxY);
+    printf("MinY = %lf\n", MinY);
+    printf("MaxZ = %lf\n", MaxZ);
+    printf("MinZ = %lf\n", MinZ);
     printf("-------------------------------------\n\n");
     fflush(stdout);
 #endif

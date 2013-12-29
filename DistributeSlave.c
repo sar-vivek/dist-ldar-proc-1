@@ -250,19 +250,19 @@ void AddPoint() {
 
 #if DEBUG >= 1 
     if (X_c < MinX || X_c > MaxX) {
-	fprintf(stderr, "\nX_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
-	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
-	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
+	fprintf(stderr, "\nX_c out of range: X_c = %lf, MinX = %lf, MaxX = %lf\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lf, MinY = %lf, MaxY = %lf\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lf, MinZ = %lf, MaxZ = %lf\n\n", Z_c, MinZ, MaxZ);
     }
     if (Y_c < MinY || Y_c > MaxY) {
-	fprintf(stderr, "\nY_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
-	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
-	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
+	fprintf(stderr, "\nY_c out of range: X_c = %lf, MinX = %lf, MaxX = %lf\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lf, MinY = %lf, MaxY = %lf\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lf, MinZ = %lf, MaxZ = %lf\n\n", Z_c, MinZ, MaxZ);
     }
     if (Z_c < MinZ || Z_c > MaxZ) {
-	fprintf(stderr, "\nZ_c out of range: X_c = %lg, MinX = %lg, MaxX = %lg\n", X_c, MinX, MaxX);
-	fprintf(stderr, "                  Y_c = %lg, MinY = %lg, MaxY = %lg\n", Y_c, MinY, MaxY);
-	fprintf(stderr, "                  Z_c = %lg, MinZ = %lg, MaxZ = %lg\n\n", Z_c, MinZ, MaxZ);
+	fprintf(stderr, "\nZ_c out of range: X_c = %lf, MinX = %lf, MaxX = %lf\n", X_c, MinX, MaxX);
+	fprintf(stderr, "                  Y_c = %lf, MinY = %lf, MaxY = %lf\n", Y_c, MinY, MaxY);
+	fprintf(stderr, "                  Z_c = %lf, MinZ = %lf, MaxZ = %lf\n\n", Z_c, MinZ, MaxZ);
     }
     fflush(stderr);
 #endif
@@ -337,18 +337,18 @@ void DistributeReceive() {
 
 #if DEBUG >= 1
     printf("-------------------------------------\n");
-    printf("Xscale = %lg\n", Xscale);
-    printf("Yscale = %lg\n", Yscale);
-    printf("Zscale = %lg\n", Zscale);
-    printf("Xoffset = %lg\n", Xoffset);
-    printf("Yoffset = %lg\n", Yoffset);
-    printf("Zoffset = %lg\n", Zoffset);
-    printf("MaxX = %lg\n", MaxX);
-    printf("MinX = %lg\n", MinX);
-    printf("MaxY = %lg\n", MaxY);
-    printf("MinY = %lg\n", MinY);
-    printf("MaxZ = %lg\n", MaxZ);
-    printf("MinZ = %lg\n", MinZ);
+    printf("Xscale = %lf\n", Xscale);
+    printf("Yscale = %lf\n", Yscale);
+    printf("Zscale = %lf\n", Zscale);
+    printf("Xoffset = %lf\n", Xoffset);
+    printf("Yoffset = %lf\n", Yoffset);
+    printf("Zoffset = %lf\n", Zoffset);
+    printf("MaxX = %lf\n", MaxX);
+    printf("MinX = %lf\n", MinX);
+    printf("MaxY = %lf\n", MaxY);
+    printf("MinY = %lf\n", MinY);
+    printf("MaxZ = %lf\n", MaxZ);
+    printf("MinZ = %lf\n", MinZ);
     printf("-------------------------------------\n\n");
     fflush(stdout);
 #endif
