@@ -19,6 +19,9 @@ INT *estack[NUM_CELLS];
 INT NumTri[NUM_CELLS];
 INT topstk[NUM_CELLS];
 LidarPointNode_t BigTriangle[NUM_CELLS][4];
+#if DEBUG >=1
+INT pcount[NUM_CELLS];
+#endif
 
 INT triLoc(int cell, LidarPointNode_t *point, int *bfp, int *dfp) {
     double px;
@@ -241,6 +244,14 @@ void processBin(int cell, INT ix, INT iy) {
     fflush(stderr);
 #endif
     while (p != NULL) {
+#if DEBUG >=1 
+	++pcount[cell];
+	if(pcount[cell] == 10000000){
+	    pcount[cell] = 0;
+	    fprintf(stderr, "Cell %d : Beep.. beep.. I'm alive\n", cell);
+	    fflush(stderr);
+	}
+#endif
 	/*locate index of triangle containing p*/
 	bflag = -1;
 	dflag = -1;
@@ -417,6 +428,9 @@ void Delaunay(int cell) {
 #endif
     int i;
 
+#if DEBUG >=1
+    pcount[cell] = 0;
+#endif
     numt = 2 * CellCnt[cell] + 1;
     topstk[cell] = BOUNDARY;
 
