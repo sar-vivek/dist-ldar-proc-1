@@ -105,13 +105,9 @@ void LasFileInit(const char *filename) {
     fflush(stdout);
 #endif
 
-    if (NumVarLenRec == 0) {
-	if (DataOffset < 2) PERROR("Data Offset error");
-	if (fseek(las_file_in, DataOffset - 2, SEEK_SET) != 0)
-	    PERROR("Error while preparing to read point data");
-    } else {
-	if (fseek(las_file_in, DataOffset, SEEK_SET) != 0)
-	    PERROR("Error while preparing to read variable length data");
+    if (DataOffset < 2) PERROR("Data Offset error");
+
+    if (NumVarLenRec != 0) {
 	for (i = 0; i < NumVarLenRec; ++i) {
 	    fread(&signature, UINT16_SIZE, 1, las_file_in);
 	    if (signature != 0xAABB)
@@ -120,8 +116,12 @@ void LasFileInit(const char *filename) {
 	    fread(&reclen, UINT16_SIZE, 1, las_file_in);
 	    fseek(las_file_in, 32 * CHAR_SIZE + reclen, SEEK_CUR);
 	}
+	fread(&signature, UINT16_SIZE, 1, las_file_in);
+	if (signature != 0xCCDD) PERROR("Point Data signature error");
     }
 
+    if (fseek(las_file_in, DataOffset - 2, SEEK_SET) != 0)
+	    PERROR("Error while preparing to read point data");
     fread(&signature, UINT16_SIZE, 1, las_file_in);
     if (signature != 0xCCDD) PERROR("Point Data signature error");
 
