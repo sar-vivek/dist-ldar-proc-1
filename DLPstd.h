@@ -29,7 +29,7 @@
 #define DEBUG 1
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
-#define NODE_POINTS_MAX 550000000
+#define NODE_POINTS_MAX 550000000LL
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
 #define NUM_BINS_X 5100
