@@ -92,6 +92,12 @@ void DistributeSend() {
     count = NumPointRec;
 
     while (count-- > 0) {
+#if DEBUG >= 1
+	if (count % 10000000 == 0) {
+	    fprintf(stderr, "%u points remaining to be read and sent\n", count);
+	    fflush(stderr);
+	}
+#endif
 	fread(X_b, INT32_SIZE, 3, las_file_in);
 	fseek(las_file_in, POINT_DATA_SKIP, SEEK_CUR);
 

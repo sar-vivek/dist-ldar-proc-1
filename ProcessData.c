@@ -106,6 +106,14 @@ void *ProcessData(void *workerID) {
 	}
     }
 
+    if (NodeID == 0 && c == 0) {
+        gettimeofday(&t_filt, NULL);
+        t_diff = 1000000 * (t_filt.tv_sec - t_dist.tv_sec) + t_filt.tv_usec - t_dist.tv_usec;
+        t_diff /= 1000000;
+        printf("\nTime taken for Node 0, Cell 0 Filter Phase: %lf seconds\n\n", t_diff);
+        fflush(stdout);
+    }
+
     Delaunay(c);
 
     if (c == 0) return NULL;

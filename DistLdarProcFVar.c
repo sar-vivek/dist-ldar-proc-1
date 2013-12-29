@@ -45,6 +45,9 @@ LidarPointNode_t NodeMin;
 LidarPointNode_t NodeMax;
 
 struct timeval t_start;
+struct timeval t_dist;
+struct timeval t_filt;
+struct timeval t_tri;
 struct timeval t_end;
 
 double t_diff;
@@ -212,6 +215,14 @@ int main(int argc, char *argv[]) {
     if (NodeID == 0) DistributeSend();
     else DistributeReceive();
 
+    if (NodeID == 0) {
+        gettimeofday(&t_dist, NULL);
+        t_diff = 1000000 * (t_dist.tv_sec - t_start.tv_sec) + t_dist.tv_usec - t_start.tv_usec;
+        t_diff /= 1000000;
+        printf("\nTime taken for Distribute Phase: %lf seconds\n\n", t_diff);
+	fflush(stdout);
+    }
+
     for (i = 0; i < NUM_CELLS; ++i) {
 	TriVertex[i] = malloc((2 * CellCnt[i] + 1) * sizeof (LidarPointNode_t **));
 	if (TriVertex[i] == NULL) perror("TriVertex[i]");
@@ -240,6 +251,14 @@ int main(int argc, char *argv[]) {
         pthread_join(Workers[i], NULL);
     }
 
+    if (NodeID == 0) {
+        gettimeofday(&t_tri, NULL);
+        t_diff = 1000000 * (t_tri.tv_sec - t_filt.tv_sec) + t_tri.tv_usec - t_filt.tv_usec;
+        t_diff /= 1000000;
+        printf("\nTime taken for Triangulate Phase: %lf seconds\n\n", t_diff);
+        fflush(stdout);
+    }
+
 #if DEBUG >= 1
     mycount2 = 0;
     for (ix = 0; ix < mycount; ++ix) {
@@ -255,9 +274,12 @@ int main(int argc, char *argv[]) {
 
     if (NodeID == 0) {
 	gettimeofday(&t_end, NULL);
+	t_diff = 1000000 * (t_end.tv_sec - t_tri.tv_sec) + t_end.tv_usec - t_tri.tv_usec;
+	t_diff /= 1000000;
+	printf("\nTime taken for Merge Phase: %lf seconds\n\n", t_diff);
 	t_diff = 1000000 * (t_end.tv_sec - t_start.tv_sec) + t_end.tv_usec - t_start.tv_usec;
 	t_diff /= 1000000;
-	printf("\nTime taken: %lf seconds\n\n", t_diff);
+	printf("\nTotal time taken: %lf seconds\n\n", t_diff);
     }
     fflush(stdout);
 

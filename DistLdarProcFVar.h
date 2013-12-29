@@ -37,6 +37,9 @@ extern LidarPointNode_t NodeMin;
 extern LidarPointNode_t NodeMax;
 
 extern struct timeval t_start;
+extern struct timeval t_dist;
+extern struct timeval t_filt;
+extern struct timeval t_tri;
 extern struct timeval t_end;
 
 extern double t_diff;
