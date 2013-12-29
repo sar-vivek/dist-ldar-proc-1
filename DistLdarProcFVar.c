@@ -84,6 +84,10 @@ int NodeID;
 int ssock;
 int polldesc;
 
+#if DEBUG >= 1
+uint32_t mycount2;
+#endif
+
 void *Malloc(size_t len) {
     void *ret;
     ret = malloc(len);
@@ -224,6 +228,16 @@ int main(int argc, char *argv[]) {
 	estack[i] = malloc(CellCnt[i] * sizeof (INT));
 	if (estack[i] == NULL) perror("estack[i] = malloc()");
     }
+
+#if DEBUG >= 1
+    mycount2 = 0;
+    for (ix = 0; ix < mycount; ++ix) {
+	if (*(FiltTbl + ix) == 0) ++mycount2;
+    }
+    printf("Original point count for node: %u\n", mycount);
+    printf("Point count after filtering: %u\n", mycount2);
+    fflush(stdout);
+#endif
 
     WorkerIDs[0] = 0;
     for (i = 1; i <= NUM_WORKERS; ++i) {

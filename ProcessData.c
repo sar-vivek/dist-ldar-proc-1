@@ -56,16 +56,7 @@ void *ProcessData(void *workerID) {
     int dy;
     int weight;
 
-#if DEBUG >= 1
-    uint32_t mycount2;
-#endif
-
     c = *((int *) workerID);
-
-#if DEBUG >= 1
-    printf("Hello from thread 0x%08X\n", (unsigned int) pthread_self());
-    fflush(stdout);
-#endif
 
 #if DEBUG >= 3
     mycount2 = 0;
@@ -75,11 +66,6 @@ void *ProcessData(void *workerID) {
 	    mycount2 += BinCnt[c][ix][iy];
 	}
     }
-#endif
-
-#if DEBUG >= 1
-    fprintf(stderr, "Node count is %u (not including boundary points).\n", mycount);
-    fflush(stderr);
 #endif
 
     for (ix = 2; ix < NUM_BINS_X - 2; ++ix) {
@@ -119,15 +105,6 @@ void *ProcessData(void *workerID) {
 	    if (FiltTbl[BinTbl[c][ix][iy] - PntTbl] == 1) BinTbl[c][ix][iy] = NULL;
 	}
     }
-
-#if DEBUG >= 1
-    mycount2 = 0;
-    for (ix = 0; ix < mycount; ++ix) {
-	if (*(FiltTbl + ix) == 0) ++mycount2;
-    }
-    printf("There are %u (original) points remaining after filtering.\n", mycount2);
-    fflush(stdout);
-#endif
 
     Delaunay(c);
 

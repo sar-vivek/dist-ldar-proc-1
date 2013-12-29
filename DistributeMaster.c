@@ -105,18 +105,8 @@ void DistributeSend() {
 
 	i = NUM_NODES_X * iy + ix;
 
-	if (i == 0) {
-	    AddPoint();
-	} else {
-#if DEBUG >= 1
-	    if (NUM_NODES == 1 || i < 0 || i >= NUM_NODES) {
-		fprintf(stderr, "We shouldn't be here. i = %d, X_r = %d, Y_r = %d\n",
-			i, *((int32_t *) X_b), *((int32_t *) Y_b));
-		fflush(stderr);
-	    }
-#endif
-	    Send(msock[i], X_b, XYZ_SIZE);
-	}
+	if (i == 0) AddPoint();
+	else Send(msock[i], X_b, XYZ_SIZE);
     }
 
     if (fclose(las_file_in)) perror("fclose()");
