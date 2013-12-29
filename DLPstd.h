@@ -51,7 +51,7 @@
 
 #define PORT_BASE 57394
 
-#define VAR_THRESHOLD 10
+#define VAR_THRESHOLD 5
 
 #define CHAR_SIZE 1
 #define UCHAR_SIZE 1
