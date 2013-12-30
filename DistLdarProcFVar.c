@@ -140,6 +140,7 @@ int main(int argc, char *argv[]) {
     assert(NUM_NODES_X * NUM_NODES_Y == NUM_NODES);
     assert(NUM_CELLS_X * NUM_CELLS_Y == NUM_CELLS);
     assert(NUM_WORKERS == NUM_CELLS - 1);
+    assert(TRI_PER_PACKET * TRI_SIZE == TRI_PACKET_LEN);
     little = 16976155;
     assert(*(((unsigned char *) &little) + 0) == (unsigned char) 0x1B);
     assert(*(((unsigned char *) &little) + 1) == (unsigned char) 0x09);
