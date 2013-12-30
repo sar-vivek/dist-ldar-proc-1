@@ -38,8 +38,8 @@
 #define TRI_PER_PACKET 39
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 500
-#define NUM_BINS_Y 500
+#define NUM_BINS_X 5000
+#define NUM_BINS_Y 5000
 
 #define NUM_CELLS 16
 #define NUM_CELLS_X 4
