@@ -156,7 +156,7 @@ void DistributeSend() {
 	    PacketCounter[i]--;
 #if DEBUG >= 1
 	    if (PacketCounter[i] % 100000 == 0) {
-		fprintf("%u packets remaining to be sent to node %d\n", PacketCounter[i], i);
+		fprintf(stderr, "%u packets remaining to be sent to node %d\n", PacketCounter[i], i);
 		fflush(stderr);
 	    }
 #endif
