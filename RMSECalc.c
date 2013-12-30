@@ -134,7 +134,14 @@ void RMSECalcMaster() {
 
     double mse[NUM_NODES];
     double rmse;
+    uint32_t sync;
     int i;
+
+    for (i = 1; i < NUM_NODES; ++i) {
+	Receive(msock[i], &sync, UINT32_SIZE);
+	fprintf(stderr, "Received sync number %u from Node %d\n", sync, i);
+    }
+    fflush(stderr);
 
     mse[0] = ComputeLocalMSE();
 
@@ -169,6 +176,10 @@ void RMSECalcSlave() {
 
     double mse;
     ssize_t ret;
+    uint32_t sync;
+
+    sync = NodeID * NodeID;
+    Send(ssock, &sync, UINT32_SIZE);
 
     mse = ComputeLocalMSE();
 

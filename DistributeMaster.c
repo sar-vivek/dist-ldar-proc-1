@@ -125,7 +125,7 @@ void DistributeSend() {
 
     count = NetBufCounter[0];
     for (i = 0; i < NUM_NODES; ++i) {
-	if (i > 0) Send(msock[i], NetBufCounter + i, UINT32_SIZE);
+	if (i > 0) Send(msock[i], &NetBufCounter[i], UINT32_SIZE);
 	PacketCounter[i] = NetBufCounter[i] / XYZ_PER_PACKET;
 	PacketCounter[i]++;
 
