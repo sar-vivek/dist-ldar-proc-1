@@ -266,16 +266,19 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < NUM_CELLS; ++i) {
 	TriVertex[i] = malloc((2 * CellCnt[i] + 1) * sizeof (LidarPointNode_t **));
 	if (TriVertex[i] == NULL) perror("TriVertex[i]");
-	for (nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
-	    TriVertex[i][nt] = malloc(3 * sizeof (LidarPointNode_t *));
-	    if (TriVertex[i][nt] == NULL) perror("TriVertex[cell][nt] = malloc()");
-	}
+	TriVertex[i][0] = malloc((6 * CellCnt[i] + 3) * sizeof (LidarPointNode_t *));
+	if (TriVertex[i][0] == NULL) perror("TriVertex[cell][0] = malloc()");
+
 	TriEdge[i] = malloc((2 * CellCnt[i] + 1) * sizeof (INT *));
 	if (TriEdge[i] == NULL) perror("TriEdge[i]");
-	for(nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
-	    TriEdge[i][nt] = malloc(3 * sizeof (INT));
-	    if (TriEdge[i][nt] == NULL) perror("TriEdge[cell][nt] = malloc()");
+	TriEdge[i][0] = malloc((6 * CellCnt[i] + 3) * sizeof (INT));
+	if (TriEdge[i][0] == NULL) perror("TriEdge[cell][0] = malloc()");
+
+	for(nt = 1; nt < 2 * CellCnt[i] + 1; ++nt) {
+	    TriVertex[i][nt] = TriVertex[i][0] + (3 * nt);
+	    TriEdge[i][nt] = TriEdge[i][0] + (3 * nt);
 	}
+
 	estack[i] = malloc(CellCnt[i] * sizeof (INT));
 	if (estack[i] == NULL) perror("estack[i] = malloc()");
     }
@@ -330,13 +333,9 @@ int main(int argc, char *argv[]) {
     free(FiltTbl);
     free(X_b);
     for (i = 0; i < NUM_CELLS; ++i) {
-	for (nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
-	    free(TriVertex[i][nt]);
-	}
+	free(TriVertex[i][0]);
 	free(TriVertex[i]);
-	for(nt = 0; nt < 2 * CellCnt[i] + 1; ++nt) {
-	    free(TriEdge[i][nt]);
-	}
+	free(TriEdge[i][0]);
 	free(TriEdge[i]);
 	free(estack[i]);
     }

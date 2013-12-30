@@ -34,8 +34,8 @@
 #define NET_BUF_LEN 536870912LL
 #define PACKET_LEN 1416
 #define XYZ_PER_PACKET 118
-#define TRI_PACKET_LEN 1408
-#define TRI_PER_PACKET 32
+#define TRI_PACKET_LEN 1404
+#define TRI_PER_PACKET 39
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
 #define NUM_BINS_X 5000
@@ -67,6 +67,7 @@
 #define UINT32_SIZE 4
 #define DOUBLE_SIZE 8
 #define XYZ_SIZE 12
+#define TRI_SIZE 36
 
 #define BOUNDARY 0xFFFFFFFF
 #define INT uint32_t
