@@ -200,7 +200,7 @@ int main(int argc, char *argv[]) {
 #endif
 	ret = fread(LasPoints, datalen, 1, las_file_in);
 #if DEBUG >= 1
-	fprintf(stderr, "datalen = %u, ret = %u\n", datalen, ret);
+	fprintf(stderr, "datalen = %llu, ret = %llu\n", (unsigned long long int) datalen, (unsigned long long int) ret);
 	fflush(stderr);
 #endif
 
