@@ -36,16 +36,16 @@
 #define XYZ_PER_PACKET 110
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 5000
-#define NUM_BINS_Y 5000
+#define NUM_BINS_X 1000
+#define NUM_BINS_Y 1000
 
-#define NUM_CELLS 16
-#define NUM_CELLS_X 4
-#define NUM_CELLS_Y 4
+#define NUM_CELLS 2
+#define NUM_CELLS_X 2
+#define NUM_CELLS_Y 1
 
-#define NUM_NODES 9
-#define NUM_NODES_X 3
-#define NUM_NODES_Y 3
+#define NUM_NODES 1 
+#define NUM_NODES_X 1
+#define NUM_NODES_Y 1
 
 #define NUM_WORKERS (NUM_CELLS - 1)
 
