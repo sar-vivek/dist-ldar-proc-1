@@ -13,13 +13,14 @@
 
 void Receive(int sd, void *buffer, size_t len) {
     ssize_t ret;
-    ret = recv(sd, buffer, len, MSG_WAITALL);
-    if (ret != len) {
-#if DEBUG >= 1
-	fprintf(stderr, "ret = %ld, len = %lu\n", ret, len);
-	fflush(stderr);
-#endif
-	perror("recv()");
+    size_t pos = 0;
+    while (pos < len) {
+	ret = recv(sd, buffer + pos, len - pos, MSG_WAITALL);
+	if (ret == -1) {
+	    perror("recv()");
+	    return;
+	}
+	pos += ret;
     }
 }
 
