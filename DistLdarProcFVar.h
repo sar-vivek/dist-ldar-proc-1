@@ -21,12 +21,12 @@ extern uint32_t CellCnt[NUM_CELLS];
 
 extern struct sockaddr_in svr_addr[NUM_NODES];
 extern struct epoll_event msockevents[NUM_NODES];
+extern void *NetworkBuffers[NUM_NODES];
+extern void *NetBufCurrent[NUM_NODES];
+extern uint32_t NetBufCounter[NUM_NODES];
+extern uint32_t PacketCounter[NUM_NODES];
 extern int msock[NUM_NODES];
-
-/***************************/
-/*this can be removed later*/
-extern int NodeSockIndex[1000];
-/***************************/
+extern int NodeSockIndex[200];
 
 extern pthread_t Workers[NUM_WORKERS + 1];
 extern int WorkerIDs[NUM_WORKERS + 1];
@@ -66,6 +66,8 @@ extern struct epoll_event *newevents;
 extern double *Z2;
 extern double *current2;
 extern int8_t *FiltTbl;
+extern void *LasPoints;
+extern void *ReadP;
 extern void *X_b;
 extern void *Y_b;
 extern void *Z_b;

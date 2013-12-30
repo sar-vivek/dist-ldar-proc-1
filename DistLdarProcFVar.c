@@ -29,12 +29,12 @@ uint32_t CellCnt[NUM_CELLS];
 
 struct sockaddr_in svr_addr[NUM_NODES];
 struct epoll_event msockevents[NUM_NODES];
+void *NetworkBuffers[NUM_NODES];
+void *NetBufCurrent[NUM_NODES];
+uint32_t NetBufCounter[NUM_NODES];
+uint32_t PacketCounter[NUM_NODES];
 int msock[NUM_NODES];
-
-/***************************/
-/*this can be removed later*/
-int NodeSockIndex[1000];
-/***************************/
+int NodeSockIndex[200];
 
 pthread_t Workers[NUM_WORKERS + 1];
 int WorkerIDs[NUM_WORKERS + 1];
@@ -74,6 +74,8 @@ struct epoll_event *newevents;
 double *Z2;
 double *current2;
 int8_t *FiltTbl;
+void *LasPoints;
+void *ReadP;
 void *X_b;
 void *Y_b;
 void *Z_b;
@@ -81,7 +83,7 @@ void *Z_b;
 int32_t X;
 int32_t Y;
 int32_t Z;
-uint32_t count;
+uint32_t count = 0;
 uint32_t mycount = 0;
 int NodeID;
 int ssock;
@@ -101,6 +103,7 @@ void *Malloc(size_t len) {
 int main(int argc, char *argv[]) {
 
     char ip[16];
+    size_t datalen;
     uint32_t little;
     uint32_t ix;
     uint32_t iy;
@@ -125,6 +128,7 @@ int main(int argc, char *argv[]) {
     assert(sizeof (int32_t) == INT32_SIZE);
     assert(sizeof (uint32_t) == UINT32_SIZE);
     assert(sizeof (double) == DOUBLE_SIZE);
+    assert(sizeof (size_t) == 8);
     assert(INT_MAX == 2147483647);
     assert(NUM_BINS_X >= 2);
     assert(NUM_BINS_Y >= 2);
@@ -180,8 +184,37 @@ int main(int argc, char *argv[]) {
 #endif
 
     if (NodeID == 0) {
-	if (NUM_NODES == 1) LasFileInit(argv[1]);
-	else LasFileInit(argv[3]);
+	if (NUM_NODES == 1) {
+	    LasFileInit(argv[1]);
+	} else {
+	    LasFileInit(argv[3]);
+	}
+
+	LasPoints = Malloc(FILE_MAX);
+	datalen = (size_t) NumPointRec;
+	datalen *= PointDataRecLen;
+#if DEBUG >= 1
+	fprintf(stderr, "Slurping points\n");
+	fflush(stderr);
+#endif
+	if (datalen != fread(LasPoints, datalen, 1, las_file_in)) {
+	    fprintf(stderr, "Uh oh. Problem with slurping...\n");
+	    fflush(stderr);
+	}
+	if (fclose(las_file_in)) perror("fclose()");
+#if DEBUG >= 1
+	fprintf(stderr, "Done slurping\n");
+	fflush(stderr);
+#endif
+
+	for (i = 0; i < NUM_NODES; ++i) {
+	    NetworkBuffers[i] = Malloc(NET_BUF_LEN * XYZ_SIZE);
+	    NetBufCurrent[i] = NetworkBuffers[i];
+	    NetBufCounter[i] = 0;
+	}
+    } else {
+	NetworkBuffers[0] = Malloc(NET_BUF_LEN * XYZ_SIZE);
+	NetBufCurrent[0] = NetworkBuffers[0];
     }
 
     PntTbl = (LidarPointNode_t *) Malloc(NODE_POINTS_MAX * sizeof (LidarPointNode_t));
@@ -215,12 +248,16 @@ int main(int argc, char *argv[]) {
     if (NodeID == 0) DistributeSend();
     else DistributeReceive();
 
+    AddPoints();
+
     if (NodeID == 0) {
         gettimeofday(&t_dist, NULL);
         t_diff = 1000000 * (t_dist.tv_sec - t_start.tv_sec) + t_dist.tv_usec - t_start.tv_usec;
         t_diff /= 1000000;
         printf("\nTime taken for Distribute Phase: %lf seconds\n\n", t_diff);
 	fflush(stdout);
+
+	free(LasPoints);
     }
 
     for (i = 0; i < NUM_CELLS; ++i) {

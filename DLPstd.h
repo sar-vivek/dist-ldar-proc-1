@@ -29,7 +29,11 @@
 #define DEBUG 1
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
+#define FILE_MAX 102000000000LL
 #define NODE_POINTS_MAX 550000000LL
+#define NET_BUF_LEN 550000000LL
+#define PACKET_LEN 1320
+#define XYZ_PER_PACKET 110
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
 #define NUM_BINS_X 5000
@@ -64,6 +68,7 @@
 
 #define BOUNDARY 0xFFFFFFFF
 #define INT uint32_t
+
 
 #define PERROR(X) do {           \
 fprintf(stderr, X);              \

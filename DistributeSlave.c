@@ -301,13 +301,30 @@ void AddPoint() {
     }
 }
 
+void AddPoints() {
+
+    uint32_t i;
+
+    for (i = 0; i < count; ++i) {
+	memcpy(X_b, NetBufCurrent[0], XYZ_SIZE);
+	NetBufCurrent[0] += XYZ_SIZE;
+	AddPoint();
+    }
+
+    boundary_begin = current;
+
+    BoundaryPointsAdd();
+}
+
 void DistributeReceive() {
 
     struct sockaddr_in cli_addr;
     uint32_t ix;
     uint32_t iy;
+    int i;
     int lsock;
     int cli_addr_len;
+    int packetcnt;
 
     lsock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (lsock == -1) perror("socket()");
@@ -371,16 +388,25 @@ void DistributeReceive() {
 
     CreateMinMax();
 
-    while (1) {
-	Receive(ssock, X_b, XYZ_SIZE);
+    Receive(ssock, &count, UINT32_SIZE);
+#if DEBUG >= 1
+    fprintf(stderr, "I am supposed to receive %u points\n", count);
+    fflush(stderr);
+#endif
 
-	if (*((int32_t *) X_b) == 0 && *((int32_t *) Y_b) == 0 && *((int32_t *) Z_b) == 0) break;
+    packetcnt = count / XYZ_PER_PACKET;
+    packetcnt++;
 
-	AddPoint();
+    for (i = 0; i < packetcnt; ++i) {
+	Receive(ssock, NetBufCurrent[0], PACKET_LEN);
+	NetBufCurrent[0] += PACKET_LEN;
     }
 
-    boundary_begin = current;
+    NetBufCurrent[0] = NetworkBuffers[0];
 
-    BoundaryPointsAdd();
+#if DEBUG >= 1
+    fprintf(stderr, "Received %d packets\n", packetcnt);
+    fflush(stderr);
+#endif
 
 }

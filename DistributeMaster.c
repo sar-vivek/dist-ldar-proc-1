@@ -42,6 +42,7 @@ void DistributeSend() {
 
     uint32_t ix;
     uint32_t iy;
+    uint32_t done;
     int i;
 
     for (i = 1; i < NUM_NODES; ++i) {
@@ -90,19 +91,17 @@ void DistributeSend() {
     CreateMinMax();
 
     count = NumPointRec;
+    ReadP = LasPoints;
 
     while (count-- > 0) {
 #if DEBUG >= 1
 	if (count % 10000000 == 0) {
-	    fprintf(stderr, "%u points remaining to be read and sent\n", count);
+	    fprintf(stderr, "%u points remaining to be 'read' and 'sent'\n", count);
 	    fflush(stderr);
 	}
 #endif
-	fread(X_b, INT32_SIZE, 3, las_file_in);
-	fseek(las_file_in, POINT_DATA_SKIP, SEEK_CUR);
-
-	ix = lround(floor(*((int32_t *) X_b) * Xratio + Xdiff));
-	iy = lround(floor(*((int32_t *) Y_b) * Yratio + Ydiff));
+	ix = lround(floor(*((int32_t *) ReadP) * Xratio + Xdiff));
+	iy = lround(floor(*((int32_t *) (ReadP + INT32_SIZE)) * Yratio + Ydiff));
 
 	if (ix >= NUM_NODES_X) ix = NUM_NODES_X - 1;
 	if (ix < 0) ix = 0;
@@ -111,22 +110,55 @@ void DistributeSend() {
 
 	i = NUM_NODES_X * iy + ix;
 
-	if (i == 0) AddPoint();
-	else Send(msock[i], X_b, XYZ_SIZE);
+	memcpy(NetBufCurrent[i], ReadP, XYZ_SIZE);
+	NetBufCurrent[i] += XYZ_SIZE;
+	NetBufCounter[i]++;
+	ReadP += PointDataRecLen;
     }
 
-    if (fclose(las_file_in)) perror("fclose()");
+#if DEBUG >= 1
+    for (i = 0; i < NUM_NODES; ++i) {
+	assert((size_t) (NetBufCurrent[i] - NetworkBuffers[i]) == ((size_t) NetBufCounter[i]) * ((size_t) XYZ_SIZE));
+    }
+    assert((size_t) (ReadP - LasPoints) == ((size_t) NumPointRec) * ((size_t) PointDataRecLen));
+#endif
 
-    *((int32_t *) X_b) = 0;
-    *((int32_t *) Y_b) = 0;
-    *((int32_t *) Z_b) = 0;
+    count = NetBufCounter[0];
+    for (i = 0; i < NUM_NODES; ++i) {
+	if (i > 0) Send(msock[i], NetBufCounter + i, UINT32_SIZE);
+	PacketCounter[i] = NetBufCounter[i] / XYZ_PER_PACKET;
+	PacketCounter[i]++;
 
-    for (i = 1; i < NUM_NODES; ++i) {
-	Send(msock[i], X_b, XYZ_SIZE);
+	NetBufCurrent[i] = NetworkBuffers[i];
+	if (NetBufCounter[i] + XYZ_PER_PACKET > NET_BUF_LEN) {
+	    fprintf(stderr, "Uh oh. Exceeded network buffer for node %d.\n", i);
+	    fflush(stderr);
+	    exit(-1);
+	}
     }
 
-    boundary_begin = current;
+#if DEBUG >= 1
+    fprintf(stderr, "Beginning to send points\n");
+    for (i = 0; i < NUM_NODES; ++i) {
+	fprintf(stderr, "Node %d is to get %u points\n", i, NetBufCounter[i]);
+    }
+    fflush(stderr);
+#endif
 
-    BoundaryPointsAdd();
+    done = 0;
+    while (1) {
+	for (i = 1; i < NUM_NODES; ++i) {
+	    if (PacketCounter[i] == 0) {
+		done |= (1 << i);
+		continue;
+	    }
+	    Send(msock[i], NetBufCurrent[i], PACKET_LEN);
+	    PacketCounter[i]--;
+	    NetBufCurrent[i] += PACKET_LEN;
+	}
+	if (done == (1 << NUM_NODES) - 2) break;
+    }
+
+    NetBufCurrent[0] = NetworkBuffers[0];
 
 }
