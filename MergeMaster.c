@@ -22,7 +22,7 @@ void MergeReceive() {
     int readsock;
     int socketcount = NUM_NODES - 1;
 
-    if ((proc_file_out = fopen("processed.out", "w")) == NULL) {
+    if ((proc_file_out = fopen("../Pout/processed.out", "w")) == NULL) {
 	fprintf(stderr, "Could not open file %s for writing. Exiting.\n", "processed.out");
 	fflush(stderr);
 	exit(-1);
