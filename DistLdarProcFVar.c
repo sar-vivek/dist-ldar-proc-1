@@ -85,13 +85,10 @@ int32_t Y;
 int32_t Z;
 uint32_t count = 0;
 uint32_t mycount = 0;
+uint32_t mycount2 = 0;
 int NodeID;
 int ssock;
 int polldesc;
-
-#if DEBUG >= 1
-uint32_t mycount2;
-#endif
 
 void *Malloc(size_t len) {
     void *ret;
@@ -308,9 +305,9 @@ int main(int argc, char *argv[]) {
     for (ix = 0; ix < mycount; ++ix) {
 	if (*(FiltTbl + ix) == 0) ++mycount2;
     }
-    printf("Original point count for node: %u\n", mycount);
-    printf("Point count after filtering: %u\n", mycount2);
-    fflush(stdout);
+    fprintf(stderr, "Original point count for node: %u\n", mycount);
+    fprintf(stderr, "Point count after filtering: %u\n", mycount2);
+    fflush(stderr);
 #endif
 
     if (NodeID == 0) MergeReceive();
@@ -325,6 +322,14 @@ int main(int argc, char *argv[]) {
 	t_diff /= 1000000;
 	printf("\nTotal time taken: %lf seconds\n\n", t_diff);
     }
+    fflush(stdout);
+
+    mycount2 = 0;
+    for (ix = 0; ix < mycount; ++ix) {
+	if (*(FiltTbl + ix) == 0) ++mycount2;
+    }
+    printf("Original point count for node: %u\n", mycount);
+    printf("Point count after filtering: %u\n", mycount2);
     fflush(stdout);
 
     if (NodeID == 0) RMSECalcMaster();

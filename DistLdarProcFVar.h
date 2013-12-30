@@ -77,6 +77,7 @@ extern int32_t Y;
 extern int32_t Z;
 extern uint32_t count;
 extern uint32_t mycount;
+extern uint32_t mycount2;
 extern int NodeID;
 extern int ssock;
 extern int polldesc;

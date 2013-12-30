@@ -135,6 +135,8 @@ void RMSECalcMaster() {
     double mse[NUM_NODES];
     double rmse;
     uint32_t sync;
+    uint32_t testcount;
+    uint32_t testcount2;
     int i;
 
     for (i = 1; i < NUM_NODES; ++i) {
@@ -142,6 +144,15 @@ void RMSECalcMaster() {
 	fprintf(stderr, "Received sync number %u from Node %d\n", sync, i);
     }
     fflush(stderr);
+
+    printf("Node %d kept %u original points and had %u left after filtering\n", NodeID, mycount, mycount2);
+    for (i = 1; i < NUM_NODES; ++i) {
+	Receive(msock[i], &testcount, UINT32_SIZE);
+	Receive(msock[i], &testcount2, UINT32_SIZE);
+	printf("Node %d got %u original points and had %u left after filtering\n", i, testcount, testcount2);
+    }
+    printf("In total, for all nodes, %d boundary points were added\n", (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y)));
+    fflush(stdout);
 
     mse[0] = ComputeLocalMSE();
 
@@ -178,8 +189,10 @@ void RMSECalcSlave() {
     ssize_t ret;
     uint32_t sync;
 
-    sync = NodeID * NodeID;
+    sync = NodeID * NodeID * NodeID;
     Send(ssock, &sync, UINT32_SIZE);
+    Send(ssock, &mycount, UINT32_SIZE);
+    Send(ssock, &mycount2, UINT32_SIZE);
 
     mse = ComputeLocalMSE();
 
