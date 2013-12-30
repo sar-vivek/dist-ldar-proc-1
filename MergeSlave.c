@@ -17,9 +17,10 @@ void MergeSend() {
 
     INT sendTri;
     INT totalTri; 
+    INT pktCount;
     uint32_t t;
     int c;
-    void *tb, *xb, *yb, *zb; 
+    void *xb, *yb, *zb; 
 
     totalTri = 0;
     for(c = 0; c < NUM_CELLS; ++c){
@@ -28,16 +29,12 @@ void MergeSend() {
     *((int *) NetworkBuffers[0]) = totalTri;
     Send(ssock, NetworkBuffers[0], INT32_SIZE);
 
+    pktCount = 0;
     sendTri = 0;
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
 
-	    cb = NetworkBuffers[0] + sendTri*TRI_SIZE; 
-	    *((int *) NetworkBuffers[0]) = c;
-	    tb = NetworkBuffers[0] + INT32_SIZE;  
-	    *((uint32_t *) tb) = t;
-	    
-	    xb = tb + INT32_SIZE; 
+	    xb = NetworkBuffers[0] + (sendTri * TRI_SIZE); 
 	    *((int32_t *) xb) = lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale);
 	    yb = xb + INT32_SIZE;
 	    *((int32_t *) yb) = lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale);
@@ -62,7 +59,13 @@ void MergeSend() {
 	    if( sendTri == TRI_PER_PACKET ){
 		Send(ssock, NetworkBuffers[0], TRI_PACKET_LEN);
 		sendTri = 0;
+		++pktCount;
 	    }
 	}
     }
+#if DEBUG >=1 
+    fprintf(stderr, "Number of triangles to send : %u\n", totalTri);
+    fprintf(stderr, "Number of packets sent : %u\n", pktCount);
+    fflush(stderr);
+#endif
 }
