@@ -104,6 +104,7 @@ int main(int argc, char *argv[]) {
 
     char ip[16];
     size_t datalen;
+    size_t ret;
     uint32_t little;
     uint32_t ix;
     uint32_t iy;
@@ -197,10 +198,12 @@ int main(int argc, char *argv[]) {
 	fprintf(stderr, "Slurping points\n");
 	fflush(stderr);
 #endif
-	if (datalen != fread(LasPoints, datalen, 1, las_file_in)) {
-	    fprintf(stderr, "Uh oh. Problem with slurping...\n");
-	    fflush(stderr);
-	}
+	ret = fread(LasPoints, datalen, 1, las_file_in);
+#if DEBUG >= 1
+	fprintf(stderr, "datalen = %u, ret = %u\n", datalen, ret);
+	fflush(stderr);
+#endif
+
 	if (fclose(las_file_in)) perror("fclose()");
 #if DEBUG >= 1
 	fprintf(stderr, "Done slurping\n");
