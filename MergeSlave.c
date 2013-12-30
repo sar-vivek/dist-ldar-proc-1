@@ -20,14 +20,13 @@ void MergeSend() {
     INT pktCount;
     uint32_t t;
     int c;
-    void *xb, *yb, *zb; 
+    uint32_t *xb; 
 
     totalTri = 0;
     for(c = 0; c < NUM_CELLS; ++c){
-	totalTri = totalTri + NumTri[c];
+	totalTri = totalTri + NumTri[c] + 1;
     }
-    *((int *) NetworkBuffers[0]) = totalTri;
-    Send(ssock, NetworkBuffers[0], INT32_SIZE);
+    Send(ssock, &totalTri, UINT32_SIZE);
 
     pktCount = 0;
     sendTri = 0;
@@ -35,25 +34,25 @@ void MergeSend() {
 	for (t = 0; t <= NumTri[c]; ++t) {
 
 	    xb = NetworkBuffers[0] + (sendTri * TRI_SIZE); 
-	    *((int32_t *) xb) = lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale);
-	    yb = xb + INT32_SIZE;
-	    *((int32_t *) yb) = lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale);
-	    zb = yb + INT32_SIZE;
-	    *((int32_t *) zb) = lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale);
+	    *xb = lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale);
+	    xb = xb + INT32_SIZE;
+	    *xb = lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale);
+	    xb = xb + INT32_SIZE;
+	    *xb = lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale);
 
-	    xb = zb + INT32_SIZE; 
-	    *((int32_t *) xb) = lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale);
-	    yb = xb + INT32_SIZE;
-	    *((int32_t *) yb) = lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale);
-	    zb = yb + INT32_SIZE;
-	    *((int32_t *) zb) = lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale);
+	    xb = xb + INT32_SIZE; 
+	    *xb = lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale);
+	    xb = xb + INT32_SIZE;
+	    *xb = lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale);
+	    xb = xb + INT32_SIZE;
+	    *xb = lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale);
 
-	    xb = zb + INT32_SIZE; 
-	    *((int32_t *) xb) = lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale);
-	    yb = xb + INT32_SIZE;
-	    *((int32_t *) yb) = lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale);
-	    zb = yb + INT32_SIZE;
-	    *((int32_t *) zb) = lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale);
+	    xb = xb + INT32_SIZE; 
+	    *xb = lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale);
+	    xb = xb + INT32_SIZE;
+	    *xb = lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale);
+	    xb = xb + INT32_SIZE;
+	    *xb = lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale);
 	    
 	    ++sendTri;
 	    if( sendTri == TRI_PER_PACKET ){
