@@ -154,6 +154,12 @@ void DistributeSend() {
 	    }
 	    Send(msock[i], NetBufCurrent[i], PACKET_LEN);
 	    PacketCounter[i]--;
+#if DEBUG >= 1
+	    if (PacketCounter[i] % 100000 == 0) {
+		fprintf("%u packets remaining to be sent to node %d\n", PacketCounter[i], i);
+		fflush(stderr);
+	    }
+#endif
 	    NetBufCurrent[i] += PACKET_LEN;
 	}
 	if (done == (1 << NUM_NODES) - 2) break;
