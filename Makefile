@@ -13,13 +13,13 @@
 COMPILER=gcc
 LIBS=-lpthread -lm
 OPTM=-O1
-OPTS=-Wall -m64 -fPIC -g
+OPTS=-Wall -m64 -fPIC
 OBJ=DistLdarProcFVar.o DistributeMaster.o DistributeSlave.o LdarReader.o MergeMaster.o MergeSlave.o ProcessData.o RMSECalc.o Triangulate.o
 
 DLP:
 	rm -f core*
-	$(COMPILER) $(OPTS) -c *.c -I . -pg 
-	$(COMPILER) $(OPTS) -I . -o DistLdarProc *.o $(OPTM) -pg $(LIBS)  
+	$(COMPILER) $(OPTS) -c *.c -I .
+	$(COMPILER) $(OPTS) -I . -o DistLdarProc *.o $(OPTM) $(LIBS)  
 
 clean:
 	rm -f DistLdarProc
