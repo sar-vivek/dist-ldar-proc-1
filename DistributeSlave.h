@@ -14,6 +14,7 @@ void CreateMinMax();
 void AddPoint2();
 void BoundaryPointsAdd();
 void AddPoint();
+void AddPoints();
 void DistributeReceive();
 
 #endif
