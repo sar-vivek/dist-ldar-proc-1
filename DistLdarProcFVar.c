@@ -309,7 +309,7 @@ int main(int argc, char *argv[]) {
 	if (*(FiltTbl + ix) == 0) ++mycount2;
     }
     printf("Original point count for node: %u\n", mycount);
-    printf("Point count after filtering: %u\n", mycount2);
+    printf("Point count after filtering:   %u\n", mycount2);
     fflush(stdout);
 #endif
 
