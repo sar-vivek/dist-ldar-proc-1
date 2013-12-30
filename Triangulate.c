@@ -246,7 +246,7 @@ void processBin(int cell, INT ix, INT iy) {
     while (p != NULL) {
 #if DEBUG >=1 
 	++pcount[cell];
-	if(pcount[cell] == 10000000){
+	if(pcount[cell] == 5000000){
 	    pcount[cell] = 0;
 	    fprintf(stderr, "Cell %d : Beep.. beep.. I'm alive\n", cell);
 	    fflush(stderr);
