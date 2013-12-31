@@ -29,8 +29,7 @@
 #define DEBUG 1
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
-/*#define FILE_MAX 102005473280LL*/
-#define FILE_MAX 8589934592LL
+#define FILE_MAX 102005473280LL
 #define NODE_POINTS_MAX 536870912LL
 #define NET_BUF_LEN 536870912LL
 #define PACKET_LEN 1368
@@ -39,16 +38,16 @@
 #define TRI_PER_PACKET 39
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 3000
-#define NUM_BINS_Y 3000
+#define NUM_BINS_X 4000
+#define NUM_BINS_Y 4000
 
-#define NUM_CELLS 1
-#define NUM_CELLS_X 1
-#define NUM_CELLS_Y 1
+#define NUM_CELLS 25
+#define NUM_CELLS_X 5
+#define NUM_CELLS_Y 5
 
-#define NUM_NODES 1
-#define NUM_NODES_X 1
-#define NUM_NODES_Y 1
+#define NUM_NODES 9
+#define NUM_NODES_X 3
+#define NUM_NODES_Y 3
 
 #define NUM_WORKERS (NUM_CELLS - 1)
 
