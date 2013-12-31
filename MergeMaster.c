@@ -78,7 +78,7 @@ void MergeReceive() {
 			recvcnt[j] += TRI_PER_PACKET;
 		    }
 		}
-#if DEBUG >= 1
+#if DEBUG >= 2
 		if (recvcnt[j] % (TRI_PER_PACKET * 5000) == 0) {
 		    fprintf(stderr, "Received %d triangles from node %d\n", recvcnt[j], j);
 		    fflush(stderr);

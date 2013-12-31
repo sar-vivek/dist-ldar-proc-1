@@ -20,6 +20,7 @@ void MergeSend() {
     INT pktCount;
     uint32_t t;
     int c;
+    int i;
     int32_t *xb; 
 
     totalTri = 0;
@@ -33,30 +34,18 @@ void MergeSend() {
     xb = NetworkBuffers[0];
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
-
-	    *xb = lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale);
-	    xb = xb + 1;
-	    *xb = lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale);
-	    xb = xb + 1;
-	    *xb = lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale);
-	    xb = xb + 1; 
-
-	    *xb = lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale);
-	    xb = xb + 1;
-	    *xb = lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale);
-	    xb = xb + 1;
-	    *xb = lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale);
-	    xb = xb + 1; 
-
-	    *xb = lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale);
-	    xb = xb + 1;
-	    *xb = lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale);
-	    xb = xb + 1;
-	    *xb = lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale);
-	    xb = xb + 1; 
+	    *xb++ = lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale);
+	    *xb++ = lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale);
+	    *xb++ = lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale);
+	    *xb++ = lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale);
+	    *xb++ = lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale);
+	    *xb++ = lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale);
+	    *xb++ = lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale);
+	    *xb++ = lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale);
+	    *xb++ = lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale);
 
 	    ++sendTri;
-	    if( sendTri == TRI_PER_PACKET ){
+	    if (sendTri == TRI_PER_PACKET) {
 		Send(ssock, NetworkBuffers[0], TRI_PACKET_LEN);
 		sendTri = 0;
 		xb = NetworkBuffers[0];
@@ -69,7 +58,7 @@ void MergeSend() {
         Send(ssock, NetworkBuffers[0], TRI_PACKET_LEN);
 
 #if DEBUG >=1 
-    if(pktCount * TRI_PER_PACKET < totalTri){
+    if (pktCount * TRI_PER_PACKET < totalTri) {
 	fprintf(stderr, "sent= %u sendTri = %u\n", totalTri - pktCount * TRI_PER_PACKET, sendTri);
     }
     fprintf(stderr, "Number of triangles to send : %u\n", totalTri);

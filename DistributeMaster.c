@@ -94,7 +94,7 @@ void DistributeSend() {
     ReadP = LasPoints;
 
     while (count-- > 0) {
-#if DEBUG >= 1
+#if DEBUG >= 2
 	if (count % 10000000 == 0) {
 	    fprintf(stderr, "%u points remaining to be 'read' and 'sent'\n", count);
 	    fflush(stderr);
@@ -138,7 +138,6 @@ void DistributeSend() {
     }
 
 #if DEBUG >= 1
-    fprintf(stderr, "Beginning to send points\n");
     for (i = 0; i < NUM_NODES; ++i) {
 	fprintf(stderr, "Node %d is to get %u points\n", i, NetBufCounter[i]);
     }
@@ -154,7 +153,7 @@ void DistributeSend() {
 	    }
 	    Send(msock[i], NetBufCurrent[i], PACKET_LEN);
 	    PacketCounter[i]--;
-#if DEBUG >= 1
+#if DEBUG >= 2
 	    if (PacketCounter[i] % 100000 == 0) {
 		fprintf(stderr, "%u packets remaining to be sent to node %d\n", PacketCounter[i], i);
 		fflush(stderr);

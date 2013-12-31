@@ -249,7 +249,7 @@ void AddPoint() {
     current->Y_c = Y_c;
     current->Z_c = Z_c;
 
-#if DEBUG >= 1 
+#if DEBUG >= 1
     if (X_c < MinX || X_c > MaxX) {
 	fprintf(stderr, "\nX_c out of range: X_c = %lf, MinX = %lf, MaxX = %lf\n", X_c, MinX, MaxX);
 	fprintf(stderr, "                  Y_c = %lf, MinY = %lf, MaxY = %lf\n", Y_c, MinY, MaxY);
