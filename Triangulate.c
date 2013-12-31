@@ -19,7 +19,7 @@ INT *estack[NUM_CELLS];
 INT NumTri[NUM_CELLS];
 INT topstk[NUM_CELLS];
 LidarPointNode_t BigTriangle[NUM_CELLS][4];
-#if DEBUG >=1
+#if DEBUG >=2
 INT pcount[NUM_CELLS];
 #endif
 
@@ -244,7 +244,7 @@ void processBin(int cell, INT ix, INT iy) {
     fflush(stderr);
 #endif
     while (p != NULL) {
-#if DEBUG >=1 
+#if DEBUG >=2 
 	++pcount[cell];
 	if(pcount[cell] == 5000000){
 	    pcount[cell] = 0;
@@ -428,7 +428,7 @@ void Delaunay(int cell) {
 #endif
     int i;
 
-#if DEBUG >=1
+#if DEBUG >=2
     pcount[cell] = 0;
 #endif
     numt = 2 * CellCnt[cell] + 1;
@@ -446,7 +446,7 @@ void Delaunay(int cell) {
     BigTriangle[cell][3].X_c = CellMax[cell].X_c; 
     BigTriangle[cell][3].Y_c = CellMax[cell].Y_c; 
     BigTriangle[cell][3].Z_c = Zinit[cell][3];
-#if DEBUG >= 1
+#if DEBUG >= 2
     fprintf(stderr, "------------BigSquare------------------- \n"); 
     for (i = 0; i < 4; ++i) {
 	fprintf(stderr, "%lf %lf %lf\n", BigTriangle[cell][i].X_c, BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
