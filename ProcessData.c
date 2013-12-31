@@ -17,7 +17,7 @@ typedef struct VarWeight {
     int dy;
     int weight;
 } VarWeight_t;
-asdasdfasdf
+
 void *ProcessData(void *workerID) {
 
     VarWeight_t WeightMatrix[37] = {
