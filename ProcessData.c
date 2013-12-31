@@ -20,28 +20,44 @@ typedef struct VarWeight {
 
 void *ProcessData(void *workerID) {
 
-    VarWeight_t WeightMatrix[21] = {
-	{-2, -1, 1},
-	{-2, 0, 2},
-	{-2, 1, 1},
-	{-1, -2, 1},
-	{-1, -1, 2},
-	{-1, 0, 3},
-	{-1, 1, 2},
-	{-1, 2, 1},
-	{0, -2, 2},
-	{0, -1, 3},
-	{0, 0, 4},
-	{0, 1, 3},
-	{0, 2, 2},
-	{1, -2, 1},
-	{1, -1, 2},
-	{1, 0, 3},
-	{1, 1, 2},
-	{1, 2, 1},
-	{2, -1, 1},
-	{2, 0, 2},
-	{2, 1, 1},
+    VarWeight_t WeightMatrix[37] = {
+	{-3, -1, 1},
+	{-3, 0, 2},
+	{-3, 1, 1},
+	{-2, -2, 1},
+	{-2, -1, 2},
+	{-2, 0, 3},
+	{-2, 1, 2},
+	{-2, 2, 1},
+	{-1, -3, 1},
+	{-1, -2, 2},
+	{-1, -1, 3},
+	{-1, 0, 4},
+	{-1, 1, 3},
+	{-1, 2, 2},
+	{-1, 3, 1},
+	{0, -3, 2},
+	{0, -2, 3},
+	{0, -1, 4},
+	{0, 0, 5},
+	{0, 1, 4},
+	{0, 2, 3},
+	{0, 3, 2},
+	{1, -3, 1},
+	{1, -2, 2},
+	{1, -1, 3},
+	{1, 0, 4},
+	{1, 1, 3},
+	{1, 2, 2},
+	{1, 3, 1},
+	{2, -2, 1},
+	{2, -1, 2},
+	{2, 0, 3},
+	{2, 1, 2},
+	{2, 2, 1},
+	{3, -1, 1},
+	{3, 0, 2},
+	{3, 1, 1},
     };
     double u1;
     double u2;
@@ -68,15 +84,15 @@ void *ProcessData(void *workerID) {
     }
 #endif
 
-    for (ix = 2; ix < NUM_BINS_X - 2; ++ix) {
-	for (iy = 2; iy < NUM_BINS_Y - 2; ++iy) {
+    for (ix = 3; ix < NUM_BINS_X - 3; ++ix) {
+	for (iy = 3; iy < NUM_BINS_Y - 3; ++iy) {
 	    i = 1;
 	    n = 0;
 	    u1 = 0;
 	    u2 = 0;
 	    vw = WeightMatrix;
 	    if (BinCnt[c][ix][iy] == 0) continue;
-	    for (i = 0; i < 21; ++i) {
+	    for (i = 0; i < 37; ++i) {
 		dx = vw->dx;
 		dy = vw->dy;
 		weight = vw->weight;
@@ -89,7 +105,7 @@ void *ProcessData(void *workerID) {
 	    u1 /= n;
 	    u2 /= n;
 
-	    if (n > 4 && u2 < u1 * u1 + VarThreshold) {
+	    if (n > 3 && u2 < u1 * u1 + VarThreshold) {
 		node = BinTbl[c][ix][iy];
 		while (node != NULL) {
 		    *(FiltTbl + (node - PntTbl)) = 1;
