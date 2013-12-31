@@ -15,7 +15,6 @@
 
 void MergeSend() {
 
-    double t_diff;
     INT sendTri;
     INT totalTri; 
     INT pktCount;

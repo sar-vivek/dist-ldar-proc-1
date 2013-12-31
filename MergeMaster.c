@@ -16,7 +16,6 @@
 void MergeReceive() {
 
     int32_t recvcnt[NUM_NODES];
-    double t_diff;
     int32_t *bufp;
     size_t blockcnt;
     int32_t tcnt;

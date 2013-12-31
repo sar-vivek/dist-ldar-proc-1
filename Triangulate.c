@@ -246,7 +246,7 @@ void processBin(int cell, INT ix, INT iy) {
     while (p != NULL) {
 #if DEBUG >=2 
 	++pcount[cell];
-	if(pcount[cell] == 5000000){
+	if (pcount[cell] == 5000000) {
 	    pcount[cell] = 0;
 	    fprintf(stderr, "Cell %d : Beep.. beep.. I'm alive\n", cell);
 	    fflush(stderr);
@@ -426,7 +426,9 @@ void Delaunay(int cell) {
     INT dbugi;
     int dbugj;
 #endif
+#if DEBUG >=2
     int i;
+#endif
 
 #if DEBUG >=2
     pcount[cell] = 0;
@@ -484,16 +486,20 @@ void Delaunay(int cell) {
     }
 
 #if DEBUG >= 1
-    fprintf(stdout,"Success %u %u %u\n", NumTri[cell], numt, 2*CellCnt[cell]+1);
+    fprintf(stdout,"Success %u %u %u\n", NumTri[cell], numt, (2 * CellCnt[cell] + 1));
     fflush(stdout);
 #endif
+
 #if DEBUG >=3
     fprintf(stderr, "\n--------------TriVertex in the END------------\n");
-    for(dbugi = 0; dbugi <= NumTri[cell]; dbugi++){
-	for(dbugj = 0; dbugj < 3; dbugj++)
-	    fprintf(stderr, "%4lf %4lf %4lf\t", TriVertex[cell][dbugi][dbugj]->X_c, TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
+    for (dbugi = 0; dbugi <= NumTri[cell]; dbugi++) {
+	for (dbugj = 0; dbugj < 3; dbugj++) {
+	    fprintf(stderr, "%4lf %4lf %4lf\t", TriVertex[cell][dbugi][dbugj]->X_c,
+		    TriVertex[cell][dbugi][dbugj]->Y_c, TriVertex[cell][dbugi][dbugj]->Z_c);
+	}
 	fprintf(stderr,"\n");
     }
     fflush(stderr);
-#endif	
+#endif
+
 }
