@@ -45,12 +45,15 @@ LidarPointNode_t NodeMin;
 LidarPointNode_t NodeMax;
 
 struct timeval t_start;
+struct timeval t_slurp;
+struct timeval t_sort;
 struct timeval t_dist;
-struct timeval t_filt;
-struct timeval t_tri;
-struct timeval t_end;
+struct timeval t_bin;
+struct timeval t_filt[NUM_CELLS];
+struct timeval t_tri[NUM_CELLS];
+struct timeval t_merge_begin;
+struct timeval t_merge;
 
-double t_diff;
 double Xdiff;
 double Ydiff;
 double Xratio;
@@ -100,6 +103,7 @@ void *Malloc(size_t len) {
 int main(int argc, char *argv[]) {
 
     char ip[16];
+    double t_diff;
     size_t datalen;
     size_t ret;
     uint32_t little;
@@ -178,8 +182,7 @@ int main(int argc, char *argv[]) {
     }
 
 #if DEBUG >= 1
-    fprintf(stderr, "\nVarThreshold = %lf\n\n", VarThreshold);
-    fflush(stderr);
+    fprintf(stderr, "VarThreshold = %lf\n", VarThreshold);
 #endif
 
     if (NodeID == 0) {
@@ -192,21 +195,18 @@ int main(int argc, char *argv[]) {
 	LasPoints = Malloc(FILE_MAX);
 	datalen = (size_t) NumPointRec;
 	datalen *= PointDataRecLen;
-#if DEBUG >= 1
-	fprintf(stderr, "Slurping points\n");
-	fflush(stderr);
-#endif
 	ret = fread(LasPoints, datalen, 1, las_file_in);
 #if DEBUG >= 1
-	fprintf(stderr, "datalen = %llu, ret = %llu\n", (unsigned long long int) datalen, (unsigned long long int) ret);
+	fprintf(stderr, "Slurping complete: datalen = %llu, ret = %llu\n", (unsigned long long int) datalen, (unsigned long long int) ret);
 	fflush(stderr);
 #endif
-
 	if (fclose(las_file_in)) perror("fclose()");
-#if DEBUG >= 1
-	fprintf(stderr, "Done slurping\n");
-	fflush(stderr);
-#endif
+
+	gettimeofday(&t_slurp, NULL);
+	t_diff = 1000000 * (t_slurp.tv_sec - t_start.tv_sec) + t_slurp.tv_usec - t_start.tv_usec;
+	t_diff /= 1000000;
+	printf("Time taken for Slurping: %lf seconds\n", t_diff);
+	fflush(stdout);
 
 	for (i = 0; i < NUM_NODES; ++i) {
 	    NetworkBuffers[i] = Malloc(NET_BUF_LEN * XYZ_SIZE);
@@ -249,17 +249,21 @@ int main(int argc, char *argv[]) {
     if (NodeID == 0) DistributeSend();
     else DistributeReceive();
 
+    gettimeofday(&t_dist, NULL);
+    t_diff = 1000000 * (t_dist.tv_sec - t_sort.tv_sec) + t_dist.tv_usec - t_sort.tv_usec;
+    t_diff /= 1000000;
+    printf("Time taken for Distribute Phase: %lf seconds\n", t_diff);
+    fflush(stdout);
+
     AddPoints();
 
-    if (NodeID == 0) {
-        gettimeofday(&t_dist, NULL);
-        t_diff = 1000000 * (t_dist.tv_sec - t_start.tv_sec) + t_dist.tv_usec - t_start.tv_usec;
-        t_diff /= 1000000;
-        printf("\nTime taken for Distribute Phase: %lf seconds\n\n", t_diff);
-	fflush(stdout);
+    gettimeofday(&t_bin, NULL);
+    t_diff = 1000000 * (t_bin.tv_sec - t_dist.tv_sec) + t_bin.tv_usec - t_dist.tv_usec;
+    t_diff /= 1000000;
+    printf("\nTime taken for Binning Phase: %lf seconds\n\n", t_diff);
+    fflush(stdout);
 
-	free(LasPoints);
-    }
+    if (NodeID == 0) free(LasPoints);
 
     for (i = 0; i < NUM_CELLS; ++i) {
 	TriVertex[i] = malloc((2 * CellCnt[i] + 1) * sizeof (LidarPointNode_t **));
@@ -292,35 +296,19 @@ int main(int argc, char *argv[]) {
         pthread_join(Workers[i], NULL);
     }
 
-    if (NodeID == 0) {
-        gettimeofday(&t_tri, NULL);
-        t_diff = 1000000 * (t_tri.tv_sec - t_filt.tv_sec) + t_tri.tv_usec - t_filt.tv_usec;
-        t_diff /= 1000000;
-        printf("\nTime taken for Triangulate Phase: %lf seconds\n\n", t_diff);
-        fflush(stdout);
-    }
-
-#if DEBUG >= 1
-    mycount2 = 0;
-    for (ix = 0; ix < mycount; ++ix) {
-	if (*(FiltTbl + ix) == 0) ++mycount2;
-    }
-    fprintf(stderr, "Original point count for node: %u\n", mycount);
-    fprintf(stderr, "Point count after filtering:   %u\n", mycount2);
-    fflush(stderr);
-#endif
+    gettimeofday(&t_merge_begin, NULL);
 
     if (NodeID == 0) MergeReceive();
     else MergeSend();
 
+    gettimeofday(&t_merge, NULL);
+    t_diff = 1000000 * (t_merge.tv_sec - t_merge_begin.tv_sec) + t_merge.tv_usec - t_merge_begin.tv_usec;
+    t_diff /= 1000000;
+    printf("Time taken for Merge Phase: %lf seconds\n", t_diff);
     if (NodeID == 0) {
-	gettimeofday(&t_end, NULL);
-	t_diff = 1000000 * (t_end.tv_sec - t_tri.tv_sec) + t_end.tv_usec - t_tri.tv_usec;
+	t_diff = 1000000 * (t_merge.tv_sec - t_start.tv_sec) + t_merge.tv_usec - t_start.tv_usec;
 	t_diff /= 1000000;
-	printf("\nTime taken for Merge Phase: %lf seconds\n\n", t_diff);
-	t_diff = 1000000 * (t_end.tv_sec - t_start.tv_sec) + t_end.tv_usec - t_start.tv_usec;
-	t_diff /= 1000000;
-	printf("\nTotal time taken: %lf seconds\n\n", t_diff);
+	printf("Total time taken: %lf seconds\n", t_diff);
     }
     fflush(stdout);
 
@@ -329,7 +317,7 @@ int main(int argc, char *argv[]) {
 	if (*(FiltTbl + ix) == 0) ++mycount2;
     }
     printf("Original point count for node: %u\n", mycount);
-    printf("Point count after filtering: %u\n", mycount2);
+    printf("Point count after filtering:   %u\n", mycount2);
     fflush(stdout);
 
     if (NodeID == 0) RMSECalcMaster();

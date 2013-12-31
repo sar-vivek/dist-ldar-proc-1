@@ -40,6 +40,7 @@ void Send(int sock, const void *buffer, size_t len) {
 
 void DistributeSend() {
 
+    double t_diff;
     uint32_t ix;
     uint32_t iy;
     uint32_t done;
@@ -94,12 +95,6 @@ void DistributeSend() {
     ReadP = LasPoints;
 
     while (count-- > 0) {
-#if DEBUG >= 2
-	if (count % 10000000 == 0) {
-	    fprintf(stderr, "%u points remaining to be 'read' and 'sent'\n", count);
-	    fflush(stderr);
-	}
-#endif
 	ix = lround(floor(*((int32_t *) ReadP) * Xratio + Xdiff));
 	iy = lround(floor(*((int32_t *) (ReadP + INT32_SIZE)) * Yratio + Ydiff));
 
@@ -122,6 +117,12 @@ void DistributeSend() {
     }
     assert((size_t) (ReadP - LasPoints) == ((size_t) NumPointRec) * ((size_t) PointDataRecLen));
 #endif
+
+    gettimeofday(&t_sort, NULL);
+    t_diff = 1000000 * (t_sort.tv_sec - t_slurp.tv_sec) + t_sort.tv_usec - t_slurp.tv_usec;
+    t_diff /= 1000000;
+    printf("Time taken for Sorting: %lf seconds\n", t_diff);
+    fflush(stdout);
 
     count = NetBufCounter[0];
     for (i = 0; i < NUM_NODES; ++i) {

@@ -390,6 +390,9 @@ void DistributeReceive() {
     CreateMinMax();
 
     Receive(ssock, &count, UINT32_SIZE);
+
+    gettimeofday(&t_sort, NULL);
+
 #if DEBUG >= 1
     fprintf(stderr, "I am supposed to receive %u points\n", count);
     fflush(stderr);
@@ -403,11 +406,11 @@ void DistributeReceive() {
 	NetBufCurrent[0] += PACKET_LEN;
     }
 
-    NetBufCurrent[0] = NetworkBuffers[0];
-
 #if DEBUG >= 1
     fprintf(stderr, "Received %d packets\n", packetcnt);
     fflush(stderr);
 #endif
+
+    NetBufCurrent[0] = NetworkBuffers[0];
 
 }

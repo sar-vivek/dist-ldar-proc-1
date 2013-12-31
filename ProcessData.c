@@ -59,6 +59,7 @@ void *ProcessData(void *workerID) {
 	{3, 0, 2},
 	{3, 1, 1},
     };
+    double t_diff;
     double u1;
     double u2;
     LidarPointNode_t *node;
@@ -115,22 +116,26 @@ void *ProcessData(void *workerID) {
 	}
     }
 
-    for (ix = 2; ix < NUM_BINS_X - 2; ++ix) {
-	for (iy = 2; iy < NUM_BINS_Y - 2; ++iy) {
+    for (ix = 3; ix < NUM_BINS_X - 3; ++ix) {
+	for (iy = 3; iy < NUM_BINS_Y - 3; ++iy) {
 	    if (BinTbl[c][ix][iy] == NULL) continue;
 	    if (FiltTbl[BinTbl[c][ix][iy] - PntTbl] == 1) BinTbl[c][ix][iy] = NULL;
 	}
     }
 
-    if (NodeID == 0 && c == 0) {
-        gettimeofday(&t_filt, NULL);
-        t_diff = 1000000 * (t_filt.tv_sec - t_dist.tv_sec) + t_filt.tv_usec - t_dist.tv_usec;
-        t_diff /= 1000000;
-        printf("\nTime taken for Node 0, Cell 0 Filter Phase: %lf seconds\n\n", t_diff);
-        fflush(stdout);
-    }
+    gettimeofday(&t_filt[c], NULL);
+    t_diff = 1000000 * (t_filt[c].tv_sec - t_bin.tv_sec) + t_filt[c].tv_usec - t_bin.tv_usec;
+    t_diff /= 1000000;
+    printf("Time taken for Node %d, Cell %d Filter Phase: %lf seconds\n", NodeID, c, t_diff);
+    fflush(stdout);
 
     Delaunay(c);
+
+    gettimeofday(&t_tri[c], NULL);
+    t_diff = 1000000 * (t_tri[c].tv_sec - t_filt[c].tv_sec) + t_tri[c].tv_usec - t_filt[c].tv_usec;
+    t_diff /= 1000000;
+    printf("Time taken for Node %d, Cell %d Triangulate Phase: %lf seconds\n", NodeID, c, t_diff);
+    fflush(stdout);
 
     if (c == 0) return NULL;
     pthread_exit(NULL);

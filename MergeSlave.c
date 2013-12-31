@@ -15,6 +15,7 @@
 
 void MergeSend() {
 
+    double t_diff;
     INT sendTri;
     INT totalTri; 
     INT pktCount;
@@ -24,7 +25,7 @@ void MergeSend() {
     int32_t *xb; 
 
     totalTri = 0;
-    for(c = 0; c < NUM_CELLS; ++c){
+    for (c = 0; c < NUM_CELLS; ++c) {
 	totalTri = totalTri + NumTri[c] + 1;
     }
     Send(ssock, &totalTri, UINT32_SIZE);
@@ -34,15 +35,11 @@ void MergeSend() {
     xb = NetworkBuffers[0];
     for (c = 0; c < NUM_CELLS; ++c) {
 	for (t = 0; t <= NumTri[c]; ++t) {
-	    *xb++ = lround((TriVertex[c][t][0]->X_c - Xoffset) / Xscale);
-	    *xb++ = lround((TriVertex[c][t][0]->Y_c - Yoffset) / Yscale);
-	    *xb++ = lround((TriVertex[c][t][0]->Z_c - Zoffset) / Zscale);
-	    *xb++ = lround((TriVertex[c][t][1]->X_c - Xoffset) / Xscale);
-	    *xb++ = lround((TriVertex[c][t][1]->Y_c - Yoffset) / Yscale);
-	    *xb++ = lround((TriVertex[c][t][1]->Z_c - Zoffset) / Zscale);
-	    *xb++ = lround((TriVertex[c][t][2]->X_c - Xoffset) / Xscale);
-	    *xb++ = lround((TriVertex[c][t][2]->Y_c - Yoffset) / Yscale);
-	    *xb++ = lround((TriVertex[c][t][2]->Z_c - Zoffset) / Zscale);
+	    for (i = 0; i < 3; ++i) {
+		*xb++ = lround((TriVertex[c][t][i]->X_c - Xoffset) / Xscale);
+		*xb++ = lround((TriVertex[c][t][i]->Y_c - Yoffset) / Yscale);
+		*xb++ = lround((TriVertex[c][t][i]->Z_c - Zoffset) / Zscale);
+	    }
 
 	    ++sendTri;
 	    if (sendTri == TRI_PER_PACKET) {
@@ -54,15 +51,17 @@ void MergeSend() {
 	}
     }
 
-    if(sendTri != 0)
-        Send(ssock, NetworkBuffers[0], TRI_PACKET_LEN);
+    if (sendTri != 0) {
+	Send(ssock, NetworkBuffers[0], TRI_PACKET_LEN);
+    }
 
 #if DEBUG >=1 
     if (pktCount * TRI_PER_PACKET < totalTri) {
-	fprintf(stderr, "sent= %u sendTri = %u\n", totalTri - pktCount * TRI_PER_PACKET, sendTri);
+	fprintf(stderr, "sent = %u, sendTri = %u\n", (totalTri - pktCount * TRI_PER_PACKET), sendTri);
     }
-    fprintf(stderr, "Number of triangles to send : %u\n", totalTri);
-    fprintf(stderr, "Number of packets sent : %u\n", pktCount);
+    fprintf(stderr, "Number of triangles sent: %u\n", totalTri);
+    fprintf(stderr, "Number of packets sent:   %u\n", pktCount);
     fflush(stderr);
 #endif
+
 }

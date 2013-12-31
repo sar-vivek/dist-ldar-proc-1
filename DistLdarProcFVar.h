@@ -37,12 +37,15 @@ extern LidarPointNode_t NodeMin;
 extern LidarPointNode_t NodeMax;
 
 extern struct timeval t_start;
+extern struct timeval t_slurp;
+extern struct timeval t_sort;
 extern struct timeval t_dist;
-extern struct timeval t_filt;
-extern struct timeval t_tri;
-extern struct timeval t_end;
+extern struct timeval t_bin;
+extern struct timeval t_filt[NUM_CELLS];
+extern struct timeval t_tri[NUM_CELLS];
+extern struct timeval t_merge_begin;
+extern struct timeval t_merge;
 
-extern double t_diff;
 extern double Xdiff;
 extern double Ydiff;
 extern double Xratio;
