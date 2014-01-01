@@ -72,6 +72,15 @@ void *ProcessData(void *workerID) {
     int dx;
     int dy;
     int weight;
+#if RANDOM_FILTERING == 1
+    struct drand48_data drbuffer;
+    struct timeval seedtval;
+    double dr;
+    LidarPointNode_t *node2;
+
+    gettimeofday(&seedtval, NULL);
+    srand48_r(seedtval.tv_usec, &drbuffer);
+#endif
 
     c = *((int *) workerID);
 
@@ -85,6 +94,7 @@ void *ProcessData(void *workerID) {
     }
 #endif
 
+#if RANDOM_FILTERING == 0
     for (ix = 3; ix < NUM_BINS_X - 3; ++ix) {
 	for (iy = 3; iy < NUM_BINS_Y - 3; ++iy) {
 	    i = 1;
@@ -122,7 +132,34 @@ void *ProcessData(void *workerID) {
 	    if (FiltTbl[BinTbl[c][ix][iy] - PntTbl] == 1) BinTbl[c][ix][iy] = NULL;
 	}
     }
+#endif
 
+#if RANDOM_FILTERING == 1
+    for (ix = 1; ix < NUM_BINS_X - 1; ++ix) {
+	for (iy = 1; iy < NUM_BINS_Y - 1; ++iy) {
+	    node2 = NULL;
+	    node = BinTbl[c][ix][iy];
+	    while (node != NULL) {
+		drand48_r(&drbuffer, &dr);
+		if (dr < RF_FRACTION) FiltTbl[node - PntTbl] = 1;
+		else {
+		    if (FiltTbl[node - PntTbl] != 0) {
+			printf("\n\n\n\n\n\n\n\n\n\nBAD: Uh oh, this shouldn't happen!!!!!\n\n\n\n\n\n\n\n\n");
+			fflush(stdout);
+		    }
+		    if (node2 == NULL) BinTbl[c][ix][iy] = node;
+		    else node2->next = node;
+		    node2 = node;
+		}
+		node = node->next;
+	    }
+	    if (node2 == NULL) BinTbl[c][ix][iy] = NULL;
+	    else node2->next = NULL;
+	}
+    }
+#endif
+
+    /* Again, not using NTP so it's ok... */
     gettimeofday(&t_filt[c], NULL);
     t_diff = 1000000 * (t_filt[c].tv_sec - t_bin.tv_sec) + t_filt[c].tv_usec - t_bin.tv_usec;
     t_diff /= 1000000;

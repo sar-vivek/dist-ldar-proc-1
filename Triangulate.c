@@ -419,7 +419,6 @@ void processBin(int cell, INT ix, INT iy) {
 }
 
 void Delaunay(int cell) {
-    INT numt;
     INT ix;
     INT iy;
 #if DEBUG >=3
@@ -433,7 +432,6 @@ void Delaunay(int cell) {
 #if DEBUG >=2
     pcount[cell] = 0;
 #endif
-    numt = 2 * CellCnt[cell] + 1;
     topstk[cell] = BOUNDARY;
 
     BigTriangle[cell][0].X_c = CellMin[cell].X_c; 
@@ -486,7 +484,7 @@ void Delaunay(int cell) {
     }
 
 #if DEBUG >= 1
-    fprintf(stdout,"Success %u %u %u\n", NumTri[cell], numt, (2 * CellCnt[cell] + 1));
+    fprintf(stdout,"Success %u %u %u\n", NumTri[cell], (2 * CellCnt[cell] + 1));
     fflush(stdout);
 #endif
 

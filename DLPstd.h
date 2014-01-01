@@ -58,6 +58,8 @@
 #define PORT_BASE 57394
 
 #define VAR_THRESHOLD 16
+#define RANDOM_FILTERING 1
+#define RF_FRACTION 0.5
 
 #define CHAR_SIZE 1
 #define UCHAR_SIZE 1
@@ -71,7 +73,6 @@
 
 #define BOUNDARY 0xFFFFFFFF
 #define INT uint32_t
-
 
 #define PERROR(X) do {           \
 fprintf(stderr, X);              \

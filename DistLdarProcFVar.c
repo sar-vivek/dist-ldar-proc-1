@@ -154,6 +154,7 @@ int main(int argc, char *argv[]) {
     assert(*(((unsigned char *) &little) + 2) == (unsigned char) 0x03);
     assert(*(((unsigned char *) &little) + 3) == (unsigned char) 0x01);
 
+    /* Shouldn't use gettimeofday() for timing but we're not using NTP so it's ok. */
     gettimeofday(&t_start, NULL);
 
     if (NUM_NODES == 1) {
