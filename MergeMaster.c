@@ -27,6 +27,8 @@ void MergeReceive() {
     int readsock;
     int socketcount = NUM_NODES - 1;
 
+    gettimeofday(&t_merge_begin, NULL);
+
     if ((proc_file_out = fopen("../Pout/processed.out", "w")) == NULL) {
 	fprintf(stderr, "Could not open file %s for writing. Exiting.\n", "processed.out");
 	fflush(stderr);

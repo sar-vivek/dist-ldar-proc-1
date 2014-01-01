@@ -95,9 +95,9 @@ double ComputeLocalMSE() {
 
 #if DEBUG >= 1
 		if (dflag > -1) {
-		    fprintf(stderr, "\nThat's interesting. Point (%lf,%lf,%lf) was filtered out ",
+		    fprintf(stderr, "That's interesting. Point (%lf,%lf,%lf) was filtered out ",
 			    X_c, Y_c, Z_c);
-		    fprintf(stderr, "but is within the error tolerance of point (%lf,%lf,%lf).\n\n",
+		    fprintf(stderr, "but is within the error tolerance of point (%lf,%lf,%lf).\n",
 			    TriVertex[c][t][dflag]->X_c, TriVertex[c][t][dflag]->Y_c,
 			    TriVertex[c][t][dflag]->Z_c);
 		    fflush(stderr);
@@ -113,7 +113,7 @@ double ComputeLocalMSE() {
 		       X_c, Y_c, Z_c, TriVertex[c][t][0]->X_c, TriVertex[c][t][0]->Y_c, TriVertex[c][t][0]->Z_c,
 		       TriVertex[c][t][1]->X_c, TriVertex[c][t][1]->Y_c, TriVertex[c][t][1]->Z_c,
 		       TriVertex[c][t][2]->X_c, TriVertex[c][t][2]->Y_c, TriVertex[c][t][2]->Z_c);
-		printf("Z_inter = %lf, diff = %lf, mse (sum) = %lf\n\n", Z_inter, diff, mse);
+		printf("Z_inter = %lf, diff = %lf, mse (sum) = %lf\n", Z_inter, diff, mse);
 #endif
 	    }
 
@@ -124,7 +124,7 @@ double ComputeLocalMSE() {
     mse /= VERIFY_POINTS_PER_NODE;
 
 #if DEBUG >= 1
-    printf("\nmse = %lf\n\n", mse);
+    printf("mse = %lf\n", mse);
 #endif
 
     return mse;
@@ -134,25 +134,7 @@ void RMSECalcMaster() {
 
     double mse[NUM_NODES];
     double rmse;
-    uint32_t sync;
-    uint32_t testcount;
-    uint32_t testcount2;
     int i;
-
-    for (i = 1; i < NUM_NODES; ++i) {
-	Receive(msock[i], &sync, UINT32_SIZE);
-	fprintf(stderr, "Received sync number %u from Node %d\n", sync, i);
-    }
-    fflush(stderr);
-
-    printf("Node %d kept %u original points and had %u left after filtering\n", NodeID, mycount, mycount2);
-    for (i = 1; i < NUM_NODES; ++i) {
-	Receive(msock[i], &testcount, UINT32_SIZE);
-	Receive(msock[i], &testcount2, UINT32_SIZE);
-	printf("Node %d got %u original points and had %u left after filtering\n", i, testcount, testcount2);
-    }
-    printf("In total, for all nodes, %d boundary points were added\n", (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y)));
-    fflush(stdout);
 
     mse[0] = ComputeLocalMSE();
 
@@ -179,7 +161,7 @@ void RMSECalcMaster() {
     mse[0] /= NUM_NODES;
     rmse = sqrt(mse[0]);
 
-    printf("\nRMSE = %lf\n\n", rmse);
+    printf("RMSE = %lf\n", rmse);
     fflush(stdout);
 }
 
@@ -187,12 +169,6 @@ void RMSECalcSlave() {
 
     double mse;
     ssize_t ret;
-    uint32_t sync;
-
-    sync = NodeID * NodeID * NodeID;
-    Send(ssock, &sync, UINT32_SIZE);
-    Send(ssock, &mycount, UINT32_SIZE);
-    Send(ssock, &mycount2, UINT32_SIZE);
 
     mse = ComputeLocalMSE();
 
@@ -211,4 +187,7 @@ void RMSECalcSlave() {
     }
 
     if (close(ssock) == -1) perror("close()");
+
+    printf("Done.\n");
+    fflush(stdout);
 }

@@ -102,10 +102,14 @@ void *Malloc(size_t len) {
 
 int main(int argc, char *argv[]) {
 
+    uint32_t scount[NUM_NODES];
+    uint32_t scount2[NUM_NODES];
     char ip[16];
     double t_diff;
+    double filtpercent = 0.0;
     size_t datalen;
     size_t ret;
+    int32_t sync;
     uint32_t little;
     uint32_t ix;
     uint32_t iy;
@@ -296,21 +300,19 @@ int main(int argc, char *argv[]) {
         pthread_join(Workers[i], NULL);
     }
 
-    gettimeofday(&t_merge_begin, NULL);
-
     if (NodeID == 0) MergeReceive();
     else MergeSend();
 
-    gettimeofday(&t_merge, NULL);
-    t_diff = 1000000 * (t_merge.tv_sec - t_merge_begin.tv_sec) + t_merge.tv_usec - t_merge_begin.tv_usec;
-    t_diff /= 1000000;
-    printf("Time taken for Merge Phase: %lf seconds\n", t_diff);
     if (NodeID == 0) {
+	gettimeofday(&t_merge, NULL);
+	t_diff = 1000000 * (t_merge.tv_sec - t_merge_begin.tv_sec) + t_merge.tv_usec - t_merge_begin.tv_usec;
+	t_diff /= 1000000;
+	printf("Time taken for Merge Phase: %lf seconds\n", t_diff);
 	t_diff = 1000000 * (t_merge.tv_sec - t_start.tv_sec) + t_merge.tv_usec - t_start.tv_usec;
 	t_diff /= 1000000;
 	printf("Total time taken: %lf seconds\n", t_diff);
+	fflush(stdout);
     }
-    fflush(stdout);
 
     mycount2 = 0;
     for (ix = 0; ix < mycount; ++ix) {
@@ -319,6 +321,52 @@ int main(int argc, char *argv[]) {
     printf("Original point count for node: %u\n", mycount);
     printf("Point count after filtering:   %u\n", mycount2);
     fflush(stdout);
+
+    scount[0] = mycount;
+    scount2[0] = mycount2;
+    if (NodeID == 0) {
+	for (i = 1; i < NUM_NODES; ++i) {
+	    Receive(msock[i], &sync, INT32_SIZE);
+	    printf("Received sync number %d from Node %d\n", sync, i);
+	    Receive(msock[i], &scount[i], UINT32_SIZE);
+	    Receive(msock[i], &scount2[i], UINT32_SIZE);
+	}
+	fflush(stdout);
+	for (i = 1; i < NUM_NODES; ++i) {
+	    mycount += scount[i];
+	    mycount2 += scount2[i];
+	}
+
+	printf("Node %d kept %u original points and had %u left after filtering\n", NodeID, scount[0], scount2[0]);
+	for (i = 1; i < NUM_NODES; ++i) {
+	    printf("Node %d got %u original points and had %u left after filtering\n", i, scount[i], scount2[i]);
+	}
+
+	printf("Total points:    %u\n", mycount);
+	printf("After filtering: %u\n", mycount2);
+
+	filtpercent = 0.0;
+	filtpercent += mycount2;
+	filtpercent /= mycount;
+	filtpercent = 100 * (1 - filtpercent);
+	printf("Filtering percentage:         %lf\%\n", filtpercent);
+
+	filtpercent = 0.0;
+	filtpercent += mycount2;
+	filtpercent += (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y));
+	filtpercent /= mycount;
+	filtpercent = 100 * (1 - filtpercent);
+	printf("Total boundary points added:  %d\n", (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y)));
+	printf("Total pts. after filtering, including boundary pts: %u\n",
+	       (mycount2 + (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y))));
+	printf("Total filtering percentage (w/ boundary pts):       %lf\%\n", filtpercent);
+	fflush(stdout);
+    } else {
+	sync = NodeID * NodeID * NodeID;
+	Send(ssock, &sync, INT32_SIZE);
+	Send(ssock, &mycount, UINT32_SIZE);
+	Send(ssock, &mycount2, UINT32_SIZE);
+    }
 
     if (NodeID == 0) RMSECalcMaster();
     else RMSECalcSlave();
