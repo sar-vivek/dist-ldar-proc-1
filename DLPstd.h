@@ -59,7 +59,7 @@
 
 #define VAR_THRESHOLD 0
 #define RANDOM_FILTERING 1
-#define RF_FRACTION 0.5
+#define RF_FRACTION 0.75
 
 #define CHAR_SIZE 1
 #define UCHAR_SIZE 1
