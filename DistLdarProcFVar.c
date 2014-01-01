@@ -113,6 +113,8 @@ int main(int argc, char *argv[]) {
     uint32_t little;
     uint32_t ix;
     uint32_t iy;
+    uint32_t tcount;
+    uint32_t tcount2;
     INT nt;
     int i;
     int id;
@@ -332,9 +334,11 @@ int main(int argc, char *argv[]) {
 	    Receive(msock[i], &scount2[i], UINT32_SIZE);
 	}
 	fflush(stdout);
-	for (i = 1; i < NUM_NODES; ++i) {
-	    mycount += scount[i];
-	    mycount2 += scount2[i];
+	tcount = 0;
+	tcount2 = 0;
+	for (i = 0; i < NUM_NODES; ++i) {
+	    tcount += scount[i];
+	    tcount2 += scount2[i];
 	}
 
 	printf("Node %d kept %u original points and had %u left after filtering\n", NodeID, scount[0], scount2[0]);
@@ -342,23 +346,23 @@ int main(int argc, char *argv[]) {
 	    printf("Node %d got %u original points and had %u left after filtering\n", i, scount[i], scount2[i]);
 	}
 
-	printf("Total points:    %u\n", mycount);
-	printf("After filtering: %u\n", mycount2);
+	printf("Total points:    %u\n", tcount);
+	printf("After filtering: %u\n", tcount2);
 
 	filtpercent = 0.0;
-	filtpercent += mycount2;
-	filtpercent /= mycount;
+	filtpercent += tcount2;
+	filtpercent /= tcount;
 	filtpercent = 100 * (1 - filtpercent);
 	printf("Filtering percentage:         %lf%%\n", filtpercent);
 
 	filtpercent = 0.0;
-	filtpercent += mycount2;
+	filtpercent += tcount2;
 	filtpercent += (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y));
-	filtpercent /= mycount;
+	filtpercent /= tcount;
 	filtpercent = 100 * (1 - filtpercent);
 	printf("Total boundary points added:  %d\n", (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y)));
 	printf("Total pts. after filtering, including boundary pts: %u\n",
-	       (mycount2 + (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y))));
+	       (tcount2 + (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y))));
 	printf("Total filtering percentage (w/ boundary pts):       %lf%%\n", filtpercent);
 	fflush(stdout);
     } else {
