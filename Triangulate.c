@@ -239,10 +239,6 @@ void processBin(int cell, INT ix, INT iy) {
 
     p = BinTbl[cell][ix][iy];
 
-#if DEBUG >= 2 
-    fprintf(stderr, "Working on adding point (%lf,%lf,%lf)\n", p->X_c, p->Y_c, p->Z_c);
-    fflush(stderr);
-#endif
     while (p != NULL) {
 #if DEBUG >=2 
 	++pcount[cell];
@@ -449,7 +445,8 @@ void Delaunay(int cell) {
 #if DEBUG >= 2
     fprintf(stderr, "------------BigSquare------------------- \n"); 
     for (i = 0; i < 4; ++i) {
-	fprintf(stderr, "%lf %lf %lf\n", BigTriangle[cell][i].X_c, BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
+	fprintf(stderr, "%lf %lf %lf\n", BigTriangle[cell][i].X_c,
+		BigTriangle[cell][i].Y_c, BigTriangle[cell][i].Z_c);
     }
     fprintf(stderr, "-----------------------------------------\n");
     fflush(stderr);
@@ -484,7 +481,7 @@ void Delaunay(int cell) {
     }
 
 #if DEBUG >= 1
-    fprintf(stdout,"Success %u %u %u\n", NumTri[cell], (2 * CellCnt[cell] + 1));
+    fprintf(stdout,"Success %u %u\n", NumTri[cell], (2 * CellCnt[cell] + 1));
     fflush(stdout);
 #endif
 

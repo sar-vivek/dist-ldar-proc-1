@@ -20,6 +20,7 @@ typedef struct VarWeight {
 
 void *ProcessData(void *workerID) {
 
+#if RANDOM_FILTERING == 0
     VarWeight_t WeightMatrix[37] = {
 	{-3, -1, 1},
 	{-3, 0, 2},
@@ -59,19 +60,20 @@ void *ProcessData(void *workerID) {
 	{3, 0, 2},
 	{3, 1, 1},
     };
-    double t_diff;
     double u1;
     double u2;
-    LidarPointNode_t *node;
     VarWeight_t *vw;
-    uint32_t ix;
-    uint32_t iy;
     uint32_t n;
-    int c;
     int i;
     int dx;
     int dy;
     int weight;
+#endif
+    double t_diff;
+    LidarPointNode_t *node;
+    uint32_t ix;
+    uint32_t iy;
+    int c;
 #if RANDOM_FILTERING == 1
     struct drand48_data drbuffer;
     struct timeval seedtval;
