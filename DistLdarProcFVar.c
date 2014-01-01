@@ -349,7 +349,7 @@ int main(int argc, char *argv[]) {
 	filtpercent += mycount2;
 	filtpercent /= mycount;
 	filtpercent = 100 * (1 - filtpercent);
-	printf("Filtering percentage:         %lf\%\n", filtpercent);
+	printf("Filtering percentage:         %lf%%\n", filtpercent);
 
 	filtpercent = 0.0;
 	filtpercent += mycount2;
@@ -359,7 +359,7 @@ int main(int argc, char *argv[]) {
 	printf("Total boundary points added:  %d\n", (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y)));
 	printf("Total pts. after filtering, including boundary pts: %u\n",
 	       (mycount2 + (NUM_NODES * NUM_CELLS * (NUM_BINS_X + NUM_BINS_Y))));
-	printf("Total filtering percentage (w/ boundary pts):       %lf\%\n", filtpercent);
+	printf("Total filtering percentage (w/ boundary pts):       %lf%%\n", filtpercent);
 	fflush(stdout);
     } else {
 	sync = NodeID * NodeID * NodeID;
