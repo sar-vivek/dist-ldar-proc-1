@@ -41,15 +41,15 @@
 #define TRI_PER_PACKET 39
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 1410
-#define NUM_BINS_Y 4230
+#define NUM_BINS_X 4232
+#define NUM_BINS_Y 4232
 
 #define NUM_CELLS 25
 #define NUM_CELLS_X 5
 #define NUM_CELLS_Y 5
 
-#define NUM_NODES 3
-#define NUM_NODES_X 3
+#define NUM_NODES 1
+#define NUM_NODES_X 1
 #define NUM_NODES_Y 1
 
 #define NUM_WORKERS (NUM_CELLS - 1)
@@ -60,7 +60,7 @@
 
 #define PORT_BASE 57394
 
-#define VAR_THRESHOLD 16.0
+#define VAR_THRESHOLD 0.004
 #define RANDOM_FILTERING 0
 #define RF_FRACTION 2.0
 
