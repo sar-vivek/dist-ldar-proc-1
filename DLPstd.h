@@ -60,7 +60,7 @@
 
 #define PORT_BASE 57394
 
-#define VAR_THRESHOLD 0.5
+#define VAR_THRESHOLD 0.1
 #define RANDOM_FILTERING 0
 #define RF_FRACTION 2.0
 
