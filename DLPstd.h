@@ -29,8 +29,11 @@
 #define DEBUG 1
 /*interpret double zero to be in between -DZERO to +DZERO*/
 #define DZERO 1.0e-8 
-#define FILE_MAX 102005473280LL
+/*#define FILE_MAX 102005473280LL*/
+#define FILE_MAX 13000000000LL
+/*#define NODE_POINTS_MAX 536870912LL*/
 #define NODE_POINTS_MAX 536870912LL
+/*#define NET_BUF_LEN 536870912LL*/
 #define NET_BUF_LEN 536870912LL
 #define PACKET_LEN 1368
 #define XYZ_PER_PACKET 114
@@ -38,8 +41,8 @@
 #define TRI_PER_PACKET 39
 
 /* NUM_BINS_X and NUM_BINS_Y should be even */
-#define NUM_BINS_X 4000
-#define NUM_BINS_Y 4000
+#define NUM_BINS_X 1410
+#define NUM_BINS_Y 1410
 
 #define NUM_CELLS 25
 #define NUM_CELLS_X 5
@@ -57,9 +60,9 @@
 
 #define PORT_BASE 57394
 
-#define VAR_THRESHOLD 0
-#define RANDOM_FILTERING 1
-#define RF_FRACTION 0.895
+#define VAR_THRESHOLD 0.004
+#define RANDOM_FILTERING 0
+#define RF_FRACTION 2.0
 
 #define CHAR_SIZE 1
 #define UCHAR_SIZE 1
